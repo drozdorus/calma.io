@@ -453,3 +453,23 @@ document.addEventListener('DOMContentLoaded', () => {
     updateSlider();
   }
 });
+
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var isOpen = this.getAttribute('aria-expanded') === 'true';
+    var answer = this.nextElementSibling;
+
+    // Close all
+    document.querySelectorAll('.faq-question').forEach(function(other) {
+      other.setAttribute('aria-expanded', 'false');
+      other.nextElementSibling.style.maxHeight = null;
+    });
+
+    // Open clicked if it was closed
+    if (!isOpen) {
+      this.setAttribute('aria-expanded', 'true');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  });
+});
