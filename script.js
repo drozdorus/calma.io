@@ -345,11 +345,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    function getCardWidth() {
+      // Use actual rendered card width to avoid offset drift from padding differences
+      return cards[0].offsetWidth;
+    }
+
     function updateSlider() {
       const gap = 24;
-      const viewportWidth = sliderViewport.offsetWidth;
-      const cardWidth = (viewportWidth - gap * (cardsPerView - 1)) / cardsPerView;
-      const offset = currentIndex * (cardWidth + gap);
+      const offset = currentIndex * (getCardWidth() + gap);
       sliderTrack.style.transform = `translateX(-${offset}px)`;
 
       prevBtn.disabled = currentIndex <= 0;
@@ -375,10 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let hasDragged = false;
 
     function getBaseOffset() {
-      const gap = 24;
-      const viewportWidth = sliderViewport.offsetWidth;
-      const cardWidth = (viewportWidth - gap * (cardsPerView - 1)) / cardsPerView;
-      return currentIndex * (cardWidth + gap);
+      return currentIndex * (getCardWidth() + 24);
     }
 
     function onDragStart(x) {
