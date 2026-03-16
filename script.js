@@ -17,55 +17,58 @@
   // Dynamic wave system with multiple layers
   const waves = [];
   
-  // Create 5 waves with random properties
-  for (let i = 0; i < 5; i++) {
+  // Create 8 waves: center=far (bright, blurry), top/bottom=near (darker, sharp)
+  for (let i = 0; i < 8; i++) {
+    const relY = 0.1 + i * 0.11; // 0.1..0.87
+    const distFromCenter = Math.abs(relY - 0.5) / 0.4; // 0=center, 1=edge
+    const depth = distFromCenter; // 1=near (top/bottom), 0=far (center)
+    const ampScale = canvas.width > 768 ? 1.6 : 1;
+    const amp = (20 + Math.random() * 30) * ampScale;
     waves.push({
-      amplitude: 30 + Math.random() * 50,
-      targetAmplitude: 30 + Math.random() * 50,
-      wavelength: 300 + Math.random() * 600,
-      speed: 0.0003 + Math.random() * 0.0005,
+      amplitude: amp,
+      targetAmplitude: amp,
+      baseAmp: amp,
+      wavelength: 400 + Math.random() * 500,
+      speed: 0.001 + depth * 0.001,
       phase: Math.random() * Math.PI * 2,
-      yOffset: canvas.height * (0.2 + i * 0.15),
-      opacity: 0.06 + Math.random() * 0.08,
+      yOffset: canvas.height * relY,
+      opacity: 0.65 - depth * 0.45,   // center=bright (0.65), edges=muted (0.20)
+      lineWidth: 0.5 + (1 - depth) * 1.5,  // center=thicker, edges=thin (0.5)
+      blur: (1 - depth) * 4,          // center=blur 4px, edges=sharp
       colorShift: Math.random() * 60,
-      phaseShift: Math.random() * 0.02
     });
   }
 
   function drawWave(wave) {
+    ctx.save();
+    if (wave.blur > 0.1) ctx.filter = `blur(${wave.blur.toFixed(1)}px)`;
+
     ctx.beginPath();
-    
-    // Draw complex wave with multiple sine functions that change shape over time
     for (let x = 0; x <= canvas.width; x += 2) {
       const primaryWave = Math.sin(x * (2 * Math.PI / wave.wavelength) + wave.phase) * wave.amplitude;
-      const secondaryWave = Math.sin(x * (2 * Math.PI / (wave.wavelength * 1.5)) + wave.phase * 1.3) * wave.amplitude * 0.5;
-      const tertiaryWave = Math.sin(x * (2 * Math.PI / (wave.wavelength * 0.8)) + wave.phase * 0.7) * wave.amplitude * 0.3;
-      
+      const secondaryWave = Math.sin(x * (2 * Math.PI / (wave.wavelength * 1.5)) + wave.phase * 1.02) * wave.amplitude * 0.3;
+      const tertiaryWave = Math.sin(x * (2 * Math.PI / (wave.wavelength * 2.0)) + wave.phase * 0.98) * wave.amplitude * 0.15;
       const y = wave.yOffset + primaryWave + secondaryWave + tertiaryWave;
-      ctx.lineTo(x, y);
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
     }
-    
-    // Dynamic gradient colors
+
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
     const time = Date.now() * 0.0001;
     const hue1 = 45 + Math.sin(time + wave.colorShift) * 15;
     const hue2 = 120 + Math.sin(time * 0.7 + wave.colorShift) * 25;
-    
-    gradient.addColorStop(0, `hsla(${hue1}, 100%, 60%, ${wave.opacity})`);
-    gradient.addColorStop(0.5, `hsla(${(hue1 + hue2) / 2}, 85%, 65%, ${wave.opacity * 0.9})`);
-    gradient.addColorStop(1, `hsla(${hue2}, 90%, 55%, ${wave.opacity})`);
-    
+    gradient.addColorStop(0, `hsla(${hue1}, 100%, 70%, ${wave.opacity})`);
+    gradient.addColorStop(0.5, `hsla(${(hue1 + hue2) / 2}, 90%, 75%, ${wave.opacity})`);
+    gradient.addColorStop(1, `hsla(${hue2}, 95%, 65%, ${wave.opacity})`);
+
     ctx.strokeStyle = gradient;
-    ctx.lineWidth = 2 + Math.sin(time + wave.phase) * 0.5;
+    ctx.lineWidth = wave.lineWidth;
     ctx.stroke();
+    ctx.restore();
   }
 
   function animate() {
-    // Smooth fade effect
-    ctx.globalAlpha = 0.08;
-    ctx.fillStyle = '#0a0a0a';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.globalAlpha = 1;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // Update and draw each wave
     waves.forEach(wave => {
@@ -77,9 +80,9 @@
       // Smoothly interpolate amplitude towards target
       wave.amplitude += (wave.targetAmplitude - wave.amplitude) * 0.02;
       
-      // Occasionally set new target amplitude
-      if (Math.random() < 0.005) {
-        wave.targetAmplitude = 30 + Math.random() * 50;
+      // Occasionally nudge target amplitude around its base value
+      if (Math.random() < 0.002) {
+        wave.targetAmplitude = wave.baseAmp + (Math.random() - 0.5) * wave.baseAmp * 0.3;
       }
       
       // Slowly vary wavelength for more organic movement
