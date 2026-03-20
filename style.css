@@ -708,9 +708,6 @@ body {
   cursor: grabbing;
 }
 
-.events-slider-viewport.dragging .conference-card {
-  pointer-events: none;
-}
 
 .events-slider-track {
   display: flex;

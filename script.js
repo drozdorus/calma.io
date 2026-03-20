@@ -375,7 +375,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let dragStartX = 0;
     let dragDeltaX = 0;
     let isDragging = false;
-    let hasDragged = false;
 
     function getBaseOffset() {
       return currentIndex * (getCardWidth() + 24);
@@ -385,7 +384,6 @@ document.addEventListener('DOMContentLoaded', () => {
       dragStartX = x;
       dragDeltaX = 0;
       isDragging = true;
-      hasDragged = false;
       sliderTrack.style.transition = 'none';
       sliderViewport.classList.add('dragging');
     }
@@ -393,7 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function onDragMove(x) {
       if (!isDragging) return;
       dragDeltaX = x - dragStartX;
-      if (Math.abs(dragDeltaX) > 5) hasDragged = true;
       sliderTrack.style.transform = `translateX(${-getBaseOffset() + dragDeltaX}px)`;
     }
 
@@ -418,7 +415,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mouse events
     sliderViewport.addEventListener('mousedown', (e) => {
-      e.preventDefault();
       onDragStart(e.clientX);
     });
     document.addEventListener('mousemove', (e) => onDragMove(e.clientX));
@@ -440,10 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, { passive: false });
 
-    // Prevent click navigation when dragging
-    sliderViewport.addEventListener('click', (e) => {
-      if (hasDragged) { e.preventDefault(); e.stopPropagation(); }
-    }, true);
 
     window.addEventListener('resize', () => {
       cardsPerView = getCardsPerView();
