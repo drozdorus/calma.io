@@ -449,6 +449,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// Scroll to top
+document.getElementById('scrollTopBtn')?.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
 // FAQ accordion
 document.querySelectorAll('.faq-question').forEach(function(btn) {
   btn.addEventListener('click', function() {
