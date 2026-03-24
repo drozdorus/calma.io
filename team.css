@@ -100,8 +100,53 @@
   pointer-events: none;
 }
 
+/* Wrap for avatar + optional link badge */
+.team-avatar-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* Link badges — corners of the avatar circle */
+.team-links {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* single or last link → bottom-right */
+.team-link {
+  position: absolute;
+  pointer-events: all;
+  bottom: 8%;
+  right: 8%;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+/* first of two → bottom-left */
+.team-link:first-child:not(:last-child) {
+  right: auto;
+  left: 8%;
+}
+
+.team-link:hover {
+  color: var(--secondary);
+  border-color: rgba(0, 255, 127, 0.4);
+}
+
 /* Text — match site body sizing */
 .team-info {
+  width: 100%;
   padding: var(--space-sm) 0 0;
 }
 
@@ -117,7 +162,9 @@
   font-weight: 400;
   color: var(--text-muted);
   letter-spacing: 0.3px;
+  min-height: 2.5em;
 }
+
 
 /* Responsive */
 @media (max-width: 768px) {
