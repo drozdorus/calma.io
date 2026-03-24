@@ -1,51 +1,132 @@
-/* Team carousel — remove this file + the <script> tag to disable */
+/* Team carousel — mirrors events slider logic exactly */
 (function () {
   const track = document.getElementById('teamTrack');
+  const viewport = document.getElementById('teamViewport');
   const prevBtn = document.getElementById('teamPrev');
   const nextBtn = document.getElementById('teamNext');
-  const dotsWrap = document.getElementById('teamDots');
-  if (!track) return;
+  const dotsContainer = document.getElementById('teamDots');
+  if (!track || !viewport) return;
 
-  const cards = track.querySelectorAll('.team-card');
-  const cardCount = cards.length;
-  let dotCount = 0;
+  const cards = Array.from(track.querySelectorAll('.team-card'));
+  if (!cards.length) return;
 
-  function getVisibleCount() {
-    const cardW = cards[0].offsetWidth;
-    const gap = parseInt(getComputedStyle(track).gap) || 24;
-    return Math.floor((track.offsetWidth + gap) / (cardW + gap));
+  let currentIndex = 0;
+  let cardsPerView = getCardsPerView();
+
+  function getCardsPerView() {
+    if (window.innerWidth <= 480) return 1;
+    if (window.innerWidth <= 900) return 2;
+    return 4;
+  }
+
+  function getMaxIndex() {
+    return Math.max(0, cards.length - cardsPerView);
+  }
+
+  function setCardWidths() {
+    const gap = 24;
+    const w = Math.floor((viewport.offsetWidth - (cardsPerView - 1) * gap) / cardsPerView);
+    cards.forEach(c => { c.style.width = w + 'px'; });
   }
 
   function buildDots() {
-    const visible = getVisibleCount();
-    dotCount = Math.max(1, cardCount - visible + 1);
-    dotsWrap.innerHTML = '';
-    for (let i = 0; i < dotCount; i++) {
-      const dot = document.createElement('span');
-      dot.className = 'team-dot' + (i === 0 ? ' active' : '');
-      dotsWrap.appendChild(dot);
+    dotsContainer.innerHTML = '';
+    const total = getMaxIndex() + 1;
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement('button');
+      dot.classList.add('events-slider-dot');
+      if (i === currentIndex) dot.classList.add('active');
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(dot);
     }
   }
 
-  function updateDots() {
-    const dots = dotsWrap.querySelectorAll('.team-dot');
-    if (!dots.length) return;
-    const cardW = cards[0].offsetWidth;
-    const gap = parseInt(getComputedStyle(track).gap) || 24;
-    const idx = Math.round(track.scrollLeft / (cardW + gap));
-    dots.forEach((d, i) => d.classList.toggle('active', i === Math.min(idx, dotCount - 1)));
+  function updateSlider() {
+    const gap = 24;
+    const offset = currentIndex * (cards[0].offsetWidth + gap);
+    track.style.transform = `translateX(-${offset}px)`;
+
+    prevBtn.disabled = currentIndex <= 0;
+    nextBtn.disabled = currentIndex >= getMaxIndex();
+
+    dotsContainer.querySelectorAll('.events-slider-dot').forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentIndex);
+    });
   }
 
-  function scrollBy(dir) {
-    const cardW = cards[0].offsetWidth;
-    const gap = parseInt(getComputedStyle(track).gap) || 24;
-    track.scrollBy({ left: dir * (cardW + gap), behavior: 'smooth' });
+  function goTo(index) {
+    currentIndex = Math.max(0, Math.min(index, getMaxIndex()));
+    updateSlider();
   }
 
-  prevBtn?.addEventListener('click', () => scrollBy(-1));
-  nextBtn?.addEventListener('click', () => scrollBy(1));
-  track.addEventListener('scroll', updateDots, { passive: true });
+  prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+  nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
 
-  buildDots();
-  window.addEventListener('resize', buildDots);
+  // Drag support
+  let dragStartX = 0;
+  let dragDeltaX = 0;
+  let isDragging = false;
+
+  function getBaseOffset() {
+    return currentIndex * (cards[0].offsetWidth + 24);
+  }
+
+  viewport.addEventListener('mousedown', e => {
+    isDragging = true;
+    dragStartX = e.clientX;
+    dragDeltaX = 0;
+    viewport.classList.add('dragging');
+    track.style.transition = 'none';
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    dragDeltaX = e.clientX - dragStartX;
+    track.style.transform = `translateX(${-getBaseOffset() + dragDeltaX}px)`;
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    viewport.classList.remove('dragging');
+    track.style.transition = '';
+    if (dragDeltaX < -50) goTo(currentIndex + 1);
+    else if (dragDeltaX > 50) goTo(currentIndex - 1);
+    else goTo(currentIndex);
+  });
+
+  viewport.addEventListener('touchstart', e => {
+    dragStartX = e.touches[0].clientX;
+    dragDeltaX = 0;
+    track.style.transition = 'none';
+  }, { passive: true });
+
+  viewport.addEventListener('touchmove', e => {
+    dragDeltaX = e.touches[0].clientX - dragStartX;
+    track.style.transform = `translateX(${-getBaseOffset() + dragDeltaX}px)`;
+  }, { passive: true });
+
+  viewport.addEventListener('touchend', () => {
+    track.style.transition = '';
+    if (dragDeltaX < -50) goTo(currentIndex + 1);
+    else if (dragDeltaX > 50) goTo(currentIndex - 1);
+    else goTo(currentIndex);
+  });
+
+  window.addEventListener('resize', () => {
+    cardsPerView = getCardsPerView();
+    if (currentIndex > getMaxIndex()) currentIndex = getMaxIndex();
+    setCardWidths();
+    buildDots();
+    updateSlider();
+  });
+
+  // rAF ensures viewport has its layout width before we calculate card sizes
+  requestAnimationFrame(() => {
+    setCardWidths();
+    buildDots();
+    updateSlider();
+  });
 })();

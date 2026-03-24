@@ -4,7 +4,6 @@
    from index.html to disable the team section entirely.
    ============================================= */
 
-/* Section wrapper */
 .team {
   padding: 100px 0;
 }
@@ -17,148 +16,107 @@
   margin-bottom: var(--space-xl);
 }
 
-/* Carousel wrapper */
-.team-carousel {
-  position: relative;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 var(--space-sm);
-}
-
-/* Scrollable track */
-.team-track {
-  display: flex;
-  gap: var(--space-md);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  padding: var(--space-sm) 0 var(--space-lg);
-
-  /* Hide scrollbar but keep functionality */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.team-track::-webkit-scrollbar {
-  display: none;
-}
-
-/* Individual card */
-.team-card {
-  flex: 0 0 260px;
-  scroll-snap-align: start;
-  background: var(--surface);
-  border: 1px solid rgba(255, 215, 0, 0.08);
-  border-radius: var(--radius-lg);
+/* Viewport — same behaviour as events-slider-viewport but own class
+   to avoid conflict with script.js querySelector('.events-slider-viewport') */
+.team-viewport {
+  flex: 1;
   overflow: hidden;
-  transition: all 0.4s var(--ease);
-  cursor: default;
+  padding: 8px 2px;
+  margin: -8px 0;
+  cursor: grab;
+  user-select: none;
 }
 
-.team-card:hover {
-  background: var(--surface-hover);
-  border-color: rgba(255, 215, 0, 0.25);
-  box-shadow: var(--shadow);
+.team-viewport.dragging {
+  cursor: grabbing;
 }
 
-/* Avatar area */
-.team-avatar {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.team-avatar img,
-.team-avatar svg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.4s var(--ease);
-}
-
-.team-card:hover .team-avatar img {
-  transform: scale(1.08);
-}
-
-/* Text area */
-.team-info {
-  padding: var(--space-md);
-}
-
-.team-name {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-.team-role {
-  font-size: 0.85rem;
-  font-weight: 400;
-  color: var(--text-secondary);
-  letter-spacing: 0.3px;
-}
-
-/* Navigation arrows */
-.team-nav {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-sm);
-  margin-top: var(--space-md);
-}
-
-.team-nav-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: var(--surface);
-  color: var(--text);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s var(--ease);
-}
-
-.team-nav-btn:hover {
-  background: var(--surface-hover);
-  border-color: rgba(255, 215, 0, 0.3);
-  color: var(--primary);
-}
-
-.team-nav-btn:active {
-  transform: scale(0.95);
-}
-
-.team-nav-btn svg {
-  width: 20px;
-  height: 20px;
-}
-
-/* Scroll progress dots */
-.team-dots {
+/* Dots wrapper — own class to avoid conflict with querySelector('.events-slider-dots') */
+.team-dots-wrap {
   display: flex;
   justify-content: center;
   gap: 8px;
   margin-top: var(--space-md);
 }
 
-.team-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  transition: all 0.3s var(--ease);
+/* Transform-based track — mirrors events-slider-track */
+.team-track {
+  display: flex;
+  gap: var(--space-md);
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
 }
 
-.team-dot.active {
-  width: 24px;
-  border-radius: 3px;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
+/* Card — glow lives here so it can expand beyond the avatar's overflow:hidden */
+.team-card {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.team-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    var(--card-accent, rgba(255, 215, 0, 0.6)) 0%,
+    transparent 60%
+  );
+  opacity: 0.6;
+  transform: scale(1);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  pointer-events: none;
+}
+
+.team-card:hover::before {
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+/* Circular avatar — no background so glow from .team-card::before shows through */
+.team-avatar {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 14%;
+}
+
+.team-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+
+/* Text — match site body sizing */
+.team-info {
+  padding: var(--space-sm) 0 0;
+}
+
+.team-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.team-role {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
 }
 
 /* Responsive */
@@ -166,30 +124,10 @@
   .team {
     padding: var(--space-2xl) 0;
   }
-
-  .team-card {
-    flex: 0 0 220px;
-  }
-
-  .team-nav {
-    display: none;
-  }
 }
 
-@media (max-width: 480px) {
-  .team-card {
-    flex: 0 0 200px;
-  }
-}
-
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .team-track {
-    scroll-behavior: auto;
-  }
-
-  .team-card {
+  .team-card::before {
     transition: none;
-    transform: none !important;
   }
 }
