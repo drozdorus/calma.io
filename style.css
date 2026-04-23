@@ -1300,9 +1300,17 @@ body {
     gap: var(--space-xl);
   }
 
+  .contact-form {
+    padding: var(--space-md);
+  }
+
   .footer-row {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .footer-meta {
     gap: var(--space-sm);
   }
 
@@ -1515,14 +1523,14 @@ body {
   right: -80px;
 }
 
-/* Services — gold center-left */
+/* Services — gold top-left, asymmetric */
 .services::before {
   width: 600px;
   height: 600px;
   background: radial-gradient(circle, rgba(232, 181, 71, 0.11) 0%, transparent 70%);
   filter: blur(100px);
-  top: calc(50% - 300px);
-  left: -150px;
+  top: -80px;
+  left: -180px;
 }
 
 /* Services — green top-right */
