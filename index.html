@@ -163,6 +163,24 @@
 </head>
 
 <body>
+  <!-- SVG icon sprite -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="icon-linkedin" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </symbol>
+    <symbol id="icon-finance" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="2" x2="12" y2="22"/>
+      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </symbol>
+    <symbol id="icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </symbol>
+  </svg>
+
   <canvas id="waveCanvas"></canvas>
 
   <!-- Header -->
@@ -175,16 +193,13 @@
 
         <nav class="nav">
           <a href="#about" class="nav-link">About</a>
-          <a href="#services" class="nav-link">Services</a>
+          <a href="#verticals" class="nav-link">Verticals</a>
           <!-- <a href="#team" class="nav-link">Team</a> -->
           <a href="#conferences" class="nav-link">Events</a>
           <a href="#contact" class="nav-link">Contact</a>
           <a href="https://www.linkedin.com/company/calma-io/" target="_blank" class="social-link"
             aria-label="LinkedIn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-            </svg>
+            <svg width="20" height="20" aria-hidden="true"><use href="#icon-linkedin"/></svg>
           </a>
           <a href="https://calma-io.notion.site/Open-Vacancies-Calma-Agency-169f120c65df806bba68fc5163bcfa52"
             target="_blank" class="hiring-link">
@@ -206,16 +221,18 @@
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobileMenu">
-    <button class="mobile-menu-close" id="mobileMenuClose">&times;</button>
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <line x1="6" y1="6" x2="18" y2="18"/>
+        <line x1="18" y1="6" x2="6" y2="18"/>
+      </svg>
+    </button>
     <a href="#about" class="nav-link" onclick="closeMobileMenu()">About</a>
-    <a href="#services" class="nav-link" onclick="closeMobileMenu()">Services</a>
+    <a href="#verticals" class="nav-link" onclick="closeMobileMenu()">Verticals</a>
     <a href="#conferences" class="nav-link" onclick="closeMobileMenu()">Events</a>
     <a href="#contact" class="nav-link" onclick="closeMobileMenu()">Contact</a>
     <a href="https://www.linkedin.com/company/calma-io/" target="_blank" class="social-link">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path
-          d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-      </svg>
+      <svg width="20" height="20" aria-hidden="true"><use href="#icon-linkedin"/></svg>
       <span>LinkedIn</span>
     </a>
     <a href="https://calma-io.notion.site/Open-Vacancies-Calma-Agency-169f120c65df806bba68fc5163bcfa52" target="_blank"
@@ -247,13 +264,12 @@
         <h2 class="section-title">About Calma</h2>
         <div class="about-text-section">
           <p class="about-text">
-            We build <strong>lead acquisition systems</strong> that deliver predictable, compliant, high-intent
-            prospects across white-hat industries. We measure success by <strong>lead quality and downstream
-              performance</strong>, not volume.
+            We run <strong>user acquisition campaigns</strong> across paid social and video, then qualify and convert
+            that traffic into leads for our <strong>partners and lead buyers</strong>.
           </p>
           <p class="about-secondary">
-            No short-term traffic tactics. We focus on sustainable acquisition with proprietary AI optimization, lead
-            verification, transparent reporting, and long-term partner alignment.
+            We optimize for downstream performance — cost per acquired lead, contact rate, and buyer conversion —
+            not raw traffic volume.
           </p>
 
           <div class="hero-badge">
@@ -310,38 +326,55 @@
     </div>
   </section>
 
-  <!-- Services -->
-  <section id="services" class="section services">
+  <!-- Verticals -->
+  <section id="verticals" class="section services">
     <div class="container">
       <div class="services-header">
         <h2 class="section-title">What We Do</h2>
-        <p class="section-subtitle">We focus on lead generation across 6 high-value regulated industries.</p>
+        <p class="section-subtitle">We focus on lead generation across high-value regulated verticals.</p>
       </div>
 
       <div class="services-grid">
         <div class="service-card">
-          <h3 class="service-title">Auto Insurance</h3>
-          <p class="service-description">Helping customers to find cheaper insurance provider</p>
+          <div class="service-head">
+            <div class="service-icon">
+              <svg width="18" height="18" aria-hidden="true"><use href="#icon-shield"/></svg>
+            </div>
+            <h3 class="service-title">Insurance</h3>
+          </div>
+          <ul class="service-list">
+            <li>Auto</li>
+            <li>Home</li>
+            <li>Health</li>
+          </ul>
         </div>
         <div class="service-card">
-          <h3 class="service-title">Home Insurance</h3>
-          <p class="service-description">Generating quality leads for home insurance companies</p>
+          <div class="service-head">
+            <div class="service-icon">
+              <svg width="18" height="18" aria-hidden="true"><use href="#icon-finance"/></svg>
+            </div>
+            <h3 class="service-title">Finance</h3>
+          </div>
+          <ul class="service-list">
+            <li>Loans</li>
+            <li>HELOC</li>
+            <li>HECM</li>
+          </ul>
+          <span class="service-more">+ more</span>
         </div>
         <div class="service-card">
-          <h3 class="service-title">Health Insurance</h3>
-          <p class="service-description">Connecting people with comprehensive health coverage options</p>
-        </div>
-        <div class="service-card">
-          <h3 class="service-title">Legal Services</h3>
-          <p class="service-description">Qualified leads for specialized legal practices and law firms</p>
-        </div>
-        <div class="service-card">
-          <h3 class="service-title">Home Improvement</h3>
-          <p class="service-description">Homeowners planning significant renovation and construction projects</p>
-        </div>
-        <div class="service-card">
-          <h3 class="service-title">Financial Services</h3>
-          <p class="service-description">Credit, lending, and personal finance solution seekers</p>
+          <div class="service-head">
+            <div class="service-icon">
+              <svg width="18" height="18" aria-hidden="true"><use href="#icon-home"/></svg>
+            </div>
+            <h3 class="service-title">Home Services</h3>
+          </div>
+          <ul class="service-list">
+            <li>Roofing</li>
+            <li>Solar Panels</li>
+            <li>Windows</li>
+          </ul>
+          <span class="service-more">+ more</span>
         </div>
       </div>
 
@@ -491,15 +524,8 @@
       <!-- Upcoming Events -->
       <div class="events-section">
         <h3 class="events-section-title">Upcoming Events</h3>
-        <div class="events-slider-wrapper">
-          <button class="events-slider-btn events-slider-prev" aria-label="Previous">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </button>
-          <div class="events-slider-viewport">
-            <div class="events-slider-track">
+        <div class="upcoming-events-scroller">
+          <div class="upcoming-events-track">
 
               <!--<a href="https://affiliateworldconferences.com/dubai" target="_blank" class="conference-card">
                 <div class="conference-logo-wrapper">
@@ -551,30 +577,15 @@
                 <span class="conference-link">affiliatesummit.com</span>
               </a>
 
-            </div>
           </div>
-          <button class="events-slider-btn events-slider-next" aria-label="Next">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
         </div>
-        <div class="events-slider-dots"></div>
       </div>
 
       <!-- Past Events -->
       <div class="past-events-section">
-        <button class="past-events-toggle" id="pastEventsToggle">
-          <span>Past Events</span>
-          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="2">
-            <path d="m6 9 6 6 6-6" />
-          </svg>
-        </button>
-
-        <div class="past-events-content" id="pastEventsContent">
-          <div class="past-events-grid">
+        <h3 class="events-section-title">Past Events</h3>
+        <div class="past-events-scroller">
+          <div class="past-events-track">
             <div class="past-conference-card">
               <div class="past-conference-date">Mar 2026</div>
               <h4 class="past-conference-name">Affiliate Takeover</h4>
@@ -606,14 +617,14 @@
               <p class="past-conference-location">New York, US</p>
             </div>
             <div class="past-conference-card">
-              <div class="past-conference-date">Jul 2024</div>
-              <h4 class="past-conference-name">Affiliate Takeover</h4>
-              <p class="past-conference-location">Barcelona, Spain</p>
-            </div>
-            <div class="past-conference-card">
               <div class="past-conference-date">Apr 2025</div>
               <h4 class="past-conference-name">AppGala</h4>
               <p class="past-conference-location">Warsaw, Poland</p>
+            </div>
+            <div class="past-conference-card">
+              <div class="past-conference-date">Jul 2024</div>
+              <h4 class="past-conference-name">Affiliate Takeover</h4>
+              <p class="past-conference-location">Barcelona, Spain</p>
             </div>
           </div>
         </div>
@@ -762,13 +773,13 @@
 
         <form class="contact-form" id="contactForm" action="https://formspree.io/f/xzzgddjo" method="POST">
           <div class="form-group">
-            <input type="text" id="name" name="name" placeholder="Your Name" required>
+            <input type="text" id="name" name="name" placeholder="Your Name" autocomplete="name" required>
           </div>
           <div class="form-group">
-            <input type="email" id="email" name="email" placeholder="Your Email" required>
+            <input type="email" id="email" name="email" placeholder="Your Email" autocomplete="email" required>
           </div>
           <div class="form-group">
-            <input type="text" id="company" name="company" placeholder="Company (optional)">
+            <input type="text" id="company" name="company" placeholder="Company (optional)" autocomplete="organization">
           </div>
           <div class="form-group">
             <textarea id="message" name="message" placeholder="Tell us about your project" rows="4" required></textarea>
@@ -782,47 +793,20 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-
-      <!-- Top row: logo + nav + contact -->
-      <div class="footer-top">
-        <div class="footer-logo">
+      <div class="footer-row">
+        <div class="footer-brand">
           <img src="./img/logo.svg" height="14" alt="Calma">
+          <span class="footer-copy">© 2026 Calma</span>
         </div>
-        <nav class="footer-nav">
-          <a href="#about" class="footer-nav-link">About</a>
-          <a href="#services" class="footer-nav-link">Services</a>
-          <a href="#conferences" class="footer-nav-link">Events</a>
-          <a href="#faq" class="footer-nav-link">FAQ</a>
-          <a href="#contact" class="footer-nav-link">Contact</a>
-        </nav>
-        <div class="footer-contact">
-          <a href="mailto:info@calma.io" class="footer-email">info@calma.io</a>
-          <a href="https://www.linkedin.com/company/calma-io/" target="_blank" class="footer-linkedin"
+        <div class="footer-meta">
+          <a href="mailto:info@calma.io" class="footer-link">info@calma.io</a>
+          <a href="./privacy/" target="_blank" class="footer-link">Privacy</a>
+          <a href="https://www.linkedin.com/company/calma-io/" target="_blank" class="footer-icon"
             aria-label="LinkedIn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-            </svg>
+            <svg width="16" height="16" aria-hidden="true"><use href="#icon-linkedin"/></svg>
           </a>
         </div>
       </div>
-
-      <!-- Divider -->
-      <div class="footer-divider"></div>
-
-      <!-- Bottom row: copyright + scroll-to-top -->
-      <div class="footer-bottom">
-        <div class="footer-text">
-          © 2026 Calma / <a href="./privacy/" target="_blank" class="footer-privacy">Privacy Policy</a>
-        </div>
-        <button class="footer-scroll-top" id="scrollTopBtn" aria-label="Back to top">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="m18 15-6-6-6 6" />
-          </svg>
-          <span>Back to top</span>
-        </button>
-      </div>
-
     </div>
   </footer>
 

@@ -1,8 +1,10 @@
-// Optimized Wave Animation
+// Wave Animation
 (function() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
   const canvas = document.getElementById('waveCanvas');
   if (!canvas) return;
-  
+
   const ctx = canvas.getContext('2d', { alpha: true });
   let animationId;
 
@@ -16,7 +18,7 @@
 
   // Dynamic wave system with multiple layers
   const waves = [];
-  
+
   // Create 8 waves: center=far (bright, blurry), top/bottom=near (darker, sharp)
   for (let i = 0; i < 8; i++) {
     const relY = 0.1 + i * 0.11; // 0.1..0.87
@@ -32,9 +34,9 @@
       speed: 0.001 + depth * 0.001,
       phase: Math.random() * Math.PI * 2,
       yOffset: canvas.height * relY,
-      opacity: 0.65 - depth * 0.45,   // center=bright (0.65), edges=muted (0.20)
-      lineWidth: 0.5 + (1 - depth) * 1.5,  // center=thicker, edges=thin (0.5)
-      blur: (1 - depth) * 4,          // center=blur 4px, edges=sharp
+      opacity: 0.65 - depth * 0.45,
+      lineWidth: 0.5 + (1 - depth) * 1.5,
+      blur: (1 - depth) * 4,
       colorShift: Math.random() * 60,
     });
   }
@@ -69,38 +71,26 @@
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Update and draw each wave
+
     waves.forEach(wave => {
       drawWave(wave);
-      
-      // Slowly change phase to modify wave shape
       wave.phase += wave.speed;
-      
-      // Smoothly interpolate amplitude towards target
       wave.amplitude += (wave.targetAmplitude - wave.amplitude) * 0.02;
-      
-      // Occasionally nudge target amplitude around its base value
       if (Math.random() < 0.002) {
         wave.targetAmplitude = wave.baseAmp + (Math.random() - 0.5) * wave.baseAmp * 0.3;
       }
-      
-      // Slowly vary wavelength for more organic movement
       wave.wavelength += Math.sin(wave.phase * 0.1) * 0.5;
       wave.wavelength = Math.max(300, Math.min(900, wave.wavelength));
     });
-    
+
     animationId = requestAnimationFrame(animate);
   }
 
   animate();
-  
+
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      cancelAnimationFrame(animationId);
-    } else {
-      animate();
-    }
+    if (document.hidden) cancelAnimationFrame(animationId);
+    else animate();
   });
 })();
 
@@ -119,34 +109,29 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 });
 
 // Optimized scroll handler
+const headerEl = document.querySelector('.header');
+const heroEl = document.querySelector('.hero');
+const canvasEl = document.getElementById('waveCanvas');
 let ticking = false;
 
 window.addEventListener('scroll', () => {
   if (!ticking) {
     requestAnimationFrame(() => {
       const scrolled = window.pageYOffset;
-      const header = document.querySelector('.header');
-      const canvas = document.getElementById('waveCanvas');
-      
-      // Header island toggle
-      if (scrolled > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
+
+      if (headerEl) {
+        if (scrolled > 50) headerEl.classList.add('scrolled');
+        else headerEl.classList.remove('scrolled');
       }
-      
-      // Canvas fade
-      if (canvas) {
-        const opacity = Math.max(0, 1 - scrolled / 300);
-        canvas.style.opacity = opacity;
+
+      if (canvasEl) {
+        canvasEl.style.opacity = Math.max(0, 1 - scrolled / 300);
       }
-      
-      // Hero parallax
-      const hero = document.querySelector('.hero');
-      if (hero && scrolled < window.innerHeight) {
-        hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+
+      if (heroEl && scrolled < window.innerHeight) {
+        heroEl.style.transform = `translateY(${scrolled * 0.3}px)`;
       }
-      
+
       ticking = false;
     });
     ticking = true;
@@ -154,34 +139,33 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // Form handling
-document.getElementById('contactForm').addEventListener('submit', async e => {
+document.getElementById('contactForm')?.addEventListener('submit', async e => {
   e.preventDefault();
-  
+
   const form = e.target;
   const data = new FormData(form);
   const button = form.querySelector('.submit-button');
-  
-  // Validation
+
   if (!data.get('name') || !data.get('email') || !data.get('message')) {
     showNotification('Please fill in all required fields', 'error');
     return;
   }
-  
+
   if (!isValidEmail(data.get('email'))) {
     showNotification('Please enter a valid email', 'error');
     return;
   }
-  
+
   button.textContent = 'Sending...';
   button.disabled = true;
-  
+
   try {
     const response = await fetch(form.action, {
       method: 'POST',
       body: data,
       headers: { 'Accept': 'application/json' }
     });
-    
+
     if (response.ok) {
       showNotification('Thanks! We\'ll get back to you soon', 'success');
       form.reset();
@@ -202,266 +186,150 @@ function isValidEmail(email) {
 
 function showNotification(message, type = 'info') {
   document.querySelectorAll('.notification').forEach(n => n.remove());
-  
+
   const notification = document.createElement('div');
-  notification.className = 'notification';
-  notification.innerHTML = `
-    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-      <span>${message}</span>
-      <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: inherit; font-size: 20px; cursor: pointer; opacity: 0.7; padding: 0;">×</button>
-    </div>
-  `;
-  
-  const bg = {
-    success: 'linear-gradient(135deg, #00FF7F, #FFD700)',
-    error: 'linear-gradient(135deg, #ff4757, #ff6b7a)',
-    info: 'linear-gradient(135deg, #FFD700, #00FF7F)'
-  };
-  
-  notification.style.cssText = `
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    background: ${bg[type]};
-    color: #0a0a0a;
-    padding: 16px 20px;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    z-index: 10000;
-    max-width: 400px;
-    animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-weight: 500;
-  `;
-  
+  notification.className = `notification notification--${type}`;
+
+  const inner = document.createElement('div');
+  inner.className = 'notification__inner';
+
+  const span = document.createElement('span');
+  span.textContent = message;
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'notification__close';
+  closeBtn.setAttribute('aria-label', 'Close');
+  closeBtn.textContent = '×';
+  closeBtn.addEventListener('click', () => notification.remove());
+
+  inner.appendChild(span);
+  inner.appendChild(closeBtn);
+  notification.appendChild(inner);
   document.body.appendChild(notification);
-  
+
   setTimeout(() => {
-    notification.style.animation = 'slideOut 0.3s ease';
+    notification.classList.add('notification--leaving');
     setTimeout(() => notification.remove(), 300);
   }, 5000);
 }
 
-// Animation styles
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  @keyframes slideOut {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(100%); opacity: 0; }
-  }
-`;
-document.head.appendChild(style);
-
-// Intersection Observer for sections
-const observer = new IntersectionObserver(entries => {
+// Section reveal observer
+const sectionObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+      entry.target.classList.remove('pre-fade');
       entry.target.classList.add('visible');
+      sectionObserver.unobserve(entry.target);
     }
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.section').forEach(section => {
-    section.style.opacity = '0';
-    observer.observe(section);
-  });
+document.querySelectorAll('.section').forEach(section => {
+  section.classList.add('pre-fade');
+  sectionObserver.observe(section);
 });
 
 // Mobile menu
+const mobileMenu = document.getElementById('mobileMenu');
+
 function toggleMenu() {
-  const menu = document.getElementById('mobileMenu');
-  menu.classList.toggle('active');
-  document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+  mobileMenu.classList.toggle('active');
+  document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
 }
 
 function closeMenu() {
-  document.getElementById('mobileMenu').classList.remove('active');
+  mobileMenu.classList.remove('active');
   document.body.style.overflow = '';
 }
 
 window.closeMobileMenu = closeMenu;
 
-document.addEventListener('DOMContentLoaded', () => {
-  const menuBtn = document.getElementById('mobileMenuBtn');
-  const menuClose = document.getElementById('mobileMenuClose');
-  const menu = document.getElementById('mobileMenu');
-  
-  menuBtn?.addEventListener('click', toggleMenu);
-  menuClose?.addEventListener('click', closeMenu);
-  menu?.addEventListener('click', e => {
-    if (e.target === menu) closeMenu();
-  });
-  
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) closeMenu();
-  });
-  
-  // Past events toggle
-  const toggle = document.getElementById('pastEventsToggle');
-  const content = document.getElementById('pastEventsContent');
+document.getElementById('mobileMenuBtn')?.addEventListener('click', toggleMenu);
+document.getElementById('mobileMenuClose')?.addEventListener('click', closeMenu);
+mobileMenu?.addEventListener('click', e => {
+  if (e.target === mobileMenu) closeMenu();
+});
 
-  toggle?.addEventListener('click', () => {
-    const isActive = content.classList.toggle('active');
-    toggle.classList.toggle('active', isActive);
-  });
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) closeMenu();
+});
 
-  // Events slider
-  const sliderTrack = document.querySelector('.events-slider-track');
-  const sliderViewport = document.querySelector('.events-slider-viewport');
-  const prevBtn = document.querySelector('.events-slider-prev');
-  const nextBtn = document.querySelector('.events-slider-next');
-  const dotsContainer = document.querySelector('.events-slider-dots');
-  const cards = sliderTrack ? Array.from(sliderTrack.querySelectorAll('.conference-card')) : [];
+// Horizontal scrollers — drag-to-scroll + dynamic edge fade (no fade at start/end)
+function initHScroller(scroller) {
+  if (!scroller) return;
 
-  if (sliderTrack && cards.length) {
-    let currentIndex = 0;
-    let cardsPerView = getCardsPerView();
+  // Prevent native link-drag on any <a> children
+  scroller.querySelectorAll('a').forEach(a => { a.draggable = false; });
 
-    function getCardsPerView() {
-      if (window.innerWidth <= 480) return 1;
-      if (window.innerWidth <= 900) return 2;
-      return 3;
-    }
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartScroll = 0;
+  let suppressClick = false;
 
-    function getMaxIndex() {
-      return Math.max(0, cards.length - cardsPerView);
-    }
-
-    function buildDots() {
-      dotsContainer.innerHTML = '';
-      const totalDots = getMaxIndex() + 1;
-      for (let i = 0; i < totalDots; i++) {
-        const dot = document.createElement('button');
-        dot.classList.add('events-slider-dot');
-        if (i === currentIndex) dot.classList.add('active');
-        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
-        dot.addEventListener('click', () => goTo(i));
-        dotsContainer.appendChild(dot);
-      }
-    }
-
-    function getCardWidth() {
-      // Use actual rendered card width to avoid offset drift from padding differences
-      return cards[0].offsetWidth;
-    }
-
-    function updateSlider() {
-      const gap = 24;
-      const offset = currentIndex * (getCardWidth() + gap);
-      sliderTrack.style.transform = `translateX(-${offset}px)`;
-
-      prevBtn.disabled = currentIndex <= 0;
-      nextBtn.disabled = currentIndex >= getMaxIndex();
-
-      dotsContainer.querySelectorAll('.events-slider-dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentIndex);
-      });
-    }
-
-    function goTo(index) {
-      currentIndex = Math.max(0, Math.min(index, getMaxIndex()));
-      updateSlider();
-    }
-
-    prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
-    nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
-
-    // Unified drag support (touch + mouse)
-    let dragStartX = 0;
-    let dragDeltaX = 0;
-    let isDragging = false;
-
-    function getBaseOffset() {
-      return currentIndex * (getCardWidth() + 24);
-    }
-
-    function onDragStart(x) {
-      dragStartX = x;
-      dragDeltaX = 0;
-      isDragging = true;
-      sliderTrack.style.transition = 'none';
-      sliderViewport.classList.add('dragging');
-    }
-
-    function onDragMove(x) {
-      if (!isDragging) return;
-      dragDeltaX = x - dragStartX;
-      sliderTrack.style.transform = `translateX(${-getBaseOffset() + dragDeltaX}px)`;
-    }
-
-    function onDragEnd() {
-      if (!isDragging) return;
-      isDragging = false;
-      sliderTrack.style.transition = '';
-      sliderViewport.classList.remove('dragging');
-      if (Math.abs(dragDeltaX) > 50) {
-        if (dragDeltaX < 0) goTo(currentIndex + 1);
-        else goTo(currentIndex - 1);
-      } else {
-        updateSlider();
-      }
-      dragDeltaX = 0;
-    }
-
-    // Touch events
-    sliderViewport.addEventListener('touchstart', (e) => onDragStart(e.touches[0].clientX), { passive: true });
-    sliderViewport.addEventListener('touchmove', (e) => onDragMove(e.touches[0].clientX), { passive: true });
-    sliderViewport.addEventListener('touchend', onDragEnd);
-
-    // Mouse events
-    sliderViewport.addEventListener('mousedown', (e) => {
-      onDragStart(e.clientX);
-    });
-    document.addEventListener('mousemove', (e) => onDragMove(e.clientX));
-    document.addEventListener('mouseup', onDragEnd);
-
-    // Trackpad horizontal scroll
-    let wheelAccum = 0;
-    let wheelLocked = false;
-    sliderViewport.addEventListener('wheel', (e) => {
-      if (Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
-      e.preventDefault();
-      if (wheelLocked) return;
-      wheelAccum += e.deltaX;
-      if (Math.abs(wheelAccum) > 30) {
-        goTo(currentIndex + (wheelAccum > 0 ? 1 : -1));
-        wheelAccum = 0;
-        wheelLocked = true;
-        setTimeout(() => { wheelLocked = false; }, 400);
-      }
-    }, { passive: false });
-
-
-    window.addEventListener('resize', () => {
-      cardsPerView = getCardsPerView();
-      if (currentIndex > getMaxIndex()) currentIndex = getMaxIndex();
-      buildDots();
-      updateSlider();
-    });
-
-    buildDots();
-    updateSlider();
+  function onMouseMove(e) {
+    if (!isDragging) return;
+    const delta = e.clientX - dragStartX;
+    scroller.scrollLeft = dragStartScroll - delta;
+    if (Math.abs(delta) > 5) suppressClick = true;
   }
-});
 
-// Scroll to top
-document.getElementById('scrollTopBtn')?.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+  function onMouseUp() {
+    if (!isDragging) return;
+    isDragging = false;
+    scroller.classList.remove('dragging');
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  }
+
+  scroller.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    isDragging = true;
+    dragStartX = e.clientX;
+    dragStartScroll = scroller.scrollLeft;
+    suppressClick = false;
+    scroller.classList.add('dragging');
+    e.preventDefault();
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
+  scroller.addEventListener('dragstart', e => e.preventDefault());
+
+  scroller.addEventListener('click', e => {
+    if (suppressClick) {
+      e.preventDefault();
+      e.stopPropagation();
+      suppressClick = false;
+    }
+  }, true);
+
+  // Dynamic fade — only fade edges where there's more content to scroll into
+  function updateFade() {
+    const max = scroller.scrollWidth - scroller.clientWidth;
+    const atStart = scroller.scrollLeft <= 2;
+    const atEnd = max <= 0 || scroller.scrollLeft >= max - 2;
+    scroller.style.setProperty('--fade-start', atStart ? '0%' : '20%');
+    scroller.style.setProperty('--fade-end', atEnd ? '0%' : '20%');
+  }
+
+  scroller.addEventListener('scroll', updateFade, { passive: true });
+  window.addEventListener('resize', updateFade);
+  window.addEventListener('load', updateFade);
+  updateFade();
+}
+
+initHScroller(document.querySelector('.upcoming-events-scroller'));
+initHScroller(document.querySelector('.past-events-scroller'));
 
 // FAQ accordion
-document.querySelectorAll('.faq-question').forEach(function(btn) {
+document.querySelectorAll('.faq-question').forEach(btn => {
   btn.addEventListener('click', function() {
-    var isOpen = this.getAttribute('aria-expanded') === 'true';
-    var answer = this.nextElementSibling;
+    const isOpen = this.getAttribute('aria-expanded') === 'true';
+    const answer = this.nextElementSibling;
 
     // Close all
-    document.querySelectorAll('.faq-question').forEach(function(other) {
+    document.querySelectorAll('.faq-question').forEach(other => {
       other.setAttribute('aria-expanded', 'false');
       other.nextElementSibling.style.maxHeight = null;
     });
