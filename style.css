@@ -1414,6 +1414,15 @@ body {
   transition: background 0.2s var(--ease), color 0.2s var(--ease);
 }
 
+.faq-question:focus {
+  outline: none;
+}
+
+.faq-question:focus-visible {
+  outline: 2px solid rgba(232, 181, 71, 0.4);
+  outline-offset: -2px;
+}
+
 .faq-question:hover {
   background: rgba(255, 255, 255, 0.03);
 }
