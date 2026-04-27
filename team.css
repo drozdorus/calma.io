@@ -1,7 +1,5 @@
 /* =============================================
    TEAM SECTION — standalone block
-   Remove this file + the <link> + the <section id="team">
-   from index.html to disable the team section entirely.
    ============================================= */
 
 .team {
@@ -16,41 +14,48 @@
   margin-bottom: var(--space-xl);
 }
 
-/* Viewport — same behaviour as events-slider-viewport but own class
-   to avoid conflict with script.js querySelector('.events-slider-viewport') */
-.team-viewport {
-  flex: 1;
-  overflow: hidden;
-  padding: 8px 2px;
-  margin: -8px 0;
+/* Native horizontal scroller — same pattern as events section */
+.team-scroller {
+  --fade-start: 0%;
+  --fade-end: 0%;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   cursor: grab;
   user-select: none;
+  mask-image: linear-gradient(90deg,
+    transparent 0%,
+    black var(--fade-start),
+    black calc(100% - var(--fade-end)),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(90deg,
+    transparent 0%,
+    black var(--fade-start),
+    black calc(100% - var(--fade-end)),
+    transparent 100%
+  );
+  overscroll-behavior-x: contain;
 }
 
-.team-viewport.dragging {
-  cursor: grabbing;
-}
+.team-scroller::-webkit-scrollbar { display: none; }
 
-/* Dots wrapper — own class to avoid conflict with querySelector('.events-slider-dots') */
-.team-dots-wrap {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: var(--space-md);
-}
+.team-scroller.dragging { cursor: grabbing; }
 
-/* Transform-based track — mirrors events-slider-track */
 .team-track {
   display: flex;
   gap: var(--space-md);
-  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
+  width: max-content;
 }
 
-/* Card — glow lives here so it can expand beyond the avatar's overflow:hidden */
+/* Card — glow lives on ::before so it can expand beyond overflow:hidden */
 .team-card {
   position: relative;
   flex-shrink: 0;
+  width: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,7 +72,7 @@
   border-radius: 50%;
   background: radial-gradient(
     circle at 50% 50%,
-    var(--card-accent, rgba(255, 215, 0, 0.6)) 0%,
+    var(--card-accent, rgba(232, 181, 71, 0.5)) 0%,
     transparent 60%
   );
   opacity: 0.6;
@@ -81,7 +86,7 @@
   transform: scale(1.25);
 }
 
-/* Circular avatar — no background so glow from .team-card::before shows through */
+/* Circular avatar */
 .team-avatar {
   position: relative;
   z-index: 1;
@@ -100,13 +105,12 @@
   pointer-events: none;
 }
 
-/* Wrap for avatar + optional link badge */
+/* Wrap for avatar + optional link badges */
 .team-avatar-wrap {
   position: relative;
   width: 100%;
 }
 
-/* Link badges — corners of the avatar circle */
 .team-links {
   position: absolute;
   inset: 0;
@@ -114,7 +118,6 @@
   z-index: 2;
 }
 
-/* single or last link → bottom-right */
 .team-link {
   position: absolute;
   pointer-events: all;
@@ -133,7 +136,7 @@
   transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
 }
 
-/* first of two → bottom-left */
+/* first of two links → bottom-left */
 .team-link:first-child:not(:last-child) {
   right: auto;
   left: 8%;
@@ -141,10 +144,9 @@
 
 .team-link:hover {
   color: var(--secondary);
-  border-color: rgba(0, 255, 127, 0.4);
+  border-color: rgba(61, 214, 140, 0.4);
 }
 
-/* Text — match site body sizing */
 .team-info {
   width: 100%;
   padding: var(--space-sm) 0 0;
@@ -165,6 +167,34 @@
   min-height: 2.5em;
 }
 
+/* "More soon" placeholder */
+.team-card--more {
+  width: 100px;
+  justify-content: center;
+}
+
+.team-card--more::before {
+  display: none;
+}
+
+.team-avatar--empty {
+  border: 1.5px dashed rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  padding: 0;
+  background: transparent;
+}
+
+.team-avatar--empty span {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.28);
+  letter-spacing: 0.5px;
+  text-align: center;
+  line-height: 1.5;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
