@@ -51,9 +51,9 @@
   width: max-content;
 }
 
-/* Card — glow lives on ::before so it can expand beyond overflow:hidden */
+/* Card — glow lives on .team-avatar-wrap::before so it tracks the avatar,
+   not the card top (card stretches taller due to text, avatar stays at top) */
 .team-card {
-  position: relative;
   flex-shrink: 0;
   width: 160px;
   display: flex;
@@ -62,7 +62,7 @@
   text-align: center;
 }
 
-.team-card::before {
+.team-avatar-wrap::before {
   content: '';
   position: absolute;
   top: 0;
@@ -81,7 +81,7 @@
   pointer-events: none;
 }
 
-.team-card:hover::before {
+.team-card:hover .team-avatar-wrap::before {
   opacity: 1;
   transform: scale(1.25);
 }
