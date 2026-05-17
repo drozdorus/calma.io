@@ -930,6 +930,7 @@ body {
   font-weight: 400;
   color: var(--text-muted);
   margin-bottom: var(--space-sm);
+  margin-top: auto;
 }
 
 .conference-link {
@@ -941,7 +942,6 @@ body {
   padding: 4px 8px;
   border-radius: var(--radius-sm);
   display: inline-block;
-  margin-top: auto;
 }
 
 .conference-card:hover .conference-link {
