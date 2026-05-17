@@ -57,6 +57,12 @@
         "image": "https://calma.io/img/metaimg.png",
         "description": "Calma is a performance lead generation publisher specializing in compliance-first, AI-optimized lead acquisition across auto insurance, home insurance, health insurance, legal services, home improvement, and financial services verticals.",
         "email": "info@calma.io",
+        "areaServed": "United States",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "info@calma.io",
+          "contactType": "sales"
+        },
         "sameAs": [
           "https://www.linkedin.com/company/calma-io/"
         ],
@@ -84,12 +90,61 @@
         }
       },
       {
+        "@type": "Person",
+        "@id": "https://calma.io/#founder",
+        "name": "Ruslan Drozdov",
+        "jobTitle": "Founder",
+        "url": "https://drozdorus.com",
+        "sameAs": ["https://www.linkedin.com/in/drozdorus/"],
+        "worksFor": { "@id": "https://calma.io/#organization" }
+      },
+      {
         "@type": "WebSite",
         "@id": "https://calma.io/#website",
         "name": "Calma",
         "url": "https://calma.io",
         "publisher": { "@id": "https://calma.io/#organization" },
         "description": "Performance lead generation publisher for insurance, legal, financial, and home improvement verticals"
+      },
+      {
+        "@type": "Event",
+        "name": "Affiliate World Europe 2026",
+        "startDate": "2026-07-09",
+        "endDate": "2026-07-10",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": { "@type": "Place", "name": "Budapest, Hungary" },
+        "url": "https://affiliateworldconferences.com/europe"
+      },
+      {
+        "@type": "Event",
+        "name": "Affiliate Takeover Barcelona 2026",
+        "startDate": "2026-07-16",
+        "endDate": "2026-07-17",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": { "@type": "Place", "name": "Barcelona, Spain" },
+        "url": "https://www.affiliatetakeover.com/barcelona"
+      },
+      {
+        "@type": "Event",
+        "name": "Affiliate Summit East 2026",
+        "startDate": "2026-07-27",
+        "endDate": "2026-07-28",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": { "@type": "Place", "name": "New York, US" },
+        "url": "https://affiliatesummit.com/east"
+      },
+      {
+        "@type": "Event",
+        "name": "Affiliate Summit West 2027",
+        "startDate": "2027-01-12",
+        "endDate": "2027-01-14",
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": { "@type": "Place", "name": "Las Vegas, US" },
+        "url": "https://affiliatesummit.com/west"
       },
       {
         "@type": "FAQPage",
@@ -251,8 +306,10 @@
     </a>
   </div>
 
+  <main id="main-content">
+
   <!-- Hero -->
-  <section class="hero">
+  <section class="hero" aria-label="Hero">
     <div class="container">
       <div class="hero-content">
         <h1 class="hero-title">Keep calm,<br>Calma generates leads</h1>
@@ -267,7 +324,7 @@
   </section>
 
   <!-- About -->
-  <section id="about" class="section about">
+  <section id="about" class="section about" aria-label="About Calma">
     <div class="container">
       <div class="about-content">
         <h2 class="section-title">About Calma</h2>
@@ -336,7 +393,7 @@
   </section>
 
   <!-- Verticals -->
-  <section id="verticals" class="section services">
+  <section id="verticals" class="section services" aria-label="Our Verticals">
     <div class="container">
       <div class="services-header">
         <h2 class="section-title">What We Do</h2>
@@ -400,7 +457,7 @@
     </div>
   </section>
 
-  <section id="team" class="section team">
+  <section id="team" class="section team" aria-label="The Team">
     <div class="container">
       <h2 class="section-title">The Team</h2>
       <p class="section-subtitle">The people behind the leads</p>
@@ -546,7 +603,7 @@
             </div>
             <div class="team-info">
               <div class="team-name">Julia</div>
-              <div class="team-role">Tax Whisperer</div>
+              <div class="team-role">Numbers Whisperer</div>
             </div>
           </div>
 
@@ -566,7 +623,7 @@
   </section>
 
   <!-- Events -->
-  <section id="conferences" class="section conferences">
+  <section id="conferences" class="section conferences" aria-label="Industry Events">
     <div class="container">
       <h2 class="section-title">Industry Events</h2>
       <p class="section-subtitle">We attend leading performance marketing and lead generation conferences to connect
@@ -593,7 +650,7 @@
               <div class="conference-logo-wrapper">
                 <img src="img/aw-logo.png" alt="Affiliate World">
               </div>
-              <div class="conference-date">9-10 Jul 2026</div>
+              <time class="conference-date" datetime="2026-07-09">9-10 Jul 2026</time>
               <h4 class="conference-name">Affiliate World</h4>
               <p class="conference-location">Budapest, Hungary</p>
               <span class="conference-link">affiliateworldconferences.com</span>
@@ -603,7 +660,7 @@
               <div class="conference-logo-wrapper">
                 <img src="img/ato-logo.png" alt="Affiliate Takeover">
               </div>
-              <div class="conference-date">16-17 Jul 2026</div>
+              <time class="conference-date" datetime="2026-07-16">16-17 Jul 2026</time>
               <h4 class="conference-name">Affiliate Takeover</h4>
               <p class="conference-location">Barcelona, Spain</p>
               <span class="conference-link">affiliatetakeover.com</span>
@@ -613,7 +670,7 @@
               <div class="conference-logo-wrapper">
                 <img src="img/ase-logo.png" alt="Affiliate Summit">
               </div>
-              <div class="conference-date">27-28 Jul 2026</div>
+              <time class="conference-date" datetime="2026-07-27">27-28 Jul 2026</time>
               <h4 class="conference-name">Affiliate Summit East</h4>
               <p class="conference-location">New York, US</p>
               <span class="conference-link">affiliatesummit.com</span>
@@ -623,7 +680,7 @@
               <div class="conference-logo-wrapper">
                 <img src="img/asw-logo.png" alt="Affiliate Summit">
               </div>
-              <div class="conference-date">12-14 Jan 2027</div>
+              <time class="conference-date" datetime="2027-01-12">12-14 Jan 2027</time>
               <h4 class="conference-name">Affiliate Summit West</h4>
               <p class="conference-location">Las Vegas, US</p>
               <span class="conference-link">affiliatesummit.com</span>
@@ -639,42 +696,42 @@
         <div class="past-events-scroller">
           <div class="past-events-track">
             <div class="past-conference-card">
-              <div class="past-conference-date">Apr 2026</div>
+              <time class="past-conference-date" datetime="2026-04">Apr 2026</time>
               <h4 class="past-conference-name">LeadsCon</h4>
               <p class="past-conference-location">Las Vegas, US</p>
             </div>
             <div class="past-conference-card">
-              <div class="past-conference-date">Jan 2026</div>
+              <time class="past-conference-date" datetime="2026-01">Jan 2026</time>
               <h4 class="past-conference-name">Affiliate Summit West</h4>
               <p class="past-conference-location">Las Vegas, USA</p>
             </div>
             <div class="past-conference-card">
-              <div class="past-conference-date">Nov 2025</div>
+              <time class="past-conference-date" datetime="2025-11">Nov 2025</time>
               <h4 class="past-conference-name">Web Summit</h4>
               <p class="past-conference-location">Lisbon, Portugal</p>
             </div>
             <div class="past-conference-card">
-              <div class="past-conference-date">Sep 2025</div>
+              <time class="past-conference-date" datetime="2025-09">Sep 2025</time>
               <h4 class="past-conference-name">SBC</h4>
               <p class="past-conference-location">Lisbon, Portugal</p>
             </div>
             <div class="past-conference-card">
-              <div class="past-conference-date">Sep 2025</div>
+              <time class="past-conference-date" datetime="2025-09">Sep 2025</time>
               <h4 class="past-conference-name">Affiliate World Europe</h4>
               <p class="past-conference-location">Budapest, Hungary</p>
             </div>
             <div class="past-conference-card">
-              <div class="past-conference-date">Aug 2025</div>
+              <time class="past-conference-date" datetime="2025-08">Aug 2025</time>
               <h4 class="past-conference-name">Affiliate Summit East</h4>
               <p class="past-conference-location">New York, US</p>
             </div>
             <div class="past-conference-card">
-              <div class="past-conference-date">Apr 2025</div>
+              <time class="past-conference-date" datetime="2025-04">Apr 2025</time>
               <h4 class="past-conference-name">AppGala</h4>
               <p class="past-conference-location">Warsaw, Poland</p>
             </div>
             <div class="past-conference-card">
-              <div class="past-conference-date">Jul 2024</div>
+              <time class="past-conference-date" datetime="2024-07">Jul 2024</time>
               <h4 class="past-conference-name">Affiliate Takeover</h4>
               <p class="past-conference-location">Barcelona, Spain</p>
             </div>
@@ -685,7 +742,7 @@
   </section>
 
   <!-- FAQ -->
-  <section id="faq" class="section faq">
+  <section id="faq" class="section faq" aria-label="Frequently Asked Questions">
     <div class="container">
       <h2 class="section-title">FAQ</h2>
       <p class="section-subtitle">Common questions about working with Calma</p>
@@ -805,7 +862,7 @@
   <div class="section-divider"></div>
 
   <!-- Contact -->
-  <section id="contact" class="section contact">
+  <section id="contact" class="section contact" aria-label="Contact Us">
     <div class="container">
       <h2 class="section-title">Get In Touch</h2>
       <div class="contact-content">
@@ -841,6 +898,8 @@
       </div>
     </div>
   </section>
+
+  </main>
 
   <!-- Footer -->
   <footer class="footer">
