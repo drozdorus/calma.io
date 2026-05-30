@@ -125,7 +125,7 @@
         "description": "Networking event for tech professionals, entrepreneurs, and investors in Miami.",
         "startDate": "2026-05-28",
         "endDate": "2026-05-28",
-        "eventStatus": "https://schema.org/EventScheduled",
+        "eventStatus": "https://schema.org/EventPast",
         "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
         "location": { "@type": "Place", "name": "Miami, US" },
         "url": "https://www.eventbrite.com/e/miami-tech-mixer-2026-tickets-1988572379518",
@@ -252,9 +252,10 @@
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="team.css">
+  <link rel="stylesheet" href="cases.css">
 </head>
 
-<body>
+<body id="top">
   <!-- SVG icon sprite -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
     <symbol id="icon-linkedin" viewBox="0 0 24 24">
@@ -283,22 +284,16 @@
   <header class="header">
     <div class="header-inner">
       <div class="header-content">
-        <div class="logo">
+        <a href="#top" class="logo">
           <img src="./img/logo.svg" height="15" alt="Calma">
-        </div>
+        </a>
 
         <nav class="nav">
-          <a href="#about" class="nav-link">About</a>
           <a href="#verticals" class="nav-link">Verticals</a>
           <a href="#team" class="nav-link">Team</a>
           <a href="#conferences" class="nav-link">Events</a>
+          <a href="#cases" class="nav-link">Cases</a>
           <a href="#contact" class="nav-link">Contact</a>
-          <a href="https://www.linkedin.com/company/calma-io/" target="_blank" class="social-link"
-            aria-label="LinkedIn">
-            <svg width="20" height="20" aria-hidden="true">
-              <use href="#icon-linkedin" />
-            </svg>
-          </a>
           <a href="https://calma-io.notion.site/Open-Vacancies-Calma-Agency-169f120c65df806bba68fc5163bcfa52"
             target="_blank" class="hiring-link">
             Hiring
@@ -326,17 +321,11 @@
         <line x1="18" y1="6" x2="6" y2="18" />
       </svg>
     </button>
-    <a href="#about" class="nav-link" onclick="closeMobileMenu()">About</a>
     <a href="#verticals" class="nav-link" onclick="closeMobileMenu()">Verticals</a>
     <a href="#team" class="nav-link" onclick="closeMobileMenu()">Team</a>
     <a href="#conferences" class="nav-link" onclick="closeMobileMenu()">Events</a>
+    <a href="#cases" class="nav-link" onclick="closeMobileMenu()">Cases</a>
     <a href="#contact" class="nav-link" onclick="closeMobileMenu()">Contact</a>
-    <a href="https://www.linkedin.com/company/calma-io/" target="_blank" class="social-link">
-      <svg width="20" height="20" aria-hidden="true">
-        <use href="#icon-linkedin" />
-      </svg>
-      <span>LinkedIn</span>
-    </a>
     <a href="https://calma-io.notion.site/Open-Vacancies-Calma-Agency-169f120c65df806bba68fc5163bcfa52" target="_blank"
       class="hiring-link">
       Hiring
@@ -684,16 +673,6 @@
               </a>-->
 
 
-            <a href="https://www.eventbrite.com/e/miami-tech-mixer-2026-tickets-1988572379518" target="_blank" class="conference-card">
-              <div class="conference-logo-wrapper" style="flex-direction: column; gap: 1px;">
-                <span style="font-size: 1.15rem; font-weight: 800; letter-spacing: 0.06em; color: var(--text);">MTM</span>
-                <span style="font-size: 0.48rem; font-weight: 500; letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase;">Miami Tech</span>
-              </div>
-              <time class="conference-date" datetime="2026-05-28">28 May 2026</time>
-              <h4 class="conference-name">Miami Tech Mixer</h4>
-              <p class="conference-location">Miami, US</p>
-              <span class="conference-link">eventbrite.com</span>
-            </a>
             <a href="https://affiliateworldconferences.com/europe" target="_blank" class="conference-card">
               <div class="conference-logo-wrapper">
                 <img src="img/aw-logo.png" alt="Affiliate World">
@@ -745,6 +724,11 @@
           <div class="past-events-track">
             <div class="past-conference-card">
               <time class="past-conference-date" datetime="2026-05">May 2026</time>
+              <h4 class="past-conference-name">Miami Tech Mixer</h4>
+              <p class="past-conference-location">Miami, US</p>
+            </div>
+            <div class="past-conference-card">
+              <time class="past-conference-date" datetime="2026-05">May 2026</time>
               <h4 class="past-conference-name">DigiMarCon Midwest</h4>
               <p class="past-conference-location">Chicago, US</p>
             </div>
@@ -790,6 +774,99 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cases -->
+  <section id="cases" class="section" aria-label="Cases">
+    <div class="container">
+      <h2 class="section-title">Cases</h2>
+      <p class="section-subtitle">Perspectives on performance marketing in regulated verticals</p>
+      <div class="cases-grid">
+
+        <a href="/cases/us-auto-insurance-market/" class="article-card">
+          <div class="article-cover">
+            <svg viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="480" height="150" fill="#0d0d0d"/>
+              <rect x="30" y="95" width="28" height="55" rx="2" fill="#E8B547" fill-opacity="0.18"/>
+              <rect x="68" y="75" width="28" height="75" rx="2" fill="#E8B547" fill-opacity="0.28"/>
+              <rect x="106" y="58" width="28" height="92" rx="2" fill="#E8B547" fill-opacity="0.32"/>
+              <rect x="144" y="72" width="28" height="78" rx="2" fill="#E8B547" fill-opacity="0.22"/>
+              <rect x="182" y="88" width="28" height="62" rx="2" fill="#E8B547" fill-opacity="0.18"/>
+              <line x1="0" y1="88" x2="480" y2="88" stroke="#E8B547" stroke-opacity="0.07" stroke-width="1"/>
+              <text x="290" y="72" font-family="system-ui,sans-serif" font-size="28" font-weight="700" fill="#E8B547" fill-opacity="0.12">$312B</text>
+              <defs><linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="1"/><stop offset="55%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
+              <rect width="480" height="80" fill="url(#cg1)"/>
+            </svg>
+          </div>
+          <div class="article-body">
+            <span class="article-tag">Market Overview</span>
+            <h3 class="article-title">The US Auto Insurance Market: Structure, Players, and Lead Economics</h3>
+            <p class="article-desc">How the $312B market is structured, who buys leads and why, and where performance acquisition fits in the ecosystem.</p>
+            <span class="article-read">Read</span>
+          </div>
+        </a>
+
+        <a href="/cases/meta-auto-insurance-ads/" class="article-card">
+          <div class="article-cover">
+            <svg viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="480" height="150" fill="#0d0d0d"/>
+              <line x1="80" y1="55" x2="190" y2="95" stroke="#3DD68C" stroke-opacity="0.15" stroke-width="1"/>
+              <line x1="80" y1="55" x2="240" y2="42" stroke="#3DD68C" stroke-opacity="0.12" stroke-width="1"/>
+              <line x1="190" y1="95" x2="310" y2="75" stroke="#3DD68C" stroke-opacity="0.15" stroke-width="1"/>
+              <line x1="240" y1="42" x2="310" y2="75" stroke="#3DD68C" stroke-opacity="0.1" stroke-width="1"/>
+              <line x1="310" y1="75" x2="400" y2="110" stroke="#3DD68C" stroke-opacity="0.12" stroke-width="1"/>
+              <line x1="190" y1="95" x2="250" y2="125" stroke="#3DD68C" stroke-opacity="0.1" stroke-width="1"/>
+              <line x1="400" y1="110" x2="440" y2="85" stroke="#3DD68C" stroke-opacity="0.08" stroke-width="1"/>
+              <circle cx="80" cy="55" r="5" fill="#3DD68C" fill-opacity="0.35"/>
+              <circle cx="190" cy="95" r="7" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="240" cy="42" r="4" fill="#3DD68C" fill-opacity="0.28"/>
+              <circle cx="310" cy="75" r="10" fill="#3DD68C" fill-opacity="0.38"/>
+              <circle cx="400" cy="110" r="5" fill="#3DD68C" fill-opacity="0.28"/>
+              <circle cx="250" cy="125" r="3" fill="#3DD68C" fill-opacity="0.22"/>
+              <circle cx="440" cy="85" r="4" fill="#3DD68C" fill-opacity="0.2"/>
+              <defs><linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="1"/><stop offset="50%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
+              <rect width="480" height="65" fill="url(#cg2)"/>
+            </svg>
+          </div>
+          <div class="article-body">
+            <span class="article-tag article-tag--mint">Paid Acquisition</span>
+            <h3 class="article-title">Running Auto Insurance Ads on Meta: What Changed in 2025–2026</h3>
+            <p class="article-desc">How Meta's Andromeda engine and Special Ad Category restrictions reshaped creative strategy for insurance advertisers.</p>
+            <span class="article-read">Read</span>
+          </div>
+        </a>
+
+        <a href="/cases/ny-ai-advertising-law/" class="article-card">
+          <div class="article-cover">
+            <svg viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="480" height="150" fill="#0d0d0d"/>
+              <line x1="0" y1="50" x2="480" y2="50" stroke="white" stroke-opacity="0.04" stroke-width="1"/>
+              <line x1="0" y1="100" x2="480" y2="100" stroke="white" stroke-opacity="0.04" stroke-width="1"/>
+              <line x1="120" y1="0" x2="120" y2="150" stroke="white" stroke-opacity="0.04" stroke-width="1"/>
+              <line x1="240" y1="0" x2="240" y2="150" stroke="white" stroke-opacity="0.04" stroke-width="1"/>
+              <line x1="360" y1="0" x2="360" y2="150" stroke="white" stroke-opacity="0.04" stroke-width="1"/>
+              <line x1="195" y1="45" x2="285" y2="45" stroke="#E8B547" stroke-opacity="0.45" stroke-width="1.5"/>
+              <line x1="240" y1="35" x2="240" y2="115" stroke="#E8B547" stroke-opacity="0.3" stroke-width="1.5"/>
+              <line x1="195" y1="45" x2="195" y2="80" stroke="#3DD68C" stroke-opacity="0.45" stroke-width="1.5"/>
+              <line x1="285" y1="45" x2="285" y2="80" stroke="#E8B547" stroke-opacity="0.45" stroke-width="1.5"/>
+              <circle cx="195" cy="88" r="14" fill="none" stroke="#3DD68C" stroke-opacity="0.38" stroke-width="1.5"/>
+              <circle cx="285" cy="88" r="14" fill="none" stroke="#E8B547" stroke-opacity="0.38" stroke-width="1.5"/>
+              <text x="187" y="92" font-family="system-ui,sans-serif" font-size="9" font-weight="600" fill="#3DD68C" fill-opacity="0.55">AI</text>
+              <text x="274" y="92" font-family="system-ui,sans-serif" font-size="9" font-weight="600" fill="#E8B547" fill-opacity="0.55">LAW</text>
+              <defs><linearGradient id="cg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="1"/><stop offset="45%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
+              <rect width="480" height="65" fill="url(#cg3)"/>
+            </svg>
+          </div>
+          <div class="article-body">
+            <span class="article-tag">Regulation</span>
+            <h3 class="article-title">New York's AI Advertising Law: What Lead Gen Operators Need to Know</h3>
+            <p class="article-desc">NYC Local Law 144 and upcoming state-level AI transparency rules — what they require, who they affect, and how to stay compliant.</p>
+            <span class="article-read">Read</span>
+          </div>
+        </a>
+
       </div>
     </div>
   </section>
@@ -963,6 +1040,7 @@
           <span class="footer-copy">© 2026 Calma</span>
         </div>
         <div class="footer-meta">
+          <a href="#cases" class="footer-link">Cases</a>
           <a href="./privacy/" target="_blank" class="footer-link">Privacy</a>
           <a href="https://www.linkedin.com/company/calma-io/" target="_blank" class="footer-icon"
             aria-label="LinkedIn">
