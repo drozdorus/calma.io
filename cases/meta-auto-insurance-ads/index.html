@@ -112,7 +112,7 @@
         <header class="article-hero">
           <div class="article-hero-meta">
             <span class="article-tag article-tag--mint">Paid Acquisition</span>
-            <span class="article-read-time">9 min read</span>
+            <span class="article-read-time">5 min read</span>
           </div>
           <h1 class="article-hero-title">Running Auto Insurance Ads on Meta: What Changed in 2025–2026</h1>
           <p class="article-hero-lead">How Meta's Andromeda engine and Special Ad Category restrictions reshaped creative strategy for insurance advertisers — and what actually works now.</p>
@@ -142,116 +142,66 @@
         </header>
 
         <article class="article-prose">
-          <p>For years, running auto insurance on Meta meant meticulous audience construction — stacking interest layers, building lookalikes off your best leads, excluding recent claimants, targeting by age bracket and ZIP. That playbook is mostly gone now. Not gradually deprecated — structurally dismantled by two simultaneous forces: Meta's Andromeda engine rewriting how ads get matched to people, and the extension of Special Ad Category rules to cover all insurance products as of January 2025. If you're still operating with a 2023 mental model, you're leaving a significant amount of performance on the table.</p>
+          <p>For years, running auto insurance on Meta meant meticulous audience construction — stacking interest layers, building lookalikes off your best leads, targeting by age bracket and ZIP. That playbook is mostly gone now. Not gradually deprecated — structurally dismantled by two simultaneous forces: Meta's Andromeda engine rewriting how ads get matched to people, and the extension of Special Ad Category rules to cover all insurance products as of January 2025. If you're still operating with a 2023 mental model, you're leaving significant performance on the table.</p>
 
-          <p>This guide covers what actually changed, what the new constraints mean operationally, and how creative-led targeting works in practice for auto insurance specifically.</p>
+          <p>This is what actually changed, what the constraints mean operationally, and how creative-led targeting works in practice for auto insurance.</p>
 
           <h2>The Andromeda Engine: What It Actually Changed</h2>
 
-          <p>Meta's Andromeda retrieval system, which rolled out in late 2024 and became the dominant delivery mechanism through 2025, replaced the older interest-graph approach with real-time semantic matching. The difference matters more than the marketing language suggests.</p>
+          <p>Meta's Andromeda retrieval system, which became the dominant delivery mechanism through 2025, replaced the older interest-graph approach with real-time semantic matching. The old system asked: <em>who has this person signaled interest in?</em> Andromeda asks: <em>what is the semantic content of this ad, and whose engagement history contains similar entities?</em> It reads your creative at multiple simultaneous layers — computer vision for objects, scenes, and motion; OCR for every word on screen; speech-to-text for audio, extracting sentiment and tone.</p>
 
-          <p>The old system asked: <em>who has this person signaled interest in?</em> Andromeda asks: <em>what is the semantic content of this ad, and whose engagement history contains similar entities?</em> It evaluates an estimated 10,000 times more ad variants in parallel, and it does this by reading your creative at multiple simultaneous layers — computer vision for objects, scenes, color palette, and motion; OCR for every word on screen including offer amounts and captions; and speech-to-text for spoken audio, extracting sentiment, keywords, and tone.</p>
+          <p>Every creative gets assigned an Entity ID based on its visual and semantic fingerprint. Show a car dashboard — Andromeda connects your ad to people whose engagement history includes automotive content. Show a renewal notice — it surfaces to people engaging with personal finance and cost content. The system is doing semantic matching, not demographic inference. Your creative brief is now also your targeting brief.</p>
 
-          <p>Every creative gets assigned an Entity ID based on its visual and semantic fingerprint. That fingerprint gets matched against user engagement histories that contain similar entities. Show a car dashboard in your ad — Andromeda connects it to people whose engagement patterns include automotive content. Show a renewal notice — it surfaces to people who've been engaging with cost and budgeting content. The system is not making demographic inferences. It is doing semantic matching at a scale that was computationally impossible before the GH200 hardware infrastructure it runs on.</p>
-
-          <div class="article-callout article-callout--mint">The practical implication: your creative brief is now also your targeting brief. What you put in front of the camera determines who sees the ad — not the audience picker in Ads Manager.</div>
-
-          <p>The Ad Quality Score (AQS) system runs parallel to this. It weights three factors: Quality Ranking at roughly 35%, Engagement Rate Ranking at around 40%, and Conversion Rate Ranking at 25%. Higher AQS means lower CPMs — Meta's research puts creative quality as accounting for 56% of all campaign performance outcomes. The first thing Andromeda uses to evaluate engagement potential is the three-second video retention rate, which functions as the primary quality signal for video formats. Low three-second retention tells the system your hook isn't working; it will reduce distribution before you've had time to optimize.</p>
+          <p>The primary quality signal for video formats is three-second retention rate. Low retention tells Andromeda your hook isn't working; it reduces distribution before you've had time to optimize. Meta's own research attributes 56% of campaign performance outcomes to creative quality. The format and content of what you run is the primary lever — not the audience picker in Ads Manager.</p>
 
           <h2>Special Ad Category: What You Lost and What Still Works</h2>
 
-          <p>Since January 2025, all insurance products — auto included — require Special Ad Category declaration in Meta's ad system. This isn't new for housing or credit, but the extension to insurance is meaningful. Here's what it actually removes from your toolkit.</p>
+          <p>Since January 2025, all insurance products require Special Ad Category declaration. You cannot target by age bracket or gender. Geographic targeting requires a minimum 15-mile radius — no ZIP precision. Lookalike Audiences are unavailable. Advantage+ expansion is off. Interest-based micro-targeting, the core of the old playbook, is gone.</p>
 
-          <p>You cannot target specific age brackets. You cannot target by gender. Geographic targeting is subject to a minimum 15-mile radius — no ZIP code precision. Lookalike Audiences are unavailable. Advantage+ audience expansion is off. You cannot exclude audiences based on demographics. Interest-based micro-targeting, the core of the old playbook, is gone.</p>
-
-          <p>What remains is more than most advertisers realize. First-party custom audiences built from email lists, website visitors, CRM leads, and video viewers are still fully available — the restriction is on demographic inference and expansion, not on data you actually own. State-level geo targeting works. City plus 15-mile radius works. DMA targeting works. And broad audience with strong creative works — which is, increasingly, where the real performance lives.</p>
-
-          <div class="article-callout">Running broad audience on a Special Ad Category campaign isn't giving up control — it's shifting control from the audience configuration to the creative. That's a workflow change, not a capability downgrade, if your creative operation is built for it.</div>
-
-          <p>One practical note: if you have a healthy email list or CRM from past leads, those custom audiences are now more valuable than they've ever been relative to the alternatives. Suppress recent buyers, re-engage quote abandoners, and build sequential nurture flows — none of that requires the targeting capabilities that got removed.</p>
+          <p>What remains is more than most advertisers realize. First-party custom audiences — email lists, website visitors, CRM leads, video viewers — are still fully available. The restriction is on demographic inference and expansion, not on data you own. State-level, DMA, and city-plus-radius geo targeting all work. And broad audience with strong creative is increasingly where real performance lives. Running broad on a Special Ad Category campaign isn't giving up control — it's shifting control from the audience configuration to the creative. First-party lists are now more valuable than ever: suppress recent buyers, re-engage quote abandoners, build sequential nurture flows. None of that requires the targeting that got removed.</p>
 
           <h2>VEO: Your Creative Is the Audience Selector</h2>
 
-          <p>Visual Entity Optimization isn't a Meta product feature with a settings panel — it's a framework for understanding how Andromeda's semantic matching works in practice, and designing creatives accordingly. Because demographic targeting is restricted, the visual and semantic content of your ad becomes the mechanism by which Meta finds the right people.</p>
-
-          <p>Here's how this works in concrete terms for auto insurance:</p>
+          <p>Because demographic targeting is restricted, the visual and semantic content of your ad becomes the mechanism by which Meta finds the right people. For auto insurance, five visual signals matter most:</p>
 
           <ul>
-            <li><strong>Show a car prominently</strong> — object recognition connects your ad to people with automotive engagement history: car owners, recent buyers, people researching vehicles.</li>
-            <li><strong>Show a bill, renewal notice, or price comparison screen</strong> — the system routes to cost-conscious users, people engaging with personal finance content, anyone whose recent behavior signals price sensitivity.</li>
-            <li><strong>Show a family inside or around a car</strong> — scene classification reads this as family context, surfacing to parents and households rather than individual young drivers.</li>
-            <li><strong>Show a smartphone with a quote interface</strong> — the semantic fingerprint connects to mobile-first users, people who use financial apps, digital-native buyers.</li>
-            <li><strong>Show highway or commute footage</strong> — motion analysis and scene classification routes toward regular drivers and commuters.</li>
+            <li><strong>Show a car prominently</strong> — object recognition connects your ad to people with automotive engagement history: car owners, recent buyers, vehicle researchers.</li>
+            <li><strong>Show a bill, renewal notice, or price comparison screen</strong> — routes to cost-conscious users and people engaging with personal finance content.</li>
+            <li><strong>Show a family inside or around a car</strong> — scene classification surfaces to parents and households rather than individual younger drivers.</li>
+            <li><strong>Show a smartphone with a quote interface</strong> — connects to mobile-first users and digital-native buyers who use financial apps.</li>
+            <li><strong>Show highway or commute footage</strong> — motion analysis routes toward regular drivers and commuters.</li>
           </ul>
 
-          <p>This means your opening three seconds of video — or your static image — is doing double duty. It's the hook for the viewer, and it's the targeting signal for the algorithm. The implication is that different creative angles should be developed not just to test messaging, but to intentionally reach different audience segments. A "family protection" creative and a "rate shock" creative won't just perform differently — they'll reach structurally different users.</p>
+          <div class="article-callout article-callout--mint">Your opening frame is doing double duty: it's the hook for the viewer and the targeting signal for the algorithm. A "family protection" creative and a "rate shock" creative won't just perform differently — they'll reach structurally different users. Add a column to your creative brief: <em>who does this visual content signal to Andromeda?</em></div>
 
-          <p>When you build your creative brief, add a column: <em>who does this visual content signal to Andromeda?</em> That discipline changes how you think about scene composition, what appears in the first frame, and what context the background sets.</p>
+          <h2>The Auto Insurance Buyer: Triggers and Psychology</h2>
 
-          <h2>The Auto Insurance Buyer: Triggers and the Psychology Behind Them</h2>
+          <p>J.D. Power's 2025 data puts 57% of policyholders having actively shopped during the year — the highest ever recorded. The six primary triggers, by frequency: new car purchase (33%), rate renewal shock (28%), relocation (16%), young driver added to policy (9%), life events like marriage or new job (7%), bad claim experience (7%). Renewal shock and new car purchase together account for over 60% of shopping events — both have clear visual and messaging correlates you can design to.</p>
 
-          <p>J.D. Power's 2025 data puts 57% of policyholders having actively shopped during the year — the highest ever recorded. Rate increases and market competition created a switching environment that doesn't require manufacturing urgency; the urgency is already there. Understanding <em>what triggers shopping behavior</em> tells you which hooks will land and when.</p>
+          <p>The underlying psychology runs on loss aversion, not aspiration. People are approximately twice as motivated by avoiding a bad outcome as by gaining a good one. "Most drivers in your state are overpaying by $600/year" consistently outperforms "Save money on car insurance" — the first activates loss aversion, the second offers a vague future benefit. The second driver is betrayal: premium increases of 15–30% at renewal create a distrust frame your creative can step into directly. "Your rate went up again — here's what other drivers did about it" converts better than generic comparison messaging. And specific dollar amounts dramatically outperform vague claims — "Drivers in Ohio saved $847 last year" beats "Save big" by 2–3x in click-through and conversion. The number activates the calculation instinct. The vague claim asks for trust the buyer doesn't have yet.</p>
 
-          <p>The six primary triggers, roughly by frequency: new car purchase (33%), rate renewal shock (28%), relocation (16%), young driver added to policy (9%), life events like marriage or new job (7%), bad claim experience (7%). This distribution matters for creative planning. Renewal shock and new car purchase together account for over 60% of shopping events — and both have clear visual and messaging correlates.</p>
+          <h2>Creative Formats and Hook Patterns</h2>
 
-          <p>The underlying psychology runs on loss aversion, not aspiration. People are approximately twice as motivated by avoiding a bad outcome as by gaining a good one. This is why "Most drivers in your state are overpaying by $600/year" consistently outperforms "Save money on car insurance." The first frame activates loss aversion — you're already losing — while the second offers a vague future benefit. For a category where the product is intangible and the purchase is reluctant, loss framing isn't a tactic, it's table stakes.</p>
-
-          <p>The second psychological driver is betrayal. Premium increases from existing carriers — often 15–30% at renewal — create a distrust frame that your creative can step into directly. The buyer isn't looking for insurance; they're looking for relief from a company they feel was fair at first and then raised rates without justification. Messaging that acknowledges this dynamic ("Your rate went up again — here's what other drivers did about it") converts better than generic comparison messaging.</p>
-
-          <div class="article-callout article-callout--mint">Specific dollar amounts dramatically outperform vague claims. "Drivers in Ohio saved $847 last year" outperforms "Save big on car insurance" not just marginally — in testing, the gap is often 2–3x on click-through and conversion. The number activates the calculation instinct. The vague claim asks for trust the buyer doesn't have yet.</div>
-
-          <h2>Creative Formats and the Hook Playbook</h2>
-
-          <p>For auto insurance on Meta in 2025–2026, format priority looks like this, in rough order of performance ceiling:</p>
+          <p>Format priority for auto insurance on Meta in 2025–2026, by performance ceiling:</p>
 
           <ul>
-            <li><strong>UGC Talking-Head Video (9:16, 30–60 seconds)</strong> — the highest-trust format, best Ad Quality Score. A real-seeming person speaking directly to camera about their rate, their switch, their savings. The authenticity signal is what Andromeda's sentiment analysis rewards, and it's what converts in a low-trust category.</li>
-            <li><strong>Problem/Solution Hook Video (9:16, 20–45 seconds)</strong> — opens with the problem (rate shock, confusion, overpaying) and pivots to the solution. Slightly more produced than UGC but still direct-response optimized.</li>
-            <li><strong>Lead Form Quiz Ad</strong> — works well for cold audiences because it reduces commitment friction. "What's your current rate?" as an interactive question generates higher engagement than a static CTA to a landing page.</li>
-            <li><strong>Testimonial Story (9:16 or 4:5)</strong> — third-party validation in a short format. Works for retargeting and warm audiences particularly well.</li>
-            <li><strong>Carousel Comparison (3–5 cards)</strong> — coverage comparison, price range by state, "before and after" rate scenarios. Drives consideration rather than immediate conversion.</li>
-            <li><strong>Urgency/Deadline Static (retargeting only)</strong> — works for re-engaging people who've already shown intent. Don't use this cold; it requires a prior relationship to activate.</li>
+            <li><strong>UGC Talking-Head Video (9:16, 30–60 seconds)</strong> — highest-trust format, best Ad Quality Score. A real-seeming person speaking to camera about their rate, their switch, their savings. Andromeda's sentiment analysis rewards the authenticity signal, and it converts in a low-trust category.</li>
+            <li><strong>Problem/Solution Hook Video (9:16, 20–45 seconds)</strong> — opens with the problem (rate shock, confusion, overpaying) and pivots to the solution. Slightly more produced than UGC, still direct-response optimized.</li>
+            <li><strong>Lead Form Quiz Ad</strong> — reduces commitment friction for cold audiences. "What's your current rate?" as an interactive question outperforms a static CTA to a landing page.</li>
+            <li><strong>Testimonial Story (9:16 or 4:5)</strong> — third-party validation in a short format. Works particularly well for retargeting and warm audiences.</li>
           </ul>
 
-          <p>For every format, the first three seconds are the primary performance variable. Andromeda uses three-second retention as its first quality gate — low retention means reduced distribution before your lead form or landing page ever gets a chance. Here are the hook patterns that have proven durable for auto insurance:</p>
+          <p>For every format, the first three seconds are the primary performance variable. Hook patterns that have proven durable for auto insurance:</p>
 
           <ul>
-            <li><strong>Rate Shock:</strong> Open with the problem already in progress. "I just got my renewal notice — $2,400 for the year." The viewer who has experienced this recognizes it immediately.</li>
-            <li><strong>Savings Specificity:</strong> Lead with the number. "$847 a year. That's what I was overpaying." The dollar amount creates cognitive engagement before the viewer decides whether to watch.</li>
+            <li><strong>Rate Shock:</strong> Open with the problem in progress. "I just got my renewal notice — $2,400 for the year." The viewer who's experienced this recognizes it immediately.</li>
+            <li><strong>Savings Specificity:</strong> Lead with the number. "$847 a year. That's what I was overpaying." The dollar amount creates cognitive engagement before the viewer decides to watch.</li>
             <li><strong>Betrayal:</strong> Name the dynamic. "My insurance company raised my rate 22% last year. I hadn't filed a single claim." Activates righteous frustration.</li>
-            <li><strong>Curiosity Gap:</strong> "Most drivers have no idea what their insurance actually covers — until they need it." Triggers the fear of unknown ignorance.</li>
             <li><strong>Identity:</strong> "If you've been driving for 10+ years without an accident, you're probably paying someone else's risk." Speaks to a specific self-concept.</li>
-            <li><strong>Fear with specificity:</strong> "Most drivers are underinsured by $50,000 or more and don't know it." The specific number makes the vague risk concrete.</li>
-            <li><strong>Pattern Interrupt:</strong> Open with something visually or contextually unexpected — a renewal notice torn in half, a screen showing a side-by-side rate comparison. Breaks passive scrolling.</li>
+            <li><strong>Pattern Interrupt:</strong> Open with something visually unexpected — a renewal notice torn in half, a side-by-side rate comparison on screen. Breaks passive scrolling.</li>
           </ul>
 
-          <h2>Building and Maintaining a Creative Library</h2>
-
-          <p>The Andromeda system has a specific failure mode that practitioners need to understand: if it perceives two or more of your ads as essentially the same creative — same semantic fingerprint, same visual entity pattern — it treats them as duplicates and increases CPMs across both. You don't get two chances to reach the same person with the same message. You get penalized for trying.</p>
-
-          <p>This means creative diversity is structural, not optional. The practical rule: maintain at least five genuinely different creative angles at all times. Not five variations of the same hook with different B-roll — five angles built around different triggers, different visual contexts, and different opening frames. Rate shock and young driver addition are different angles. Family protection and commuter convenience are different angles. A green-screen UGC and a produced testimonial are different formats but might have the same semantic fingerprint if the message and visual context overlap heavily.</p>
-
-          <p>Refresh cadence matters too. The typical decay curve for auto insurance creatives runs 14–18 days before fatigue is measurable in retention and CPL metrics. At a frequency of 3+ — the threshold where performance reliably deteriorates — you need new creative in market, not optimization of existing. "Refresh" means genuinely new angle, new visual content, new hook. Reshooting the same script with a different presenter doesn't reset the Entity ID meaningfully if the semantic content is identical.</p>
-
-          <div class="article-callout">The creative library isn't just a volume play — it's how you maintain coverage across the different buyer triggers simultaneously. Someone hit by renewal shock and someone who just bought a new car are in different headspaces. You need a creative that was designed for each.</div>
-
-          <p>A workable production rhythm for a serious auto insurance campaign: two to three new creatives per week in testing, with promotion to primary spend once a creative demonstrates above-threshold three-second retention. Keep a test budget separate from scale budget. Pull creatives that hit frequency 3 before you see CPL deterioration, not after.</p>
-
-          <h2>KPIs That Actually Tell You What's Happening</h2>
-
-          <p>Given how much of the performance lever now lives in creative, the KPIs you watch need to reflect that. The metrics worth tracking actively:</p>
-
-          <ul>
-            <li><strong>3-second video retention rate:</strong> Target above 30%. Below 20% means your hook isn't stopping the scroll — the problem is in the first three seconds, not elsewhere.</li>
-            <li><strong>Hook hold rate to 15 seconds:</strong> Target above 20%. This tells you whether viewers who stop are actually staying. High three-second retention plus low 15-second hold means you're stopping scrollers but losing them immediately — hook works, setup doesn't.</li>
-            <li><strong>CPL by creative angle:</strong> $8–25 is the practical range depending on state and format, but the more useful number is the relative CPL across creative variants. This tells you which angles are resonating with which intent clusters.</li>
-            <li><strong>Lead-to-quote rate:</strong> Target above 35%. Below this typically indicates a mismatch between ad messaging and landing page experience — the ad is setting an expectation the page isn't fulfilling.</li>
-            <li><strong>Frequency:</strong> Watch for 3+ at the ad set level. This is the trigger for creative refresh, not post-hoc diagnosis. Set up automated rules if you're running at volume.</li>
-          </ul>
-
-          <p>One additional signal worth building: segment your CPL and conversion data by the visual entity type of your creative — not just by the campaign or ad set, but by what the creative is actually showing. Over time, this tells you which VEO signals are producing the highest-quality leads in your specific geo and demographic context, which feeds directly back into creative brief development.</p>
-
-          <p>The shift from targeting-first to creative-first isn't a temporary state while the industry adjusts to Andromeda. It's the direction the platform is moving, and the restrictions on insurance advertising make the creative dependency permanent rather than optional. The advertisers building durable performance in this category are the ones who've reorganized their operation around that reality — treating creative production as the primary performance function, not the execution layer downstream of audience strategy.</p>
+          <p>The shift from targeting-first to creative-first isn't a temporary adjustment while the industry adapts to Andromeda. The Special Ad Category restrictions make the creative dependency permanent. Advertisers building durable performance in this category have reorganized their operation around that reality — treating creative production as the primary performance function, not the execution layer downstream of audience strategy.</p>
         </article>
 
       </div>

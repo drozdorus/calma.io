@@ -112,7 +112,7 @@
         <header class="article-hero">
           <div class="article-hero-meta">
             <span class="article-tag">Market Overview</span>
-            <span class="article-read-time">8 min read</span>
+            <span class="article-read-time">5 min read</span>
           </div>
           <h1 class="article-hero-title">The US Auto Insurance Market: Structure, Players, and Lead Economics</h1>
           <p class="article-hero-lead">How the $312B market is structured, who the key players are, and where performance lead generation fits in the ecosystem.</p>
@@ -155,15 +155,13 @@
 
           <p>Brokers and independent agents hold state-by-state licenses to sell insurance on behalf of carriers. A captive agent represents a single carrier (the classic State Farm or Allstate agent). An independent agent or broker can represent multiple carriers and theoretically shop the market for the customer. Both earn commission — typically 8–15% of the first-year premium, with renewal commissions in the 5–10% range depending on the carrier relationship.</p>
 
-          <p>The aggregator-brokers operating at national scale — <strong>SmartFinancial, EverQuote, PolicyGenius, Young Alfred</strong> — blend the broker and technology layers. They have insurance licenses (or work through licensed entities in each state), use carrier APIs to generate real quotes, and then either complete the sale themselves or transfer the customer to the carrier. Their unit economics depend on getting a commission on bound policies, not just generating quote activity.</p>
+          <p>Aggregator-brokers operating at national scale blend the broker and technology layers — holding insurance licenses in each state, using carrier APIs to generate real quotes, and either completing the sale themselves or transferring the customer to the carrier. Their unit economics depend on commissions on bound policies, not just generating quote activity.</p>
 
           <p>Licensing is the compliance moat here. You cannot legally sell, solicit, or negotiate insurance in any state without the appropriate license — or without working through a licensed entity. This is why pure lead generators (who only collect and sell contact information) operate in a structurally different model than brokers who actually close the sale.</p>
 
           <h3>Tier 3: Aggregators and Quote Engines</h3>
 
-          <p>Comparison platforms let a consumer enter their ZIP code, vehicle, and driver info, and receive multiple price quotes in a single session. The major consumer-facing names are <strong>The Zebra, Insurify, Gabi (acquired by Experian), and NerdWallet's insurance vertical</strong>. These platforms generate tens of millions of quote sessions per year.</p>
-
-          <p>The economics vary. Some aggregators act as licensed brokers and earn commissions on bound policies. Others function primarily as lead resellers — collecting the quote request and selling it to one or more carriers or downstream buyers. Insurify uses direct carrier API integrations to show real bindable prices; The Zebra combines online quotes with a call center follow-up model. The user experience is designed to maximize intent signals, while the monetization model is designed to extract maximum revenue per session regardless of whether the user converts.</p>
+          <p>Comparison platforms let a consumer enter their ZIP code, vehicle, and driver info, and receive multiple price quotes in a single session. These platforms generate tens of millions of quote sessions per year. Some show real carrier prices via direct API integrations and act as licensed brokers; others collect the quote request and resell it to buyers downstream. The user experience maximizes intent signals; the monetization model extracts maximum revenue per session regardless of whether the consumer converts.</p>
 
           <p>Aggregators at this tier typically operate on a <strong>cost-per-application (CPA) or cost-per-sale (CPS) model</strong> with carriers, or on a per-lead model with downstream buyers. The distinction matters: CPA and CPS models reward quality over volume; per-lead models reward volume, which creates incentive misalignment that shows up as lead quality problems.</p>
 
@@ -171,7 +169,7 @@
 
           <p>At the base of the distribution stack sit pure lead generators. Their product is a submitted form — name, phone, email, vehicle, driver profile, coverage interest. They don't show the consumer prices. They don't complete the sale. They collect contact data and sell it.</p>
 
-          <p>Names operating in this space include <strong>QuoteWizard (acquired by LendingTree), MediaAlpha, OttoInsurance, CoverageProfessor</strong>, and hundreds of smaller operations. EverQuote operates simultaneously as a Tier 3 quote platform and a Tier 4 lead reseller, depending on the buyer relationship.</p>
+          <p>Hundreds of operations — from large publicly-traded lead exchanges to small niche publishers — work in this space. Some platforms operate across both Tier 3 and Tier 4 simultaneously, depending on the buyer relationship and the consumer's intent level at the time of the session.</p>
 
           <p>The critical technology at this tier is the <strong>ping tree</strong>: an automated, real-time auction system that routes each lead to the highest bidder from a pool of pre-integrated buyers. A lead is "pinged" — key data fields are sent to buyers before the consumer even hits submit — and buyers respond with bids within milliseconds. The winning buyer gets the full lead record and is charged their bid price. Unsold or under-valued leads may be sold as seconds (to a second buyer at a lower price), or placed into shared lead pools and sold multiple times.</p>
 
