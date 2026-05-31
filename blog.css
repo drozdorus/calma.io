@@ -5,8 +5,8 @@ a.logo {
   text-decoration: none;
 }
 
-/* ─── Cases section (main page) ─── */
-.cases-grid {
+/* ─── Blog section (main page) ─── */
+.blog-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
@@ -362,7 +362,7 @@ a.logo {
 
 /* ─── Responsive ─── */
 @media (max-width: 768px) {
-  .cases-grid {
+  .blog-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
