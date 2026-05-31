@@ -362,11 +362,10 @@ function initHScroller(scroller) {
 initHScroller(document.querySelector('.upcoming-events-scroller'));
 initHScroller(document.querySelector('.past-events-scroller'));
 
-// FAQ accordion — one implementation for every FAQ on the site.
-// Markup is native <details>, so it toggles fine without JS; this only layers a
-// height slide on top (Web Animations API). Reduced-motion users get the plain
-// native toggle. Inside the boxed homepage list (.faq-list) it behaves as an
-// accordion (opening one closes the others); article FAQs open independently.
+// FAQ — one accordion control for the whole site. Markup is native <details>,
+// so it toggles fine without JS; this only layers a height slide on top (Web
+// Animations API). Reduced-motion users get the plain native toggle. Items open
+// independently everywhere — matching the no-JS behavior exactly.
 (function initFaq() {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -392,12 +391,6 @@ initHScroller(document.querySelector('.past-events-scroller'));
         );
         anim.onfinish = () => { item.open = false; anim = null; };
       } else {
-        const list = item.closest('.faq-list');
-        if (list) {
-          list.querySelectorAll('details.faq-item[open]').forEach(other => {
-            if (other !== item) other.open = false;
-          });
-        }
         item.open = true;
         const end = answer.scrollHeight;
         anim = answer.animate(

@@ -269,39 +269,9 @@ a.logo {
   font-style: italic;
 }
 
-/* ─── FAQ accordion (article variant — shared mechanics live in style.css) ─── */
+/* ─── FAQ (article reuses the shared .faq-list control; this is only spacing) ─── */
 .article-faq {
   margin-top: 3rem;
-}
-
-.article-faq .faq-item {
-  border-bottom: 1px solid var(--border-default);
-}
-
-.article-faq .faq-item:first-of-type {
-  border-top: 1px solid var(--border-default);
-}
-
-.article-faq .faq-item > summary {
-  align-items: flex-start;
-  gap: 1.25rem;
-  padding: 1.1rem 0;
-  font-size: 0.95rem;
-}
-
-.article-faq .faq-icon {
-  margin-top: 1px;
-}
-
-.article-faq .faq-answer {
-  padding: 0 2.5rem 1.25rem 0;
-  font-size: 0.9rem;
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.58);
-}
-
-.article-faq .faq-answer p {
-  margin: 0;
 }
 
 /* ─── Related articles ─── */
