@@ -1177,7 +1177,6 @@ body {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1fr;
   gap: var(--space-xl);
-  margin-bottom: var(--space-xl);
 }
 
 .footer-col {
@@ -1220,20 +1219,14 @@ body {
   letter-spacing: 0.01em;
 }
 
-.footer-bottom {
+/* Legal/social line — lives at the bottom of the brand column, no separate bar */
+.footer-legal {
+  margin-top: auto;
+  padding-top: var(--space-lg);
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-md);
-  padding-top: var(--space-md);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
   flex-wrap: wrap;
-}
-
-.footer-bottom-meta {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
 }
 
 .footer-link {
