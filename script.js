@@ -362,22 +362,50 @@ function initHScroller(scroller) {
 initHScroller(document.querySelector('.upcoming-events-scroller'));
 initHScroller(document.querySelector('.past-events-scroller'));
 
-// FAQ accordion
-document.querySelectorAll('.faq-question').forEach(btn => {
-  btn.addEventListener('click', function() {
-    const isOpen = this.getAttribute('aria-expanded') === 'true';
-    const answer = this.nextElementSibling;
+// FAQ accordion — one implementation for every FAQ on the site.
+// Markup is native <details>, so it toggles fine without JS; this only layers a
+// height slide on top (Web Animations API). Reduced-motion users get the plain
+// native toggle. Inside the boxed homepage list (.faq-list) it behaves as an
+// accordion (opening one closes the others); article FAQs open independently.
+(function initFaq() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    // Close all
-    document.querySelectorAll('.faq-question').forEach(other => {
-      other.setAttribute('aria-expanded', 'false');
-      other.nextElementSibling.style.maxHeight = null;
+  const DURATION = 300;
+  const EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
+
+  document.querySelectorAll('details.faq-item').forEach(item => {
+    const summary = item.querySelector('summary');
+    const answer = item.querySelector('.faq-answer');
+    if (!summary || !answer) return;
+
+    let anim = null;
+
+    summary.addEventListener('click', e => {
+      e.preventDefault();
+      if (anim) anim.cancel();
+
+      if (item.open) {
+        const start = answer.offsetHeight;
+        anim = answer.animate(
+          [{ height: start + 'px', opacity: 1 }, { height: '0px', opacity: 0 }],
+          { duration: DURATION, easing: EASING }
+        );
+        anim.onfinish = () => { item.open = false; anim = null; };
+      } else {
+        const list = item.closest('.faq-list');
+        if (list) {
+          list.querySelectorAll('details.faq-item[open]').forEach(other => {
+            if (other !== item) other.open = false;
+          });
+        }
+        item.open = true;
+        const end = answer.scrollHeight;
+        anim = answer.animate(
+          [{ height: '0px', opacity: 0 }, { height: end + 'px', opacity: 1 }],
+          { duration: DURATION, easing: EASING }
+        );
+        anim.onfinish = () => { anim = null; };
+      }
     });
-
-    // Open clicked if it was closed
-    if (!isOpen) {
-      this.setAttribute('aria-expanded', 'true');
-      answer.style.maxHeight = answer.scrollHeight + 'px';
-    }
   });
-});
+})();

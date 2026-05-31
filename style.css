@@ -1413,8 +1413,84 @@ body {
   overflow: hidden;
 }
 
-/* Scoped under .faq-list so the homepage accordion never collides with the
-   article FAQ (.article-faq, which uses native <details> + its own cases.css). */
+/* Shared accordion mechanics — used by both the boxed homepage FAQ (.faq-list)
+   and the inline article FAQ (.article-faq, see cases.css). Native <details>;
+   script.js adds the height slide as a progressive enhancement (works without JS). */
+.faq-item > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--text-secondary);
+  user-select: none;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.faq-item > summary::-webkit-details-marker,
+.faq-item > summary::marker {
+  display: none;
+}
+
+.faq-item > summary:focus {
+  outline: none;
+}
+
+.faq-item > summary:focus-visible {
+  outline: 2px solid rgba(232, 181, 71, 0.4);
+  outline-offset: -2px;
+}
+
+.faq-item:hover > summary,
+.faq-item[open] > summary {
+  color: var(--primary);
+}
+
+.faq-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: transform 0.35s var(--ease-spring), border-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.faq-item[open] .faq-icon {
+  transform: rotate(45deg);
+  border-color: var(--border-hover);
+  color: var(--primary);
+}
+
+.faq-answer {
+  overflow: hidden;
+}
+
+.faq-answer p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.faq-answer a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.faq-answer a:hover {
+  opacity: 0.8;
+}
+
+/* Boxed container (homepage) */
 .faq-list .faq-item {
   border-bottom: 1px solid var(--border-default);
 }
@@ -1423,78 +1499,22 @@ body {
   border-bottom: none;
 }
 
-.faq-list .faq-question {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+.faq-list .faq-item > summary {
   padding: 20px 24px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  color: var(--text-secondary);
-  font-family: inherit;
   font-size: 0.95rem;
-  font-weight: 600;
-  transition: background 0.2s var(--ease), color 0.2s var(--ease);
 }
 
-.faq-list .faq-question:focus {
-  outline: none;
-}
-
-.faq-list .faq-question:focus-visible {
-  outline: 2px solid rgba(232, 181, 71, 0.4);
-  outline-offset: -2px;
-}
-
-.faq-list .faq-question:hover {
+.faq-list .faq-item:hover > summary {
   background: rgba(255, 255, 255, 0.03);
-}
-
-.faq-list .faq-question[aria-expanded="true"] {
-  color: var(--primary);
-}
-
-.faq-list .faq-chevron {
-  flex-shrink: 0;
-  color: var(--text-secondary);
-  transition: transform 0.35s var(--ease-spring), color 0.2s var(--ease);
-}
-
-.faq-list .faq-question[aria-expanded="true"] .faq-chevron {
-  transform: rotate(180deg) scale(1.05);
-  color: var(--primary);
-}
-
-.faq-list .faq-answer {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.35s var(--ease);
 }
 
 .faq-list .faq-answer p {
   padding: 0 24px 20px;
-  margin: 0;
-  color: var(--text-secondary);
   font-size: 0.95rem;
-  line-height: 1.7;
-}
-
-.faq-list .faq-answer a {
-  color: var(--primary);
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-
-.faq-list .faq-answer a:hover {
-  opacity: 0.8;
 }
 
 @media (max-width: 600px) {
-  .faq-list .faq-question {
+  .faq-list .faq-item > summary {
     padding: 18px 16px;
     font-size: 0.95rem;
   }
