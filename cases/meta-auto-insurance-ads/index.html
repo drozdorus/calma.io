@@ -23,6 +23,39 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is Special Ad Category required for all insurance ads on Meta?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, as of January 2025, all insurance products require SAC declaration. This removes age and gender targeting, limits geo to a 15-mile minimum radius, disables Lookalike Audiences, and turns off Advantage+ expansion." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I still use my own CRM or email list data under Special Ad Category?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. First-party custom audiences — email lists, website visitors, CRM leads, video viewers — remain fully available. The restriction targets demographic inference and expansion, not data you own and upload directly." }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Andromeda's semantic matching actually work?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Andromeda reads your creative at multiple layers: computer vision identifies objects and scenes, OCR reads on-screen text, speech-to-text extracts audio. It assigns an Entity ID based on the content fingerprint and matches it to users whose engagement history contains similar entities." }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is three-second retention rate the most important video metric?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Andromeda uses three-second retention as its primary quality signal. Low retention reduces distribution before you can optimize. Meta attributes 56% of campaign performance outcomes to creative quality, with the hook as the highest-leverage variable." }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do specific dollar amounts outperform vague savings claims?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Specific numbers trigger the calculation instinct — the viewer estimates whether the claim applies to them. A claim like 'Drivers in Ohio saved $847 last year' outperforms 'Save big' by 2–3x because it makes the value concrete and self-relevant rather than abstract." }
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
     "@type": "Article",
     "headline": "Running Auto Insurance Ads on Meta: What Changed in 2025–2026",
     "description": "How Meta's Andromeda engine and Special Ad Category restrictions reshaped creative strategy for auto insurance advertisers.",
@@ -202,7 +235,60 @@
           </ul>
 
           <p>The shift from targeting-first to creative-first isn't a temporary adjustment while the industry adapts to Andromeda. The Special Ad Category restrictions make the creative dependency permanent. Advertisers building durable performance in this category have reorganized their operation around that reality — treating creative production as the primary performance function, not the execution layer downstream of audience strategy.</p>
+
+          <section class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+
+            <details class="faq-item">
+              <summary>Is Special Ad Category required for all insurance ads on Meta?<span class="faq-icon">+</span></summary>
+              <div class="faq-answer"><p>Yes, as of January 2025, all insurance products — including auto, home, life, and health — require SAC declaration. This removes age and gender targeting, limits geographic targeting to a minimum 15-mile radius, disables Lookalike Audiences, and turns off Advantage+ audience expansion. The restrictions apply to any ad promoting an insurance product regardless of format.</p></div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Can I still use my own CRM or email list data under Special Ad Category?<span class="faq-icon">+</span></summary>
+              <div class="faq-answer"><p>Yes. First-party custom audiences — email lists, website visitors, CRM leads, and video viewers — remain fully available. The restriction targets demographic inference and expansion capabilities (age, gender, lookalikes), not data you own and upload directly. First-party lists have become more valuable as a result: suppression, retargeting, and sequential nurture flows all work without restriction.</p></div>
+            </details>
+
+            <details class="faq-item">
+              <summary>How does Andromeda's semantic matching actually work?<span class="faq-icon">+</span></summary>
+              <div class="faq-answer"><p>Andromeda reads your creative at multiple layers simultaneously: computer vision identifies objects, scenes, and motion; OCR reads every word on screen; speech-to-text extracts audio content, sentiment, and tone. The system assigns an Entity ID based on the creative's fingerprint and matches it to users whose engagement history contains similar entities — independent of any explicit audience selector in Ads Manager.</p></div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Why is three-second retention rate the most important video metric?<span class="faq-icon">+</span></summary>
+              <div class="faq-answer"><p>Andromeda uses three-second retention as its primary quality signal for video. Low retention tells the system the hook isn't working — it reduces distribution before you've had time to run an optimization cycle. Meta's own research attributes 56% of campaign performance outcomes to creative quality, with the hook (first 1–3 seconds) as the highest-leverage variable across formats.</p></div>
+            </details>
+
+            <details class="faq-item">
+              <summary>Why do specific dollar amounts outperform vague savings claims?<span class="faq-icon">+</span></summary>
+              <div class="faq-answer"><p>Specific numbers trigger the calculation instinct: the viewer immediately estimates whether the claim applies to them. "Drivers in Ohio saved $847 last year" consistently outperforms "Save big on car insurance" by 2–3x in click-through and conversion because it makes the value claim concrete, estimable, and self-relevant — while the vague claim asks for trust the cold-audience buyer hasn't extended yet.</p></div>
+            </details>
+          </section>
         </article>
+
+        <section class="article-related">
+          <p class="article-related-label">More from Calma</p>
+          <div class="article-related-grid">
+            <a href="/cases/us-auto-insurance-market/" class="related-card">
+              <div class="related-card-meta">
+                <span class="article-tag">Market Overview</span>
+                <span class="article-read-time">5 min read</span>
+              </div>
+              <h3 class="related-card-title">The US Auto Insurance Market: Structure, Players, and Lead Economics</h3>
+              <p class="related-card-desc">How the $312B market is structured, who the key players are, and where performance lead gen fits in the ecosystem.</p>
+              <span class="related-card-read">Read article</span>
+            </a>
+            <a href="/cases/ny-ai-advertising-law/" class="related-card">
+              <div class="related-card-meta">
+                <span class="article-tag">Regulation</span>
+                <span class="article-read-time">5 min read</span>
+              </div>
+              <h3 class="related-card-title">New York's AI Advertising Law: What Lead Gen Operators Need to Know</h3>
+              <p class="related-card-desc">NY SB-8420A, FTC Endorsement Guides, and state ADMT frameworks — what performance marketers must act on now.</p>
+              <span class="related-card-read">Read article</span>
+            </a>
+          </div>
+        </section>
 
       </div>
     </div>
