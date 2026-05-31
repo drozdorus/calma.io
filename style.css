@@ -1241,16 +1241,6 @@ body {
   color: var(--text);
 }
 
-.footer-icon {
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  transition: color 0.2s var(--ease);
-}
-
-.footer-icon:hover {
-  color: var(--text);
-}
 
 /* Animations */
 @keyframes fadeInUp {
