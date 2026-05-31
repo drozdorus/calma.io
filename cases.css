@@ -325,7 +325,10 @@ details.faq-item[open] .faq-icon {
   color: var(--primary, #E8B547);
 }
 
-.faq-answer {
+.article-faq .faq-answer {
+  overflow: visible;
+  max-height: none;
+  transition: none;
   padding: 0 2.5rem 1.25rem 0;
   font-size: 0.9rem;
   line-height: 1.8;
@@ -334,11 +337,11 @@ details.faq-item[open] .faq-icon {
 }
 
 @keyframes faqIn {
-  from { opacity: 0; transform: translateY(-3px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-.faq-answer p {
+.article-faq .faq-answer p {
   margin: 0;
 }
 
