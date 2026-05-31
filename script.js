@@ -112,31 +112,71 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 const headerEl = document.querySelector('.header');
 const heroEl = document.querySelector('.hero');
 const canvasEl = document.getElementById('waveCanvas');
+
+// Scroll progress bar (injected so every page gets it without markup duplication)
+const progressEl = document.createElement('div');
+progressEl.className = 'scroll-progress';
+document.body.appendChild(progressEl);
+
+// Active-nav setup: desktop nav links that point to on-page sections
+const navLinks = [...document.querySelectorAll('.nav .nav-link[href^="#"]')];
+const navMap = new Map(navLinks.map(l => [l.getAttribute('href').slice(1), l]));
+let activeNavLink = null;
+
+function updateScrollState() {
+  const scrolled = window.pageYOffset;
+
+  if (headerEl) {
+    if (scrolled > 50) headerEl.classList.add('scrolled');
+    else headerEl.classList.remove('scrolled');
+  }
+
+  if (canvasEl) {
+    canvasEl.style.opacity = Math.max(0, 1 - scrolled / 300);
+  }
+
+  if (heroEl && scrolled < window.innerHeight) {
+    heroEl.style.transform = `translateY(${scrolled * 0.3}px)`;
+  }
+
+  const doc = document.documentElement;
+  const max = doc.scrollHeight - doc.clientHeight;
+  progressEl.style.transform = `scaleX(${max > 0 ? scrolled / max : 0})`;
+
+  // Active nav: the last mapped section whose top has crossed the header line.
+  // While still in the hero, every section top is below it, so nothing is active.
+  let current = null;
+  navMap.forEach((link, id) => {
+    const sec = document.getElementById(id);
+    if (sec && sec.getBoundingClientRect().top <= 100) current = link;
+  });
+  // Bottom edge: the last section can't scroll under the header line (we hit the
+  // page bottom first), so once fully scrolled, force the last nav link active.
+  if (navLinks.length && scrolled + window.innerHeight >= doc.scrollHeight - 2) {
+    current = navLinks[navLinks.length - 1];
+  }
+  if (current !== activeNavLink) {
+    if (activeNavLink) activeNavLink.classList.remove('active');
+    if (current) current.classList.add('active');
+    activeNavLink = current;
+  }
+}
+
 let ticking = false;
 
 window.addEventListener('scroll', () => {
   if (!ticking) {
     requestAnimationFrame(() => {
-      const scrolled = window.pageYOffset;
-
-      if (headerEl) {
-        if (scrolled > 50) headerEl.classList.add('scrolled');
-        else headerEl.classList.remove('scrolled');
-      }
-
-      if (canvasEl) {
-        canvasEl.style.opacity = Math.max(0, 1 - scrolled / 300);
-      }
-
-      if (heroEl && scrolled < window.innerHeight) {
-        heroEl.style.transform = `translateY(${scrolled * 0.3}px)`;
-      }
-
+      updateScrollState();
       ticking = false;
     });
     ticking = true;
   }
 }, { passive: true });
+
+// Run once on load so a page opened mid-scroll (e.g. via #anchor) is correct;
+// at the top it resolves to "no active link".
+updateScrollState();
 
 // Form handling
 document.getElementById('contactForm')?.addEventListener('submit', async e => {
