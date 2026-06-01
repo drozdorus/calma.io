@@ -1,12 +1,36 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import IconSprite from '../../components/IconSprite.astro';
 
-const verticals = (await getCollection('verticals')).sort(
-  (a, b) => a.data.order - b.data.order
-);
+// Mirrors the homepage "What We Do" block. A link exists wherever there is a
+// dedicated page: sub-niches for insurance (auto, home), the group itself for
+// home services and finance.
+const groups = [
+  {
+    icon: 'icon-shield',
+    title: 'Insurance',
+    href: null,
+    items: [
+      { label: 'Auto', href: '/lead-generation/auto-insurance/' },
+      { label: 'Home', href: '/lead-generation/home-insurance/' },
+      { label: 'Health', href: null },
+    ],
+  },
+  {
+    icon: 'icon-home',
+    title: 'Home Services',
+    href: '/lead-generation/home-services/',
+    items: [{ label: 'Roofing' }, { label: 'Solar' }, { label: 'Windows' }],
+  },
+  {
+    icon: 'icon-finance',
+    title: 'Finance',
+    href: '/lead-generation/finance/',
+    items: [{ label: 'Loans' }, { label: 'HELOC' }, { label: 'Reverse mortgage' }],
+  },
+];
 ---
 
 <BaseLayout
@@ -17,6 +41,7 @@ const verticals = (await getCollection('verticals')).sort(
   ogDescription="The verticals Calma generates, qualifies, and delivers leads for."
   useBlogCss={true}
 >
+  <IconSprite />
   <Header />
 
   <main id="main-content">
@@ -34,14 +59,31 @@ const verticals = (await getCollection('verticals')).sort(
           <p class="section-subtitle">The verticals we generate, qualify, and deliver leads for</p>
         </header>
 
-        <div class="vhub-grid">
-          {verticals.map((v) => (
-            <a href={`/lead-generation/${v.id}/`} class="vhub-card">
-              {v.data.subniches && <span class="vhub-tag">{v.data.subniches}</span>}
-              <h2 class="vhub-title">{v.data.breadcrumbLabel}</h2>
-              <p class="vhub-summary">{v.data.summary}</p>
-              <span class="vhub-link">Learn more →</span>
-            </a>
+        <div class="services-grid vhub-grid">
+          {groups.map((g) => (
+            <div class="service-card">
+              <div class="service-head">
+                <div class="service-icon">
+                  <svg width="18" height="18" aria-hidden="true"><use href={`#${g.icon}`} /></svg>
+                </div>
+                {g.href ? (
+                  <a class="service-title vhub-grouplink" href={g.href}>{g.title}<span class="vhub-arrow">→</span></a>
+                ) : (
+                  <h3 class="service-title">{g.title}</h3>
+                )}
+              </div>
+              <ul class="service-list">
+                {g.items.map((it) => (
+                  <li>
+                    {it.href ? (
+                      <a class="vhub-itemlink" href={it.href}>{it.label}<span class="vhub-arrow">→</span></a>
+                    ) : (
+                      it.label
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
 
@@ -57,51 +99,31 @@ const verticals = (await getCollection('verticals')).sort(
     margin: 1.75rem 0 2.5rem;
     text-align: center;
   }
-  .vhub-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--space-md);
+  /* .service-card defaults to opacity:0 until inside a scroll-observed
+     .section.visible on the homepage — force visible on this static page. */
+  .vhub-grid :global(.service-card) {
+    opacity: 1;
+    transform: none;
   }
-  .vhub-card {
-    display: flex;
-    flex-direction: column;
-    padding: var(--space-lg);
-    background: var(--glass-bg);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-md);
-    box-shadow: var(--glass-shadow);
+  .vhub-grouplink {
     text-decoration: none;
-    transition: all 0.3s var(--ease);
-  }
-  .vhub-card:hover {
-    transform: translateY(-2px);
-    border-color: var(--border-hover);
-    background: var(--glass-bg-hover);
-    box-shadow: var(--glass-shadow-hover);
-  }
-  .vhub-tag {
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--secondary);
-    margin-bottom: 0.6rem;
-  }
-  .vhub-title {
-    font-size: 1.2rem;
-    font-weight: 600;
     color: var(--text);
-    margin-bottom: 0.5rem;
+    transition: color 0.2s var(--ease);
   }
-  .vhub-summary {
-    font-size: 0.92rem;
-    color: var(--text-muted);
-    line-height: 1.55;
-    margin-bottom: 1rem;
-    flex-grow: 1;
-  }
-  .vhub-link {
-    font-size: 0.85rem;
-    font-weight: 500;
+  .vhub-grouplink:hover {
     color: var(--primary);
+  }
+  .vhub-itemlink {
+    text-decoration: none;
+    color: var(--text-secondary);
+    transition: color 0.2s var(--ease);
+  }
+  .vhub-itemlink:hover {
+    color: var(--primary);
+  }
+  .vhub-arrow {
+    color: var(--primary);
+    font-size: 0.8em;
+    margin-left: 0.35em;
   }
 </style>
