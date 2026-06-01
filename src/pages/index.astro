@@ -2,9 +2,9 @@
 // Homepage — pixel-for-pixel port of the legacy index.html. All 9 sections
 // (Hero, About, Verticals, Team, Events, Blog teaser, FAQ, Contact, Footer).
 // Loads blog.css + team.css + team.js (homepage uses all three); bodyId="top".
-// Header/Footer get home={true} so their nav/section links render as bare
-// `#anchor`, which is what script.js's smooth-scroll (`a[href^="#"]`) and
-// active-nav spy (`.nav .nav-link[href^="#"]`) match.
+// Footer gets home={true} so its section links render as bare `#anchor`,
+// which is what script.js's smooth-scroll (`a[href^="#"]`) matches. The header
+// is page-level only now (no section anchors), so it takes no `home` prop.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -242,7 +242,7 @@ import { cardCovers } from '../components/blog/cardCovers';
 
   <canvas id="waveCanvas"></canvas>
 
-  <Header home={true} />
+  <Header />
 
   <main id="main-content">
 

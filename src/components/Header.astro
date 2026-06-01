@@ -1,36 +1,62 @@
 ---
-// Header — single source of truth for the site nav + mobile menu.
-// On the homepage (home=true) nav/logo links render as bare `#anchor` / `#top`
-// so script.js's `a[href^="#"]` smooth-scroll + `.nav .nav-link[href^="#"]`
-// active-nav spy match them. On article/privacy routes (home=false, default)
-// they render absolute (`/`, `/#anchor`) to jump back to the homepage section.
+// Header — page-level site nav + mobile menu (single source of truth).
+// Top nav is page links only (Verticals dropdown, Blog, Contact, Hiring);
+// homepage *section* anchors live in the separate floating bottom pill.
+// Active state is pathname-based (server-side) via `Astro.url.pathname`.
 // The scroll-progress bar and mobile-menu open/close are wired in script.js.
-export interface Props {
-  /** homepage: emit bare `#anchor` links so the smooth-scroll/active-nav JS matches */
-  home?: boolean;
-}
-const { home = false } = Astro.props;
-const base = home ? '' : '/';
-const logoHref = home ? '#top' : '/';
+import { getCollection } from 'astro:content';
+
 const vacanciesUrl =
   'https://calma-io.notion.site/Open-Vacancies-Calma-Agency-169f120c65df806bba68fc5163bcfa52';
+
+// Drive the Verticals dropdown from the content collection.
+const verticals = (await getCollection('verticals')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const path = Astro.url.pathname;
+const isVerticals = path.startsWith('/lead-generation');
+const isBlog = path.startsWith('/blog');
+const isContact = path.startsWith('/contacts');
 ---
 
 <!-- Header -->
 <header class="header">
   <div class="header-inner">
     <div class="header-content">
-      <a href={logoHref} class="logo">
+      <a href="/" class="logo">
         <img src="/img/logo.svg" height="15" alt="Calma" />
       </a>
 
       <nav class="nav">
-        <a href={`${base}#verticals`} class="nav-link">Verticals</a>
-        <a href={`${base}#team`} class="nav-link">Team</a>
-        <a href={`${base}#conferences`} class="nav-link">Events</a>
-        <a href={`${base}#blog`} class="nav-link">Blog</a>
-        <a href={`${base}#contact`} class="nav-link">Contact</a>
-        <a href={vacanciesUrl} target="_blank" class="hiring-link">
+        <div class="nav-dropdown" data-dropdown>
+          <a
+            href="/lead-generation/"
+            class:list={['nav-link', 'nav-dropdown-toggle', { active: isVerticals }]}
+            aria-haspopup="true"
+            aria-expanded="false"
+            data-dropdown-toggle
+          >
+            Verticals
+            <svg class="nav-caret" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M2 3.5 5 6.5 8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+          <div class="nav-dropdown-menu" role="menu" data-dropdown-menu>
+            {verticals.map((v) => (
+              <a href={`/lead-generation/${v.id}/`} class="nav-dropdown-item" role="menuitem">
+                {v.data.breadcrumbLabel}
+              </a>
+            ))}
+            <a href="/lead-generation/" class="nav-dropdown-item nav-dropdown-item--all" role="menuitem">
+              All verticals
+            </a>
+          </div>
+        </div>
+
+        <a href="/blog/" class:list={['nav-link', { active: isBlog }]}>Blog</a>
+        <a href="/contacts/" class:list={['nav-link', { active: isContact }]}>Contact</a>
+        <a href={vacanciesUrl} target="_blank" rel="noopener" class="hiring-link">
           Hiring
           <span class="notification-dot"></span>
         </a>
@@ -55,13 +81,86 @@ const vacanciesUrl =
       <line x1="18" y1="6" x2="6" y2="18"></line>
     </svg>
   </button>
-  <a href={`${base}#verticals`} class="nav-link" onclick="closeMobileMenu()">Verticals</a>
-  <a href={`${base}#team`} class="nav-link" onclick="closeMobileMenu()">Team</a>
-  <a href={`${base}#conferences`} class="nav-link" onclick="closeMobileMenu()">Events</a>
-  <a href={`${base}#blog`} class="nav-link" onclick="closeMobileMenu()">Blog</a>
-  <a href={`${base}#contact`} class="nav-link" onclick="closeMobileMenu()">Contact</a>
-  <a href={vacanciesUrl} target="_blank" class="hiring-link">
+
+  <div class="mobile-nav-group">
+    <a href="/lead-generation/" class="nav-link mobile-nav-heading" onclick="closeMobileMenu()">Verticals</a>
+    <div class="mobile-nav-sub">
+      {verticals.map((v) => (
+        <a href={`/lead-generation/${v.id}/`} class="mobile-nav-subitem" onclick="closeMobileMenu()">
+          {v.data.breadcrumbLabel}
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <a href="/blog/" class="nav-link" onclick="closeMobileMenu()">Blog</a>
+  <a href="/contacts/" class="nav-link" onclick="closeMobileMenu()">Contact</a>
+  <a href={vacanciesUrl} target="_blank" rel="noopener" class="hiring-link">
     Hiring
     <span class="notification-dot"></span>
   </a>
 </div>
+
+<script>
+  // Desktop Verticals dropdown: hover + click/focus, keyboard + a11y.
+  // Click on the "Verticals" toggle still navigates to the hub; we only
+  // intercept Space (and Enter when the menu is closed → open it instead).
+  const dropdown = document.querySelector<HTMLElement>('[data-dropdown]');
+  if (dropdown) {
+    const toggle = dropdown.querySelector<HTMLElement>('[data-dropdown-toggle]')!;
+    const menu = dropdown.querySelector<HTMLElement>('[data-dropdown-menu]')!;
+    const items = [...menu.querySelectorAll<HTMLElement>('.nav-dropdown-item')];
+    let open = false;
+
+    const setOpen = (next: boolean) => {
+      open = next;
+      dropdown.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+
+    // Hover (pointer) — only matters on devices with a real cursor.
+    dropdown.addEventListener('mouseenter', () => setOpen(true));
+    dropdown.addEventListener('mouseleave', () => setOpen(false));
+
+    // Keyboard on the toggle.
+    toggle.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setOpen(true);
+        items[0]?.focus();
+      } else if (e.key === ' ') {
+        // Space toggles the menu (links don't do this natively).
+        e.preventDefault();
+        setOpen(!open);
+        if (open) items[0]?.focus();
+      } else if (e.key === 'Escape') {
+        setOpen(false);
+      }
+    });
+
+    // Keyboard within the menu.
+    items.forEach((item, i) => {
+      item.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          (items[i + 1] ?? items[0]).focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          (items[i - 1] ?? items[items.length - 1]).focus();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          setOpen(false);
+          toggle.focus();
+        }
+      });
+    });
+
+    // Close on outside click and on focus leaving the dropdown.
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target as Node)) setOpen(false);
+    });
+    dropdown.addEventListener('focusout', (e) => {
+      if (!dropdown.contains(e.relatedTarget as Node)) setOpen(false);
+    });
+  }
+</script>
