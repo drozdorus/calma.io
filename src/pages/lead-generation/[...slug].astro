@@ -112,10 +112,25 @@ const faqJsonLd = {
 <style>
   .vertical-hero {
     max-width: 760px;
-    margin: 1.75rem 0 2.5rem;
+    margin: 1.75rem auto 2.5rem;
+    text-align: center;
   }
   .vertical-hero-title {
     margin-bottom: 1rem;
+  }
+  /* Centre the reading column so the page isn't visually shifted left. */
+  .vertical-prose {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* .methodology-item / .traffic-source default to opacity:0 and are only
+     revealed inside a scroll-observed `.section.visible` on the homepage. This
+     is a static landing page (no such wrapper, and it must work without JS), so
+     force the cards visible. */
+  .vertical-page :global(.methodology-item),
+  .vertical-page :global(.traffic-source) {
+    opacity: 1;
+    transform: none;
   }
   .vertical-hero-lead {
     color: var(--text-secondary);
