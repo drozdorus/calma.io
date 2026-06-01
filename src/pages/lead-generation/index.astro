@@ -1,0 +1,107 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const verticals = (await getCollection('verticals')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<BaseLayout
+  title="Lead Generation by Vertical — Calma"
+  description="The verticals Calma generates, qualifies, and delivers leads for — auto and home insurance, home services, and financial services. Compliance-first performance lead generation."
+  canonical="https://calma.io/lead-generation/"
+  ogTitle="Lead Generation by Vertical"
+  ogDescription="The verticals Calma generates, qualifies, and delivers leads for."
+  useBlogCss={true}
+>
+  <Header />
+
+  <main id="main-content">
+    <div class="article-page">
+      <div class="container">
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">calma.io</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current">Lead Generation</span>
+        </nav>
+
+        <header class="vhub-hero">
+          <h1 class="section-title">Lead Generation by Vertical</h1>
+          <p class="section-subtitle">The verticals we generate, qualify, and deliver leads for</p>
+        </header>
+
+        <div class="vhub-grid">
+          {verticals.map((v) => (
+            <a href={`/lead-generation/${v.id}/`} class="vhub-card">
+              {v.data.subniches && <span class="vhub-tag">{v.data.subniches}</span>}
+              <h2 class="vhub-title">{v.data.breadcrumbLabel}</h2>
+              <p class="vhub-summary">{v.data.summary}</p>
+              <span class="vhub-link">Learn more →</span>
+            </a>
+          ))}
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .vhub-hero {
+    margin: 1.75rem 0 2.5rem;
+    text-align: center;
+  }
+  .vhub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-md);
+  }
+  .vhub-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    background: var(--glass-bg);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    box-shadow: var(--glass-shadow);
+    text-decoration: none;
+    transition: all 0.3s var(--ease);
+  }
+  .vhub-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-hover);
+    background: var(--glass-bg-hover);
+    box-shadow: var(--glass-shadow-hover);
+  }
+  .vhub-tag {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 0.6rem;
+  }
+  .vhub-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .vhub-summary {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+  }
+  .vhub-link {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--primary);
+  }
+</style>

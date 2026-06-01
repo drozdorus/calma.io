@@ -811,6 +811,22 @@ body {
   font-style: italic;
 }
 
+.services-cta {
+  margin-top: var(--space-lg);
+  text-align: center;
+}
+
+.services-cta-link {
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s var(--ease);
+}
+
+.services-cta-link:hover {
+  opacity: 0.7;
+}
+
 /* Events */
 .events-section-title {
   font-size: 1.3rem;
