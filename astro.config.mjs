@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
@@ -12,7 +13,7 @@ export default defineConfig({
   markdown: {
     // Keep straight quotes/apostrophes verbatim — the legacy articles use them.
     // GFM (tables, etc.) stays on; disabling smartypants only affects quote glyphs.
-    smartypants: false,
+    processor: unified({ smartypants: false }),
   },
   integrations: [sitemap()],
 });
