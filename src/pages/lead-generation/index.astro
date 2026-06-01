@@ -119,21 +119,17 @@ const groups = [
   .vhub-grouplink {
     text-decoration: none;
     color: var(--secondary);
-    transition: color 0.2s var(--ease);
-  }
-  .vhub-grouplink:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
   }
   .vhub-itemlink {
     text-decoration: none;
     color: var(--secondary);
     font-weight: 500;
-    transition: color 0.2s var(--ease);
   }
-  .vhub-itemlink:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
+  /* Hover: nudge the arrow rather than underline (the underline ran awkwardly
+     across the gap before the arrow). The mint colour already signals the link. */
+  .vhub-grouplink:hover .vhub-arrow,
+  .vhub-itemlink:hover .vhub-arrow {
+    transform: translateX(3px);
   }
   /* Tint the bullet of a linked sub-niche so the whole row reads as active. */
   .service-list li:has(.vhub-itemlink)::before {
@@ -141,9 +137,11 @@ const groups = [
     opacity: 1;
   }
   .vhub-arrow {
+    display: inline-block;
     color: var(--secondary);
     font-size: 0.9em;
     margin-left: 0.4em;
+    transition: transform 0.2s var(--ease);
   }
   .vhub-outro {
     max-width: 680px;
