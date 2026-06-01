@@ -48,17 +48,35 @@ const blog = defineCollection({
   }),
 });
 
-// Phase 2 — per-vertical landing pages at /lead-generation/<vertical>/.
-// Loader/schema are wired up now; the content dir is intentionally empty in v1.
+// Phase 2 — per-vertical "what we do" landing pages at /lead-generation/<vertical>/.
+// SEO + client-generation surfaces (distinct from the editorial blog). The page
+// body (Markdown) holds the overview prose; the structured blocks below drive the
+// hero, methodology pillars, FAQ and CTA so every vertical page has the same shape.
 const verticals = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/verticals' }),
   schema: z.object({
+    // <head>
     title: z.string(),
     description: z.string(),
     canonical: z.string().optional(),
     ogTitle: z.string().optional(),
     ogDescription: z.string().optional(),
     ogImage: z.string().optional(),
+    // Ordering of the vertical in any future index.
+    order: z.number().default(0),
+    // Hero
+    h1: z.string(),
+    heroLead: z.string(),
+    /** short label for the breadcrumb's current crumb */
+    breadcrumbLabel: z.string(),
+    // "How we do it" — three pillars (tailored per vertical).
+    pillars: z
+      .array(z.object({ label: z.string(), desc: z.string() }))
+      .length(3),
+    // SEO FAQ.
+    faq: z.array(z.object({ question: z.string(), answer: z.string() })),
+    // Closing call-to-action band.
+    cta: z.object({ heading: z.string(), text: z.string() }),
   }),
 });
 

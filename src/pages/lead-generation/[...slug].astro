@@ -1,0 +1,162 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const verticals = await getCollection('verticals');
+  return verticals.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: data.faq.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: { '@type': 'Answer', text: f.answer },
+  })),
+};
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  canonical={data.canonical!}
+  ogType="website"
+  ogTitle={data.ogTitle}
+  ogDescription={data.ogDescription}
+  ogImage={data.ogImage}
+  useBlogCss={true}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  </Fragment>
+
+  <Header />
+
+  <main id="main-content">
+    <div class="article-page vertical-page">
+      <div class="container">
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">calma.io</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/#verticals">Verticals</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current">{data.breadcrumbLabel}</span>
+        </nav>
+
+        <header class="vertical-hero">
+          <h1 class="section-title vertical-hero-title">{data.h1}</h1>
+          <p class="vertical-hero-lead">{data.heroLead}</p>
+          <a href="/#contact" class="vertical-cta-btn">Get in touch</a>
+        </header>
+
+        <article class="article-prose vertical-prose">
+          <Content />
+        </article>
+
+        <div class="methodology vertical-pillars">
+          <h3 class="methodology-title">How we do it</h3>
+          <div class="methodology-grid">
+            {data.pillars.map((p) => (
+              <div class="methodology-item">
+                <h4 class="methodology-label">{p.label}</h4>
+                <p class="methodology-desc">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="traffic-sources vertical-channels">
+          <h3 class="traffic-sources-title">Acquisition Channels</h3>
+          <p class="traffic-sources-desc">We deploy performance across major acquisition channels with compliance-first creative and measurement</p>
+          <div class="traffic-sources-grid">
+            <div class="traffic-source"><div class="traffic-source-logo"><img src="/img/meta.svg" alt="Meta"></div></div>
+            <div class="traffic-source"><div class="traffic-source-logo"><img src="/img/google.svg" alt="Google Ads"></div></div>
+            <div class="traffic-source"><div class="traffic-source-logo"><img src="/img/tt.svg" alt="TikTok Ads"></div></div>
+          </div>
+        </div>
+
+        <section class="article-faq vertical-faq">
+          <h2>Frequently Asked Questions</h2>
+          <div class="faq-list">
+            {data.faq.map((item) => (
+              <details class="faq-item">
+                <summary>{item.question}<span class="faq-icon">+</span></summary>
+                <div class="faq-answer"><p>{item.answer}</p></div>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section class="vertical-cta">
+          <h2 class="vertical-cta-heading">{data.cta.heading}</h2>
+          <p class="vertical-cta-text">{data.cta.text}</p>
+          <a href="/#contact" class="vertical-cta-btn">Get in touch</a>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .vertical-hero {
+    max-width: 760px;
+    margin: 1.75rem 0 2.5rem;
+  }
+  .vertical-hero-title {
+    margin-bottom: 1rem;
+  }
+  .vertical-hero-lead {
+    color: var(--text-secondary);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+  }
+  .vertical-cta-btn {
+    display: inline-block;
+    padding: 0.8rem 1.6rem;
+    border-radius: var(--radius-md);
+    background: var(--primary);
+    color: #0a0a0a;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s var(--ease), opacity 0.2s var(--ease);
+  }
+  .vertical-cta-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
+  }
+  .vertical-pillars,
+  .vertical-channels,
+  .vertical-faq {
+    margin-top: 3rem;
+  }
+  .vertical-cta {
+    margin: 3.5rem 0 1rem;
+    padding: 2.5rem;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--glass-bg);
+  }
+  .vertical-cta-heading {
+    font-size: 1.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .vertical-cta-text {
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+  }
+</style>
