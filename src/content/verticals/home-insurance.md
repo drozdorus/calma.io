@@ -9,8 +9,6 @@ order: 2
 h1: 'Home Insurance Lead Generation'
 heroLead: 'We generate high-intent homeowners insurance shoppers through paid social and video, qualify them, and deliver them to carriers, agencies, and aggregators — optimized for downstream performance, not raw volume.'
 breadcrumbLabel: 'Home Insurance'
-summary: 'In-market homeowners shopping property coverage — qualified and delivered to buyers.'
-subniches: 'Homeowners · Renters'
 pillars:
   - label: 'Audience Intelligence'
     desc: 'Our AI identifies homeowners who are actively shopping — new buyers, renewals, and rate-driven switchers — by property profile, geography, and behavioral signals.'

@@ -9,8 +9,6 @@ order: 1
 h1: 'Auto Insurance Lead Generation'
 heroLead: 'We generate high-intent auto insurance shoppers through paid social and video, qualify them, and deliver them to carriers, agencies, and aggregators — optimized for downstream performance, not raw volume.'
 breadcrumbLabel: 'Auto Insurance'
-summary: 'High-intent auto insurance shoppers — qualified and delivered to carriers, agencies, and aggregators.'
-subniches: 'Private passenger auto'
 pillars:
   - label: 'Audience Intelligence'
     desc: 'Our AI identifies high-intent auto insurance shoppers by coverage need, geography, and behavioral signals — so spend goes to prospects who are actually in-market.'

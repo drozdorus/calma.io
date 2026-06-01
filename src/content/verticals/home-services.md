@@ -9,8 +9,6 @@ order: 3
 h1: 'Home Services Lead Generation'
 heroLead: 'We generate homeowners ready to invest in their property — roofing, solar, windows and more — through paid social and video, then qualify and deliver them to contractors, installers, and dealer networks.'
 breadcrumbLabel: 'Home Services'
-summary: 'Homeowners planning roofing, solar, and window projects — delivered to contractors and installers.'
-subniches: 'Roofing · Solar · Windows'
 pillars:
   - label: 'Audience Intelligence'
     desc: 'Our AI identifies homeowners with real project intent — by property type, location, and behavioral signals — so spend reaches people actually planning the work.'

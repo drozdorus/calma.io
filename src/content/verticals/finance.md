@@ -9,8 +9,6 @@ order: 4
 h1: 'Financial Services Lead Generation'
 heroLead: 'We generate high-intent borrowers across lending products — personal loans, HELOC, and reverse mortgage — through paid social and video, qualify them, and deliver them to lenders, brokers, and networks.'
 breadcrumbLabel: 'Finance'
-summary: 'Borrowers actively comparing lending products — delivered to lenders and brokers.'
-subniches: 'Loans · HELOC · Reverse mortgage'
 pillars:
   - label: 'Audience Intelligence'
     desc: 'Our AI identifies prospects with genuine borrowing intent by product, geography, and behavioral signals — so spend reaches people actually looking to finance.'

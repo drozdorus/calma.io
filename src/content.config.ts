@@ -69,10 +69,6 @@ const verticals = defineCollection({
     heroLead: z.string(),
     /** short label for the breadcrumb's current crumb */
     breadcrumbLabel: z.string(),
-    /** one-line description shown on the /lead-generation/ hub card */
-    summary: z.string(),
-    /** sub-niche tagline for the hub card, e.g. "Roofing · Solar · Windows" */
-    subniches: z.string().optional(),
     // "How we do it" — three pillars (tailored per vertical).
     pillars: z
       .array(z.object({ label: z.string(), desc: z.string() }))
