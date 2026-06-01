@@ -1,0 +1,6 @@
+---
+// Importing CSS inside a component scopes the bundling to where the component is
+// rendered, so blog.css is only emitted on pages that opt in (homepage blog
+// cards + article pages), matching the legacy <link rel="stylesheet" href="/blog.css">.
+import '../../styles/blog.css';
+---

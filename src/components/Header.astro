@@ -1,0 +1,58 @@
+---
+// Header — single source of truth for the site nav + mobile menu.
+// Links are absolute (`/`, `/#anchor`) so the component works identically on
+// the homepage and on article/privacy routes. The scroll-progress bar and the
+// mobile-menu open/close behaviour are wired up in src/scripts/script.js.
+const vacanciesUrl =
+  'https://calma-io.notion.site/Open-Vacancies-Calma-Agency-169f120c65df806bba68fc5163bcfa52';
+---
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-content">
+      <a href="/" class="logo">
+        <img src="/img/logo.svg" height="15" alt="Calma" />
+      </a>
+
+      <nav class="nav">
+        <a href="/#verticals" class="nav-link">Verticals</a>
+        <a href="/#team" class="nav-link">Team</a>
+        <a href="/#conferences" class="nav-link">Events</a>
+        <a href="/#blog" class="nav-link">Blog</a>
+        <a href="/#contact" class="nav-link">Contact</a>
+        <a href={vacanciesUrl} target="_blank" class="hiring-link">
+          Hiring
+          <span class="notification-dot"></span>
+        </a>
+      </nav>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+    </svg>
+  </button>
+  <a href="/#verticals" class="nav-link" onclick="closeMobileMenu()">Verticals</a>
+  <a href="/#team" class="nav-link" onclick="closeMobileMenu()">Team</a>
+  <a href="/#conferences" class="nav-link" onclick="closeMobileMenu()">Events</a>
+  <a href="/#blog" class="nav-link" onclick="closeMobileMenu()">Blog</a>
+  <a href="/#contact" class="nav-link" onclick="closeMobileMenu()">Contact</a>
+  <a href={vacanciesUrl} target="_blank" class="hiring-link">
+    Hiring
+    <span class="notification-dot"></span>
+  </a>
+</div>

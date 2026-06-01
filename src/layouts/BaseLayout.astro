@@ -1,0 +1,123 @@
+---
+// BaseLayout — renders the exact <head> from the legacy index.html, driven by
+// props so each page sets its own SEO/OG/twitter values. Loads global CSS
+// (style.css always; blog.css / team.css per-page) and JS (script.js site-wide;
+// team.js only where needed). Page body goes in the default <slot />; page-
+// specific <head> additions (e.g. JSON-LD) go in the named "head" slot.
+import '../styles/style.css';
+import BlogCss from '../components/css/BlogCss.astro';
+import TeamCss from '../components/css/TeamCss.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  /** index, follow by default */
+  robots?: string;
+  /** homepage-only keywords meta; omit elsewhere */
+  keywords?: string;
+  ogType?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  /** load blog.css for this page (article + homepage blog cards) */
+  useBlogCss?: boolean;
+  /** load team.css for this page (homepage only) */
+  useTeamCss?: boolean;
+  /** load team.js for this page (homepage only) */
+  useTeamScript?: boolean;
+  /** extra class on <body> */
+  bodyClass?: string;
+  /** id on <body> (homepage uses id="top") */
+  bodyId?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  robots = 'index, follow',
+  keywords,
+  ogType = 'website',
+  ogTitle,
+  ogDescription,
+  ogImage = 'https://calma.io/img/metaimg.png',
+  twitterTitle,
+  twitterDescription,
+  twitterImage,
+  useBlogCss = false,
+  useTeamCss = false,
+  useTeamScript = false,
+  bodyClass,
+  bodyId,
+} = Astro.props;
+
+const ogTitleFinal = ogTitle ?? title;
+const ogDescriptionFinal = ogDescription ?? description;
+const twitterTitleFinal = twitterTitle ?? ogTitleFinal;
+const twitterDescriptionFinal = twitterDescription ?? ogDescriptionFinal;
+const twitterImageFinal = twitterImage ?? ogImage;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <link rel="canonical" href={canonical} />
+  <title>{title}</title>
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/img/favicon/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="/img/favicon/favicon-16x16.png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="/img/favicon/apple-icon-180x180.png" />
+
+  <!-- Meta Tags -->
+  <meta name="title" content={title} />
+  <meta name="description" content={description} />
+  {keywords && <meta name="keywords" content={keywords} />}
+  <meta name="robots" content={robots} />
+  <meta name="author" content="Calma" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content={ogType} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:site_name" content="Calma" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content={ogTitleFinal} />
+  <meta property="og:description" content={ogDescriptionFinal} />
+  <meta property="og:image" content={ogImage} />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={canonical} />
+  <meta property="twitter:title" content={twitterTitleFinal} />
+  <meta property="twitter:description" content={twitterDescriptionFinal} />
+  <meta property="twitter:image" content={twitterImageFinal} />
+
+  <!-- Per-page stylesheets (style.css is imported globally above) -->
+  {useBlogCss && <BlogCss />}
+  {useTeamCss && <TeamCss />}
+
+  <!-- Page-specific head (e.g. JSON-LD) -->
+  <slot name="head" />
+</head>
+
+<body id={bodyId} class={bodyClass}>
+  <slot />
+
+  <script>
+    import '../scripts/script.js';
+  </script>
+  {useTeamScript && (
+    <script>
+      import '../scripts/team.js';
+    </script>
+  )}
+</body>
+
+</html>
