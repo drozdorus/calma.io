@@ -105,25 +105,35 @@ const groups = [
     opacity: 1;
     transform: none;
   }
+  /* Clickable items are mint (the site's link accent) so they clearly stand
+     out from the plain, non-linked sub-niches next to them. */
   .vhub-grouplink {
     text-decoration: none;
-    color: var(--text);
+    color: var(--secondary);
     transition: color 0.2s var(--ease);
   }
   .vhub-grouplink:hover {
-    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
   .vhub-itemlink {
     text-decoration: none;
-    color: var(--text-secondary);
+    color: var(--secondary);
+    font-weight: 500;
     transition: color 0.2s var(--ease);
   }
   .vhub-itemlink:hover {
-    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  /* Tint the bullet of a linked sub-niche so the whole row reads as active. */
+  .service-list li:has(.vhub-itemlink)::before {
+    background: var(--secondary);
+    opacity: 1;
   }
   .vhub-arrow {
-    color: var(--primary);
-    font-size: 0.8em;
-    margin-left: 0.35em;
+    color: var(--secondary);
+    font-size: 0.9em;
+    margin-left: 0.4em;
   }
 </style>
