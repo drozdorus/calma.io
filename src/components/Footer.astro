@@ -1,6 +1,15 @@
 ---
-// Footer — single source of truth. Links are absolute (`/`, `/#anchor`,
-// `/privacy/`) so the footer renders identically on every route.
+// Footer — single source of truth. On the homepage (home=true) the section
+// links render as bare `#anchor` / `#top` so they smooth-scroll via script.js
+// (matching legacy index.html); on article/privacy routes (default) they're
+// absolute (`/`, `/#anchor`) to jump back to the homepage section.
+export interface Props {
+  /** homepage: emit bare `#anchor` links so the smooth-scroll JS matches */
+  home?: boolean;
+}
+const { home = false } = Astro.props;
+const base = home ? '' : '/';
+const logoHref = home ? '#top' : '/';
 const vacanciesUrl =
   'https://calma-io.notion.site/Open-Vacancies-Calma-Agency-169f120c65df806bba68fc5163bcfa52';
 ---
@@ -10,21 +19,21 @@ const vacanciesUrl =
   <div class="container">
     <div class="footer-grid">
       <div class="footer-col footer-col--brand">
-        <a href="/" class="footer-logo"><img src="/img/logo.svg" height="16" alt="Calma" /></a>
+        <a href={logoHref} class="footer-logo"><img src="/img/logo.svg" height="16" alt="Calma" /></a>
         <p class="footer-tagline">Performance lead generation across insurance, financial, legal, and home services
           verticals.</p>
       </div>
       <div class="footer-col">
         <h4 class="footer-heading">Company</h4>
-        <a href="/#about" class="footer-link">About</a>
-        <a href="/#team" class="footer-link">Team</a>
-        <a href="/#blog" class="footer-link">Blog</a>
+        <a href={`${base}#about`} class="footer-link">About</a>
+        <a href={`${base}#team`} class="footer-link">Team</a>
+        <a href={`${base}#blog`} class="footer-link">Blog</a>
         <a href={vacanciesUrl} target="_blank" class="footer-link">Careers</a>
       </div>
       <div class="footer-col">
         <h4 class="footer-heading">Get in touch</h4>
         <a href="mailto:info@calma.io" class="footer-link">info@calma.io</a>
-        <a href="/#contact" class="footer-link">Contact</a>
+        <a href={`${base}#contact`} class="footer-link">Contact</a>
         <a href="https://www.linkedin.com/company/calma-io/" target="_blank" class="footer-link">LinkedIn</a>
       </div>
       <div class="footer-legal">

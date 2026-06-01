@@ -1,8 +1,17 @@
 ---
 // Header — single source of truth for the site nav + mobile menu.
-// Links are absolute (`/`, `/#anchor`) so the component works identically on
-// the homepage and on article/privacy routes. The scroll-progress bar and the
-// mobile-menu open/close behaviour are wired up in src/scripts/script.js.
+// On the homepage (home=true) nav/logo links render as bare `#anchor` / `#top`
+// so script.js's `a[href^="#"]` smooth-scroll + `.nav .nav-link[href^="#"]`
+// active-nav spy match them. On article/privacy routes (home=false, default)
+// they render absolute (`/`, `/#anchor`) to jump back to the homepage section.
+// The scroll-progress bar and mobile-menu open/close are wired in script.js.
+export interface Props {
+  /** homepage: emit bare `#anchor` links so the smooth-scroll/active-nav JS matches */
+  home?: boolean;
+}
+const { home = false } = Astro.props;
+const base = home ? '' : '/';
+const logoHref = home ? '#top' : '/';
 const vacanciesUrl =
   'https://calma-io.notion.site/Open-Vacancies-Calma-Agency-169f120c65df806bba68fc5163bcfa52';
 ---
@@ -11,16 +20,16 @@ const vacanciesUrl =
 <header class="header">
   <div class="header-inner">
     <div class="header-content">
-      <a href="/" class="logo">
+      <a href={logoHref} class="logo">
         <img src="/img/logo.svg" height="15" alt="Calma" />
       </a>
 
       <nav class="nav">
-        <a href="/#verticals" class="nav-link">Verticals</a>
-        <a href="/#team" class="nav-link">Team</a>
-        <a href="/#conferences" class="nav-link">Events</a>
-        <a href="/#blog" class="nav-link">Blog</a>
-        <a href="/#contact" class="nav-link">Contact</a>
+        <a href={`${base}#verticals`} class="nav-link">Verticals</a>
+        <a href={`${base}#team`} class="nav-link">Team</a>
+        <a href={`${base}#conferences`} class="nav-link">Events</a>
+        <a href={`${base}#blog`} class="nav-link">Blog</a>
+        <a href={`${base}#contact`} class="nav-link">Contact</a>
         <a href={vacanciesUrl} target="_blank" class="hiring-link">
           Hiring
           <span class="notification-dot"></span>
@@ -46,11 +55,11 @@ const vacanciesUrl =
       <line x1="18" y1="6" x2="6" y2="18"></line>
     </svg>
   </button>
-  <a href="/#verticals" class="nav-link" onclick="closeMobileMenu()">Verticals</a>
-  <a href="/#team" class="nav-link" onclick="closeMobileMenu()">Team</a>
-  <a href="/#conferences" class="nav-link" onclick="closeMobileMenu()">Events</a>
-  <a href="/#blog" class="nav-link" onclick="closeMobileMenu()">Blog</a>
-  <a href="/#contact" class="nav-link" onclick="closeMobileMenu()">Contact</a>
+  <a href={`${base}#verticals`} class="nav-link" onclick="closeMobileMenu()">Verticals</a>
+  <a href={`${base}#team`} class="nav-link" onclick="closeMobileMenu()">Team</a>
+  <a href={`${base}#conferences`} class="nav-link" onclick="closeMobileMenu()">Events</a>
+  <a href={`${base}#blog`} class="nav-link" onclick="closeMobileMenu()">Blog</a>
+  <a href={`${base}#contact`} class="nav-link" onclick="closeMobileMenu()">Contact</a>
   <a href={vacanciesUrl} target="_blank" class="hiring-link">
     Hiring
     <span class="notification-dot"></span>

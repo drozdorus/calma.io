@@ -359,6 +359,11 @@ function initHScroller(scroller) {
   updateFade();
 }
 
+// Expose for team.js, which runs as a separate module on the homepage and
+// calls initHScroller on the team scroller. (Mirrors window.closeMobileMenu,
+// which the header's inline onclick handlers depend on.)
+window.initHScroller = initHScroller;
+
 initHScroller(document.querySelector('.upcoming-events-scroller'));
 initHScroller(document.querySelector('.past-events-scroller'));
 
