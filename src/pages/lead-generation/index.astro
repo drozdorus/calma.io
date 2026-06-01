@@ -67,7 +67,7 @@ const groups = [
                   <svg width="18" height="18" aria-hidden="true"><use href={`#${g.icon}`} /></svg>
                 </div>
                 {g.href ? (
-                  <a class="service-title vhub-grouplink" href={g.href}>{g.title}<span class="vhub-arrow">→</span></a>
+                  <a class="service-title text-link text-link--arrow" href={g.href}>{g.title}</a>
                 ) : (
                   <h3 class="service-title">{g.title}</h3>
                 )}
@@ -76,7 +76,7 @@ const groups = [
                 {g.items.map((it) => (
                   <li>
                     {it.href ? (
-                      <a class="vhub-itemlink" href={it.href}>{it.label}<span class="vhub-arrow">→</span></a>
+                      <a class="text-link text-link--arrow" href={it.href}>{it.label}</a>
                     ) : (
                       it.label
                     )}
@@ -92,7 +92,7 @@ const groups = [
             Every vertical runs on its own buyer dynamics, compliance rules, and creative
             playbook — so we build dedicated systems for each rather than a one-size-fits-all
             funnel. Open a vertical to see how we generate, qualify, and deliver its leads, or
-            <a href="/#contact">get in touch</a> to talk through a custom program.
+            <a href="/#contact" class="text-link">get in touch</a> to talk through a custom program.
           </p>
         </div>
 
@@ -114,35 +114,7 @@ const groups = [
     opacity: 1;
     transform: none;
   }
-  /* Clickable items are mint (the site's link accent) so they clearly stand
-     out from the plain, non-linked sub-niches next to them. */
-  .vhub-grouplink {
-    text-decoration: none;
-    color: var(--secondary);
-  }
-  .vhub-itemlink {
-    text-decoration: none;
-    color: var(--secondary);
-    font-weight: 500;
-  }
-  /* Hover: nudge the arrow rather than underline (the underline ran awkwardly
-     across the gap before the arrow). The mint colour already signals the link. */
-  .vhub-grouplink:hover .vhub-arrow,
-  .vhub-itemlink:hover .vhub-arrow {
-    transform: translateX(3px);
-  }
-  /* Tint the bullet of a linked sub-niche so the whole row reads as active. */
-  .service-list li:has(.vhub-itemlink)::before {
-    background: var(--secondary);
-    opacity: 1;
-  }
-  .vhub-arrow {
-    display: inline-block;
-    color: var(--secondary);
-    font-size: 0.9em;
-    margin-left: 0.4em;
-    transition: transform 0.2s var(--ease);
-  }
+  /* Linked items use the shared .text-link / .text-link--arrow accent style. */
   .vhub-outro {
     max-width: 680px;
     margin: var(--space-xl) auto 0;
@@ -152,13 +124,5 @@ const groups = [
     font-size: 0.95rem;
     line-height: 1.65;
     color: var(--text-muted);
-  }
-  .vhub-outro a {
-    color: var(--secondary);
-    text-decoration: none;
-  }
-  .vhub-outro a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
   }
 </style>

@@ -397,14 +397,3 @@ a.logo {
   margin-top: 2.5rem;
   text-align: center;
 }
-
-.blog-view-all-link {
-  color: var(--secondary);
-  text-decoration: none;
-  font-weight: 500;
-  transition: opacity 0.2s var(--ease);
-}
-
-.blog-view-all-link:hover {
-  opacity: 0.7;
-}
