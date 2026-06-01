@@ -387,3 +387,24 @@ a.logo {
     grid-template-columns: 1fr;
   }
 }
+
+/* Blog index (library) page */
+.blog-index-hero {
+  margin: 1.75rem 0 2.5rem;
+}
+
+.blog-view-all {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.blog-view-all-link {
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s var(--ease);
+}
+
+.blog-view-all-link:hover {
+  opacity: 0.7;
+}

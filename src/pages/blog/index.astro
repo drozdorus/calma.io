@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ArticleCard from '../../components/blog/ArticleCard.astro';
+
+// Newest first; ties keep collection order.
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<BaseLayout
+  title="Blog — Calma"
+  description="Perspectives on performance marketing and lead generation across insurance, financial, legal, and home services."
+  canonical="https://calma.io/blog/"
+  ogTitle="Calma Blog"
+  ogDescription="Perspectives on performance marketing and lead generation."
+  useBlogCss={true}
+>
+  <Header />
+
+  <main id="main-content">
+    <div class="article-page">
+      <div class="container">
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">calma.io</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current">Blog</span>
+        </nav>
+
+        <header class="blog-index-hero">
+          <h1 class="section-title">Blog</h1>
+          <p class="section-subtitle">Perspectives on performance marketing and lead generation</p>
+        </header>
+
+        <div class="blog-grid">
+          {posts.map((post) => <ArticleCard post={post} />)}
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { cardCovers } from './cardCovers';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { data } = post;
+const href = `/blog/${post.id}/`;
+const cover = cardCovers[post.id] ?? '';
+const title = data.ogTitle ?? data.title;
+---
+
+<a href={href} class="article-card">
+  <div class="article-cover" set:html={cover} />
+  <div class="article-body">
+    <span class={`article-tag${data.tagMint ? ' article-tag--mint' : ''}`}>{data.tag}</span>
+    <h3 class="article-title">{title}</h3>
+    <p class="article-desc">{data.relatedDesc}</p>
+    <span class="article-read">Read</span>
+  </div>
+</a>
