@@ -817,8 +817,8 @@ body {
 }
 
 /* Shared accent text link — matches the amber→mint convention already used by
-   the contact / careers links. Add .text-link--arrow for a trailing → that
-   nudges on hover. Use this instead of inventing per-block link styles. */
+   the contact / careers links. Use this instead of inventing per-block link
+   styles (no arrows / underlines / nudges, to stay consistent site-wide). */
 .text-link {
   color: var(--primary);
   text-decoration: none;
@@ -827,16 +827,6 @@ body {
 
 .text-link:hover {
   color: var(--secondary);
-}
-
-.text-link--arrow::after {
-  content: ' →';
-  display: inline-block;
-  transition: transform 0.2s var(--ease);
-}
-
-.text-link--arrow:hover::after {
-  transform: translateX(3px);
 }
 
 /* Events */

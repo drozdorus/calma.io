@@ -67,7 +67,7 @@ const groups = [
                   <svg width="18" height="18" aria-hidden="true"><use href={`#${g.icon}`} /></svg>
                 </div>
                 {g.href ? (
-                  <a class="service-title text-link text-link--arrow" href={g.href}>{g.title}</a>
+                  <a class="service-title text-link" href={g.href}>{g.title}</a>
                 ) : (
                   <h3 class="service-title">{g.title}</h3>
                 )}
@@ -76,7 +76,7 @@ const groups = [
                 {g.items.map((it) => (
                   <li>
                     {it.href ? (
-                      <a class="text-link text-link--arrow" href={it.href}>{it.label}</a>
+                      <a class="text-link" href={it.href}>{it.label}</a>
                     ) : (
                       it.label
                     )}
@@ -114,7 +114,7 @@ const groups = [
     opacity: 1;
     transform: none;
   }
-  /* Linked items use the shared .text-link / .text-link--arrow accent style. */
+  /* Linked items use the shared .text-link accent style. */
   .vhub-outro {
     max-width: 680px;
     margin: var(--space-xl) auto 0;
