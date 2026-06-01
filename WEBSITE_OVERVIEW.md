@@ -42,10 +42,12 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 | `src/layouts/BaseLayout.astro` | `<head>` (meta/OG/JSON-LD via props/slots), global CSS+JS includes |
 | `src/components/Header.astro` / `Footer.astro` | **Single source of truth.** `home` prop → bare `#anchor` on homepage, absolute `/#anchor` elsewhere |
 | `src/pages/index.astro` | Homepage (all 9 sections, wave canvas, JSON-LD `@graph`) |
-| `src/pages/blog/[...slug].astro` | Article template (breadcrumb, prose, related, FAQ, JSON-LD from frontmatter) |
+| `src/pages/blog/[...slug].astro` / `blog/index.astro` | Article template + `/blog/` library index (`ArticleCard` + `cardCovers`) |
+| `src/pages/lead-generation/[...slug].astro` / `index.astro` | Per-vertical "what we do" pages + the hub (mirrors homepage "What We Do" groups) |
 | `src/pages/privacy.astro` | Privacy Policy |
-| `src/content/blog/<slug>.md` | Articles (3) — Markdown + frontmatter; a new article = one `.md` |
-| `src/content.config.ts` | `blog` collection schema (+ `verticals` stub for phase 2) |
+| `src/content/blog/<slug>.md` · `src/content/verticals/<slug>.md` | Articles (3) + vertical pages (4) — Markdown + frontmatter |
+| `src/content.config.ts` | `blog` + `verticals` collection schemas |
+| `src/components/IconSprite.astro` | Shared hidden SVG icon sprite (homepage + hub) |
 | `src/styles/*.css` | `style.css` (global+FAQ+footer), `blog.css`, `team.css` — gated per-page |
 | `src/scripts/*.js` | `script.js` (wave canvas, island header, scroll-spy, drag scrollers, FAQ, form), `team.js` |
 | `public/` | `img/`, `fonts/`, `CNAME`, `.nojekyll`, `robots.txt`, favicons |
@@ -144,15 +146,19 @@ auto-generated, JSON-LD driven by frontmatter, deploy via GitHub Actions. Plan +
 QA in `ASTRO_MIGRATION_PLAN.md` / `QA_REPORT.md` (delete both once cutover is stable;
 `legacy-static` branch + `pre-astro` tag are the rollback, keep ~2 weeks then drop).
 
-### 2. Standalone pages (planned)
+### 2. ~~Standalone pages~~ — DONE (2026-06-01)
 
-- **`/blog/` index page** — a real blog library page (currently `#blog` is only a
-  homepage anchor; article breadcrumbs point at it). Low effort, natural as content grows.
-- **Per-vertical landing pages** — dedicated pages for each vertical. Biggest SEO/intent
-  lever for a lead-gen company. URL pattern decided: **`/lead-generation/<vertical>/`**.
-  The `verticals` content collection is already stubbed in `content.config.ts` (empty
-  dir) — add `.md` files + a `[...slug].astro` template, same shape as blog.
-- Lower priority: standalone `/team`, `/about` (fine as homepage sections for now).
+- **`/blog/` index** — real blog library page (`ArticleCard` + shared `cardCovers`),
+  linked from the homepage `#blog` ("View all articles") and article breadcrumbs.
+- **Verticals / "what we do" pages** — SEO + client-gen surfaces, **distinct from the
+  blog**, at **`/lead-generation/<vertical>/`** (`verticals` content collection +
+  `[...slug].astro`). Hub at `/lead-generation/` mirrors the homepage "What We Do" groups
+  (Insurance / Home Services / Finance) and links wherever a page exists. Pages: auto-insurance,
+  home-insurance, home-services, finance (insurance split to sub-niches; the rest at group
+  level). Linked from the homepage "What We Do" ("Explore lead generation by vertical").
+- Shared `IconSprite.astro` (homepage + hub). Accent links use one `.text-link` (amber→mint),
+  matching the contact/careers convention — don't reintroduce per-block link styles.
+- Lower priority / not built: standalone `/team`, `/about`, `/contact` (homepage sections for now).
 
 ### 3. Smaller follow-ups
 
