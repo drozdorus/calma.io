@@ -24,26 +24,32 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 
 ## Tech Stack
 
-- **Static site** — plain HTML/CSS/JavaScript, **no framework, no build step**
-- **Hosting**: GitHub Pages (push to `main` deploys). `.nojekyll` is present, so the
-  repo is served as-is (no Jekyll, no server-side includes/redirects)
+- **Astro 6** — static output (migrated from plain HTML/CSS/JS on 2026-05-31; see Roadmap).
+- **Build step**: `astro build` → `dist/`. Source is the same vanilla CSS/JS, now
+  componentized (single-source Header/Footer/Layout) + a blog content collection.
+- **Hosting**: GitHub Pages, **source = GitHub Actions** (`.github/workflows/deploy.yml`
+  builds on push to `main` and deploys `dist/`). `CNAME`/`.nojekyll`/`robots.txt` live
+  in `public/`. Repo-level Actions had to be enabled for this (was branch-deploy before).
 - **Form backend**: Formspree (`https://formspree.io/f/xzzgddjo`)
-- **Fonts**: Geologica (local TTF, 9 weights) — primary. Nexa present but unused in CSS.
+- **Fonts**: Geologica (local TTF in `public/fonts/`, 9 weights) — primary. `@font-face`
+  uses absolute `/fonts/...` paths (relative would 404 once CSS is bundled).
 - **No analytics** currently in the source
 
 ### Files
 
-| File | Scope |
+| Path | Scope |
 |------|-------|
-| `index.html` | Single-page homepage |
-| `style.css` | Global + homepage sections + **shared FAQ control** + footer |
-| `blog.css` | Blog cards (homepage) + article-page layout (prose, related, FAQ container) |
-| `team.css` | Team scroller (homepage only — not loaded on article pages) |
-| `script.js` | Wave canvas, island header, scroll-progress + active-nav spy, smooth scroll, drag scrollers, contact form, FAQ slide |
-| `team.js` | One line: inits the team drag-scroller |
-| `blog/<slug>/index.html` | Article pages (3) |
-| `cases/<slug>/index.html` | **Redirect stubs** → `/blog/<slug>/` (old URLs, articles were renamed cases→blog) |
-| `privacy/index.html` | Privacy Policy |
+| `src/layouts/BaseLayout.astro` | `<head>` (meta/OG/JSON-LD via props/slots), global CSS+JS includes |
+| `src/components/Header.astro` / `Footer.astro` | **Single source of truth.** `home` prop → bare `#anchor` on homepage, absolute `/#anchor` elsewhere |
+| `src/pages/index.astro` | Homepage (all 9 sections, wave canvas, JSON-LD `@graph`) |
+| `src/pages/blog/[...slug].astro` | Article template (breadcrumb, prose, related, FAQ, JSON-LD from frontmatter) |
+| `src/pages/privacy.astro` | Privacy Policy |
+| `src/content/blog/<slug>.md` | Articles (3) — Markdown + frontmatter; a new article = one `.md` |
+| `src/content.config.ts` | `blog` collection schema (+ `verticals` stub for phase 2) |
+| `src/styles/*.css` | `style.css` (global+FAQ+footer), `blog.css`, `team.css` — gated per-page |
+| `src/scripts/*.js` | `script.js` (wave canvas, island header, scroll-spy, drag scrollers, FAQ, form), `team.js` |
+| `public/` | `img/`, `fonts/`, `CNAME`, `.nojekyll`, `robots.txt`, favicons |
+| `astro.config.mjs` | `site`, `trailingSlash:'always'`, `build.format:'directory'`, sitemap, `markdown.processor` (smartypants off for verbatim quotes) |
 
 ---
 
@@ -85,8 +91,8 @@ Audience Intelligence · Automated Optimization · Lead Verification
 - Section on the homepage (`#blog`) is a teaser grid of `.article-card`s.
 - Articles live at `/blog/<slug>/`. Currently 3 (auto-insurance market, Meta auto
   ads, NY AI advertising law).
-- Renamed from `/cases/` → `/blog/` (2026-05-31). Old `/cases/<slug>/` paths are
-  meta-refresh redirect stubs pointing at the new URLs; `sitemap.xml` lists `/blog/`.
+- Renamed from `/cases/` → `/blog/` (2026-05-31); the old `/cases/` redirect stubs
+  were dropped. Sitemap is auto-generated (`/sitemap-index.xml`) by `@astrojs/sitemap`.
 - Breadcrumb on articles: `calma.io / Blog / <title>`.
 
 ---
@@ -123,36 +129,29 @@ Audience Intelligence · Automated Optimization · Lead Verification
 
 Column layout (stacks on mobile): **Brand** (logo + one-line descriptor) · **Company**
 (About, Team, Blog, Careers) · **Get in touch** (info@calma.io, Contact). Bottom bar:
-© year + Privacy + LinkedIn. Same markup on homepage and article pages (article links
-are absolute `/#…`); keep them in sync — there's no shared include yet (see Roadmap).
+© year + Privacy + LinkedIn. Now a single `Footer.astro` component (no more
+duplication) — its `home` prop decides bare `#…` vs absolute `/#…` links.
 
 ---
 
 ## Roadmap / TODO
 
-### 1. Migrate to Astro (planned)
+### 1. ~~Migrate to Astro~~ — DONE (2026-05-31)
 
-The biggest structural debt is that the header and footer are **duplicated across 4
-HTML files** (index + 3 articles) — any nav/footer change must be repeated, and has
-drifted before. Astro fixes this cleanly:
-
-- Componentize `Header` / `Footer` / `Layout` (one source of truth).
-- Articles become Markdown/MDX in a **content collection** → a new article is one
-  `.md` file instead of ~300 lines of copy-pasted HTML.
-- Auto-generate `sitemap.xml`; JSON-LD from frontmatter.
-- Output stays **static** → GitHub Pages still works (add an `astro build` GitHub
-  Action). Owner already runs Astro 6 on betterhouse, so the stack is familiar.
-- **Sequence**: do this *after* the CSS/JS cleanup (done) — migrate clean code, not
-  the zoo. Only worth it because the blog + per-vertical pages below will grow.
+Migrated to Astro 6, parity-only (lift & shift). Header/Footer/Layout componentized
+(single source of truth), articles moved to a `blog` content collection, sitemap
+auto-generated, JSON-LD driven by frontmatter, deploy via GitHub Actions. Plan +
+QA in `ASTRO_MIGRATION_PLAN.md` / `QA_REPORT.md` (delete both once cutover is stable;
+`legacy-static` branch + `pre-astro` tag are the rollback, keep ~2 weeks then drop).
 
 ### 2. Standalone pages (planned)
 
 - **`/blog/` index page** — a real blog library page (currently `#blog` is only a
   homepage anchor; article breadcrumbs point at it). Low effort, natural as content grows.
-- **Per-vertical landing pages** — dedicated pages for each vertical (e.g. auto
-  insurance lead generation). Biggest SEO/intent lever for a lead-gen company: someone
-  searching "auto insurance lead generation" should land on a focused page, not a
-  homepage card. Largest effort; fits Astro collections.
+- **Per-vertical landing pages** — dedicated pages for each vertical. Biggest SEO/intent
+  lever for a lead-gen company. URL pattern decided: **`/lead-generation/<vertical>/`**.
+  The `verticals` content collection is already stubbed in `content.config.ts` (empty
+  dir) — add `.md` files + a `[...slug].astro` template, same shape as blog.
 - Lower priority: standalone `/team`, `/about` (fine as homepage sections for now).
 
 ### 3. Smaller follow-ups
@@ -170,5 +169,5 @@ drifted before. Astro fixes this cleanly:
 | Formspree | Contact form (`/f/xzzgddjo`) |
 | LinkedIn | Company page (header? no — footer + JSON-LD `sameAs`) |
 | Notion | Careers / open vacancies (external) |
-| GitHub Pages | Hosting & deploy (push to `main`) |
+| GitHub Pages | Hosting & deploy — source = GitHub Actions (`astro build` on push to `main`) |
 </content>
