@@ -9,5 +9,10 @@ export default defineConfig({
   build: {
     format: 'directory',
   },
+  markdown: {
+    // Keep straight quotes/apostrophes verbatim — the legacy articles use them.
+    // GFM (tables, etc.) stays on; disabling smartypants only affects quote glyphs.
+    smartypants: false,
+  },
   integrations: [sitemap()],
 });

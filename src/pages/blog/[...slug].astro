@@ -1,0 +1,159 @@
+---
+// Article template — renders every entry in the `blog` content collection at
+// /blog/<slug>/, pixel-for-pixel with the legacy blog/<slug>/index.html pages.
+// Prose comes from the Markdown body, wrapped in <article class="article-prose">
+// so blog.css's `.article-prose *` rules apply. The FAQ <details> block and the
+// "More from Calma" related cards are generated from frontmatter (faq[]/related[]),
+// and the FAQPage + Article JSON-LD are emitted into BaseLayout's head slot.
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { heroCovers } from '../../components/blog/heroCovers';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post, posts },
+  }));
+}
+
+const { post, posts } = Astro.props;
+const { data } = post;
+const { Content } = await render(post);
+
+// Article date as YYYY-MM-DD for JSON-LD (datePublished / dateModified).
+const isoDate = data.date.toISOString().slice(0, 10);
+
+// Tag pill class — mint variant for "Paid Acquisition".
+const tagClass = data.tagMint ? 'article-tag article-tag--mint' : 'article-tag';
+
+// Resolve related slugs to their collection entries (for the cards).
+const relatedPosts = (data.related ?? [])
+  .map((slug) => posts.find((p) => p.id === slug))
+  .filter((p): p is (typeof posts)[number] => Boolean(p));
+
+const heroCover = heroCovers[post.id] ?? '';
+
+// FAQPage JSON-LD — generated from faq[] (schemaText is the short legacy text).
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: (data.faq ?? []).map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.schemaText ?? item.answer,
+    },
+  })),
+};
+
+// Article JSON-LD — driven by frontmatter, matching the legacy block.
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.ogTitle ?? data.title,
+  description: data.articleDescription ?? data.description,
+  url: data.canonical,
+  datePublished: isoDate,
+  dateModified: isoDate,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Calma',
+    url: 'https://calma.io',
+    logo: { '@type': 'ImageObject', url: 'https://calma.io/img/logo.svg' },
+  },
+  author: { '@type': 'Organization', name: 'Calma' },
+};
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  canonical={data.canonical!}
+  ogType="article"
+  ogTitle={data.ogTitle}
+  ogDescription={data.ogDescription}
+  ogImage={data.ogImage}
+  twitterTitle={data.ogTitle}
+  twitterDescription={data.twitterDescription ?? data.ogDescription}
+  useBlogCss={true}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+  </Fragment>
+
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="icon-linkedin" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </symbol>
+  </svg>
+
+  <Header />
+
+  <main id="main-content">
+    <div class="article-page">
+      <div class="container">
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">calma.io</a>
+          <span class="breadcrumb-sep">/</span>
+          <a href="/#blog">Blog</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current">{data.breadcrumbLabel}</span>
+        </nav>
+
+        <header class="article-hero">
+          <div class="article-hero-meta">
+            <span class={tagClass}>{data.tag}</span>
+            <span class="article-read-time">{data.readTime}</span>
+          </div>
+          <h1 class="article-hero-title">{data.ogTitle ?? data.title}</h1>
+          <p class="article-hero-lead">{data.lead}</p>
+          <div class="article-cover article-cover--hero" set:html={heroCover} />
+        </header>
+
+        <article class="article-prose">
+          <Content />
+
+          <section class="article-faq">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-list">
+              {(data.faq ?? []).map((item) => (
+                <details class="faq-item">
+                  <summary>{item.questionRendered ?? item.question}<span class="faq-icon">+</span></summary>
+                  <div class="faq-answer"><p>{item.answer}</p></div>
+                </details>
+              ))}
+            </div>
+          </section>
+
+          {data.afterFaq && <Fragment set:html={data.afterFaq} />}
+        </article>
+
+        <section class="article-related">
+          <p class="article-related-label">More from Calma</p>
+          <div class="article-related-grid">
+            {relatedPosts.map((rel) => (
+              <a href={`/blog/${rel.id}/`} class="related-card">
+                <div class="related-card-meta">
+                  <span class={rel.data.tagMint ? 'article-tag article-tag--mint' : 'article-tag'}>{rel.data.tag}</span>
+                  <span class="article-read-time">{rel.data.readTime}</span>
+                </div>
+                <h3 class="related-card-title">{rel.data.ogTitle ?? rel.data.title}</h3>
+                <p class="related-card-desc">{rel.data.relatedDesc}</p>
+                <span class="related-card-read">Read article</span>
+              </a>
+            ))}
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
