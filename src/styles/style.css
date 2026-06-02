@@ -1073,19 +1073,11 @@ body {
   transition: all 0.3s;
   padding: 4px 8px;
   border-radius: var(--radius-sm);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-/* External-link arrow, matching the card-link convention (internal → / external ↗). */
-.conference-link::after {
-  content: '↗';
+  display: inline-block;
 }
 
 .conference-card:hover .conference-link {
   color: var(--secondary);
-  gap: 0.5rem;
 }
 
 /* Past Events */

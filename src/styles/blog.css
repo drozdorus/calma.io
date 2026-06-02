@@ -94,23 +94,6 @@ a.logo {
   font-weight: 500;
   color: var(--primary);
   margin-top: 0.25rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  transition: gap 0.2s ease;
-}
-
-.article-read::after {
-  content: '→';
-}
-
-.article-card:hover .article-read {
-  gap: 0.5rem;
-}
-
-/* External link variant */
-.article-card--external .article-read::after {
-  content: '↗';
 }
 
 /* ─── Article page layout ─── */
@@ -345,19 +328,7 @@ a.logo {
   font-size: 0.78rem;
   font-weight: 500;
   color: var(--primary);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
   margin-top: 0.25rem;
-  transition: gap 0.2s ease;
-}
-
-.related-card-read::after {
-  content: '→';
-}
-
-.related-card:hover .related-card-read {
-  gap: 0.5rem;
 }
 
 /* ─── Responsive ─── */
