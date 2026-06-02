@@ -1008,8 +1008,9 @@ body {
   border-radius: var(--radius-lg);
   text-align: center;
   border: 1px solid var(--border-default);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  /* No backdrop-filter here: these cards live inside a mask-image'd horizontal
+     scroller, and backdrop-filter + mask + scroll triggers Chrome's seam-line
+     repaint artifact. The glass bg alone reads fine on the dark events section. */
   box-shadow: var(--glass-shadow);
   transition: all 0.3s var(--ease);
   width: 300px;
