@@ -1,8 +1,12 @@
 ---
-// Footer — single source of truth. On the homepage (home=true) the section
-// links render as bare `#anchor` / `#top` so they smooth-scroll via script.js
-// (matching legacy index.html); on article/privacy routes (default) they're
-// absolute (`/`, `/#anchor`) to jump back to the homepage section.
+// Footer — sitewide nav ("everything" menu): brand + 3 link columns so any page
+// can reach any destination. On the homepage (home=true) the section anchors
+// render as bare `#anchor` / `#top` so they smooth-scroll via script.js
+// (matching legacy index.html); on inner routes (default) they're absolute
+// (`/`, `/#anchor`) to jump back to the homepage section. Only the section
+// anchors use `base`; page links (verticals, blog, contact, privacy) are absolute.
+import { getCollection } from 'astro:content';
+
 export interface Props {
   /** homepage: emit bare `#anchor` links so the smooth-scroll JS matches */
   home?: boolean;
@@ -12,6 +16,13 @@ const base = home ? '' : '/';
 const logoHref = home ? '#top' : '/';
 const vacanciesUrl =
   'https://calma-io.notion.site/Open-Vacancies-Calma-Agency-169f120c65df806bba68fc5163bcfa52';
+
+// Drive the "What we do" column from the verticals collection.
+const verticals = (await getCollection('verticals')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const year = new Date().getFullYear();
 ---
 
 <!-- Footer -->
@@ -23,21 +34,33 @@ const vacanciesUrl =
         <p class="footer-tagline">Performance lead generation across insurance, financial, legal, and home services
           verticals.</p>
       </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">What we do</h4>
+        {verticals.map((v) => (
+          <a href={`/lead-generation/${v.id}/`} class="footer-link">{v.data.breadcrumbLabel}</a>
+        ))}
+        <a href="/lead-generation/" class="footer-link">All verticals</a>
+      </div>
+
       <div class="footer-col">
         <h4 class="footer-heading">Company</h4>
         <a href={`${base}#about`} class="footer-link">About</a>
         <a href={`${base}#team`} class="footer-link">Team</a>
-        <a href={`${base}#blog`} class="footer-link">Blog</a>
-        <a href={vacanciesUrl} target="_blank" class="footer-link">Careers</a>
+        <a href={`${base}#conferences`} class="footer-link">Events</a>
+        <a href="/blog/" class="footer-link">Blog</a>
+        <a href={vacanciesUrl} target="_blank" rel="noopener" class="footer-link">Careers</a>
       </div>
+
       <div class="footer-col">
         <h4 class="footer-heading">Get in touch</h4>
+        <a href="/contacts/" class="footer-link">Contact</a>
         <a href="mailto:info@calma.io" class="footer-link">info@calma.io</a>
-        <a href={`${base}#contact`} class="footer-link">Contact</a>
-        <a href="https://www.linkedin.com/company/calma-io/" target="_blank" class="footer-link">LinkedIn</a>
+        <a href="https://www.linkedin.com/company/calma-io/" target="_blank" rel="noopener" class="footer-link">LinkedIn</a>
       </div>
+
       <div class="footer-legal">
-        <span class="footer-copy">© 2026 Calma</span>
+        <span class="footer-copy">© {year} Calma</span>
         <a href="/privacy/" target="_blank" class="footer-link">Privacy</a>
       </div>
     </div>

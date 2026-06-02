@@ -1322,8 +1322,14 @@ body {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
   gap: var(--space-xl);
+}
+
+/* Brand block leads the row; legal sits under it in the same first column. */
+.footer-col--brand {
+  grid-row: 1;
+  grid-column: 1;
 }
 
 .footer-col {
@@ -1331,6 +1337,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  min-width: 0;
 }
 
 .footer-logo {
@@ -1496,12 +1503,13 @@ body {
   }
 
   .footer-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-lg);
   }
 
   .footer-col--brand {
     grid-column: 1 / -1;
+    grid-row: auto;
   }
 
   .footer-legal {
@@ -1520,6 +1528,11 @@ body {
 @media (max-width: 480px) {
   .conference-card {
     width: 240px;
+  }
+
+  /* Narrow phones: link columns share two-up so labels never clip. */
+  .footer-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
