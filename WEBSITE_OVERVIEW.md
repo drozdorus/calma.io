@@ -40,10 +40,13 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 | Path | Scope |
 |------|-------|
 | `src/layouts/BaseLayout.astro` | `<head>` (meta/OG/JSON-LD via props/slots), global CSS+JS includes |
-| `src/components/Header.astro` / `Footer.astro` | **Single source of truth.** `home` prop → bare `#anchor` on homepage, absolute `/#anchor` elsewhere |
-| `src/pages/index.astro` | Homepage (all 9 sections, wave canvas, JSON-LD `@graph`) |
+| `src/components/Header.astro` | **Page-level top nav** (Verticals dropdown, Blog, Contact, Hiring); pathname active; mobile burger menu. No `home` prop (all links absolute) |
+| `src/components/Footer.astro` | **Single source of truth.** 3-column sitewide nav; `home` prop → bare `#anchor` on homepage section links, absolute `/#anchor` elsewhere |
+| `src/components/SectionNav.astro` | Floating bottom **section pill** (homepage only) — jumps homepage sections, scroll-spy active |
+| `src/pages/index.astro` | Homepage (sections, wave canvas, JSON-LD `@graph`, bottom CTA band → /contacts/, `<SectionNav />`) |
 | `src/pages/blog/[...slug].astro` / `blog/index.astro` | Article template + `/blog/` library index (`ArticleCard` + `cardCovers`) |
 | `src/pages/lead-generation/[...slug].astro` / `index.astro` | Per-vertical "what we do" pages + the hub (mirrors homepage "What We Do" groups) |
+| `src/pages/contacts.astro` | Contact page (Formspree form + email + careers) — moved off the homepage |
 | `src/pages/privacy.astro` | Privacy Policy |
 | `src/content/blog/<slug>.md` · `src/content/verticals/<slug>.md` | Articles (3) + vertical pages (4) — Markdown + frontmatter |
 | `src/content.config.ts` | `blog` + `verticals` collection schemas |
@@ -55,24 +58,27 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 
 ---
 
-## Site Structure
+## Site Structure & Navigation
 
-Single-page homepage with anchor nav + separate article pages.
+Navigation is **split by purpose** (rebuilt 2026-06-02, Flighty-style):
 
-| # | Section | Anchor | In nav? |
-|---|---------|--------|---------|
-| 1 | Hero | `#top` | — (logo) |
-| 2 | About | `#about` | — |
-| 3 | Team | `#team` | ✓ Team |
-| 4 | Verticals ("What We Do") | `#verticals` | ✓ Verticals |
-| 5 | Blog | `#blog` | ✓ Blog |
-| 6 | Events ("Industry Events") | `#conferences` | ✓ Events |
-| 7 | FAQ | `#faq` | — |
-| 8 | Contact ("Get In Touch") | `#contact` | ✓ Contact |
-| 9 | Footer | — | — |
+- **Top header = pages** (`Header.astro`): logo · **Verticals ▾** (glass dropdown → 4
+  vertical pages + "All verticals" hub) · **Blog** (`/blog/`) · **Contact** (`/contacts/`)
+  · **Hiring** pill (Notion). Active state is **pathname-based** (Verticals on
+  `/lead-generation/*`, Blog on `/blog/*`, Contact on `/contacts/*`). On mobile the nav
+  collapses to a burger → full-screen page menu (Verticals + 4 sub-pages, Blog, Contact, Hiring).
+- **Floating bottom pill = homepage sections** (`SectionNav.astro`, homepage only): a glass
+  pill that jumps between homepage sections and highlights the active one on scroll
+  (the scroll-spy drives it). Sections: **About · Verticals · Team · Events · FAQ**
+  (Blog is omitted here — it's a page in the header). Hidden on non-home pages.
 
-Header also has a **Hiring** pill (→ Notion vacancies). Nav highlights the active
-section on scroll; a thin gradient scroll-progress bar sits at the top of every page.
+**Homepage sections** (in DOM order): Hero (`#top`) · About (`#about`) · Verticals /
+"What We Do" (`#verticals`) · Team (`#team`) · Events (`#conferences`) · Blog teaser
+(`#blog`) · FAQ (`#faq`) · **CTA band → `/contacts/`** · Footer.
+
+**Contact is its own page** (`/contacts/`) — the homepage no longer has a `#contact`
+section; its bottom CTA band links to the contacts page. A thin gradient scroll-progress
+bar still sits at the top of every page.
 
 ### Verticals (6)
 
@@ -112,12 +118,20 @@ Audience Intelligence · Automated Optimization · Lead Verification
 - **Cards**: one glass-card language (services, methodology, traffic, conference, blog
   cards) — glass bg, `translateY(-2px)` hover, `--border-hover`.
 - **Gradient text**: hero title only (brand signature). Section titles are solid white.
+- **Link affordances (two, deliberately)**: (1) **text links** — a word/phrase that is
+  the link: shared `.text-link` = amber→mint, **underlined** (matches `.article-prose a`);
+  use this, don't invent per-block link styles. (2) **card links** — the whole card is the
+  link: no underline/arrow, the card's hover-lift is the affordance (blog, related, event,
+  hub-vertical cards). Plus **buttons** (Hiring pill, the homepage CTA-band button) for
+  prominent CTAs. Underline therefore = "link inside text"; no stray arrows.
 
 ### Key interactions
 
 - Canvas wave animation (multi-layer sine, color-shifting, scroll-fade)
 - Island header (full-width → floating pill on scroll)
-- Smooth-scroll anchors (80px offset) + active-nav spy + top scroll-progress bar
+- Smooth-scroll anchors (80px offset); the **scroll-spy drives the bottom section pill**
+  (`SectionNav`) on the homepage; top scroll-progress bar on every page
+- **Verticals dropdown** (header): hover + click/keyboard (Enter/Space/Arrow/Esc), `aria-expanded`
 - Drag-to-scroll horizontal scrollers (events, team) via `initHScroller`
 - **FAQ**: one control site-wide (`.faq-list`) — native `<details>` markup with a
   JS height-slide (Web Animations API) as progressive enhancement; works without JS;
@@ -129,10 +143,12 @@ Audience Intelligence · Automated Optimization · Lead Verification
 
 ## Footer
 
-Column layout (stacks on mobile): **Brand** (logo + one-line descriptor) · **Company**
-(About, Team, Blog, Careers) · **Get in touch** (info@calma.io, Contact). Bottom bar:
-© year + Privacy + LinkedIn. Now a single `Footer.astro` component (no more
-duplication) — its `home` prop decides bare `#…` vs absolute `/#…` links.
+Full sitewide nav (rebuilt 2026-06-02), single `Footer.astro` component. Brand block +
+three columns: **What we do** (4 vertical pages + All verticals, data-driven) · **Company**
+(About, Team, Events, Blog, Careers) · **Get in touch** (Contact `/contacts/`, info@calma.io,
+LinkedIn). Bottom bar: © year + Privacy. Responsive grid (`min-width:0` / `minmax(0,…)`) —
+no horizontal overflow on phones. The `home` prop only affects the Company section anchors
+(bare `#…` on homepage vs absolute `/#…` elsewhere).
 
 ---
 
@@ -158,10 +174,22 @@ QA in `ASTRO_MIGRATION_PLAN.md` / `QA_REPORT.md` (delete both once cutover is st
   level). Linked from the homepage "What We Do" ("Explore lead generation by vertical").
 - Shared `IconSprite.astro` (homepage + hub). Accent links use one `.text-link` (amber→mint),
   matching the contact/careers convention — don't reintroduce per-block link styles.
-- Lower priority / not built: standalone `/team`, `/about`, `/contact` (homepage sections for now).
+- Lower priority / not built: standalone `/team`, `/about` (homepage sections for now).
 
-### 3. Smaller follow-ups
+### 3. ~~Navigation overhaul~~ — DONE (2026-06-02)
 
+Split nav by purpose (Flighty-style): page-level top header (Verticals dropdown, Blog,
+Contact, Hiring) + a floating bottom **section pill** on the homepage. Moved Contact to a
+`/contacts/` page (homepage gets a CTA band). Footer became a full 3-column sitewide nav.
+Collapsed the link zoo to two affordances (text-link underline / card-link card) + buttons.
+
+### 4. Backlog
+
+- **Redesign the verticals hub as cards** — the hub currently uses a grouped nested **list**
+  of text links (Insurance → Auto/Home, etc.), which only reads as clickable because of the
+  underline. Re-present each linkable vertical as a **card** (the site's no-underline card
+  pattern), keeping the Insurance / Home Services / Finance grouping as headings. Goal: hub
+  affordance without underline, fully consistent with the blog/event card language.
 - Light/dark toggle is **not** planned (brand is dark-first); would need a real light
   design pass, not an inversion.
 - No hero CTA by design — this is a presentation site, not an acquisition funnel.
