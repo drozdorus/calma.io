@@ -118,10 +118,14 @@ const progressEl = document.createElement('div');
 progressEl.className = 'scroll-progress';
 document.body.appendChild(progressEl);
 
-// Active-nav setup: desktop nav links that point to on-page sections
-const navLinks = [...document.querySelectorAll('.nav .nav-link[href^="#"]')];
+// Scroll-spy: the floating section pill (homepage only). Each link points to an
+// on-page section; we highlight the one currently in view. No-ops on pages
+// without the pill (navLinks is empty there).
+const sectionNavEl = document.querySelector('.section-nav');
+const navLinks = [...document.querySelectorAll('.section-nav .section-nav-link[href^="#"]')];
 const navMap = new Map(navLinks.map(l => [l.getAttribute('href').slice(1), l]));
 let activeNavLink = null;
+const footerEl = document.querySelector('footer, .footer');
 
 function updateScrollState() {
   const scrolled = window.pageYOffset;
@@ -143,22 +147,46 @@ function updateScrollState() {
   const max = doc.scrollHeight - doc.clientHeight;
   progressEl.style.transform = `scaleX(${max > 0 ? scrolled / max : 0})`;
 
-  // Active nav: the last mapped section whose top has crossed the header line.
-  // While still in the hero, every section top is below it, so nothing is active.
-  let current = null;
-  navMap.forEach((link, id) => {
-    const sec = document.getElementById(id);
-    if (sec && sec.getBoundingClientRect().top <= 100) current = link;
-  });
-  // Bottom edge: the last section can't scroll under the header line (we hit the
-  // page bottom first), so once fully scrolled, force the last nav link active.
-  if (navLinks.length && scrolled + window.innerHeight >= doc.scrollHeight - 2) {
-    current = navLinks[navLinks.length - 1];
+  // Active section: the last mapped section whose top has crossed the offset
+  // line. While still in the hero, every section top is below it; we default to
+  // the first link so the pill always shows a selection once it's visible.
+  if (navLinks.length) {
+    let current = null;
+    navMap.forEach((link, id) => {
+      const sec = document.getElementById(id);
+      if (sec && sec.getBoundingClientRect().top <= 100) current = link;
+    });
+    // Bottom edge: the last section can't always scroll under the offset line
+    // (CTA band + footer follow it), so once fully scrolled, force the last link.
+    if (scrolled + window.innerHeight >= doc.scrollHeight - 2) {
+      current = navLinks[navLinks.length - 1];
+    }
+    if (!current) current = navLinks[0];
+    if (current !== activeNavLink) {
+      if (activeNavLink) activeNavLink.classList.remove('active');
+      current.classList.add('active');
+      current.setAttribute('aria-current', 'true');
+      if (activeNavLink) activeNavLink.removeAttribute('aria-current');
+      // Keep the active item in view inside the (scrollable) pill on mobile —
+      // adjust only the pill's horizontal scroll, never the page's vertical one.
+      const scroller = current.closest('.section-nav-scroll');
+      if (scroller && scroller.scrollWidth > scroller.clientWidth) {
+        const linkLeft = current.offsetLeft;
+        const linkRight = linkLeft + current.offsetWidth;
+        const viewLeft = scroller.scrollLeft;
+        const viewRight = viewLeft + scroller.clientWidth;
+        if (linkLeft < viewLeft) scroller.scrollLeft = linkLeft - 8;
+        else if (linkRight > viewRight) scroller.scrollLeft = linkRight - scroller.clientWidth + 8;
+      }
+      activeNavLink = current;
+    }
   }
-  if (current !== activeNavLink) {
-    if (activeNavLink) activeNavLink.classList.remove('active');
-    if (current) current.classList.add('active');
-    activeNavLink = current;
+
+  // Hide the pill once the footer/CTA band enters view so it never sits on top
+  // of the footer in a broken way.
+  if (sectionNavEl && footerEl) {
+    const footerTop = footerEl.getBoundingClientRect().top;
+    sectionNavEl.classList.toggle('is-hidden', footerTop < window.innerHeight);
   }
 }
 

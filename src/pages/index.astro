@@ -8,6 +8,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import SectionNav from '../components/SectionNav.astro';
 import IconSprite from '../components/IconSprite.astro';
 import { cardCovers } from '../components/blog/cardCovers';
 ---
@@ -827,6 +828,8 @@ import { cardCovers } from '../components/blog/cardCovers';
   </section>
 
   </main>
+
+  <SectionNav />
 
   <Footer home={true} />
 </BaseLayout>

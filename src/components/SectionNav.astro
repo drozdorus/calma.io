@@ -1,0 +1,115 @@
+---
+// SectionNav — floating bottom "pill" that navigates the homepage's on-page
+// sections (Flighty-style segmented control, rendered in Calma's glass language).
+// Homepage-only: include it just before <Footer /> in src/pages/index.astro.
+//
+// Markup: a <nav> landmark of bare `#anchor` links. script.js handles both the
+// smooth-scroll (`a[href^="#"]`, 80px offset) and the scroll-spy that toggles
+// `.active` on the matching link (it keys off `.section-nav .section-nav-link`).
+// Active treatment = amber text + a translucent amber glass pill behind the item
+// (NOT a solid-amber segment) so it stays clearly "ours".
+//
+// Order matches DOM order of the sections on the homepage.
+const items = [
+  { id: 'about', label: 'About' },
+  { id: 'verticals', label: 'Verticals' },
+  { id: 'team', label: 'Team' },
+  { id: 'conferences', label: 'Events' },
+  { id: 'blog', label: 'Blog' },
+  { id: 'faq', label: 'FAQ' },
+];
+---
+
+<nav class="section-nav" aria-label="Page sections">
+  <div class="section-nav-scroll">
+    <ul class="section-nav-track">
+      {items.map((it) => (
+        <li>
+          <a href={`#${it.id}`} class="section-nav-link">{it.label}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .section-nav {
+    position: fixed;
+    left: 50%;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    /* Below header (1000+) and the mobile-menu overlay (1002), above content. */
+    z-index: 900;
+    max-width: calc(100vw - 24px);
+    /* Glass surface */
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-default);
+    border-radius: 100px;
+    box-shadow: var(--glass-shadow), 0 8px 32px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  }
+
+  /* Horizontal scroll wrapper — keeps all labels on a narrow viewport. */
+  .section-nav-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .section-nav-scroll::-webkit-scrollbar { display: none; }
+
+  .section-nav-track {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    list-style: none;
+    margin: 0;
+    padding: 5px;
+  }
+
+  .section-nav-link {
+    display: block;
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s var(--ease), background 0.2s var(--ease);
+  }
+
+  .section-nav-link:hover {
+    color: var(--text);
+    background: var(--surface-hover);
+  }
+
+  /* Active treatment: amber text + translucent amber glass pill (not solid). */
+  .section-nav-link.active {
+    color: var(--primary);
+    background: linear-gradient(145deg, rgba(232, 181, 71, 0.18) 0%, rgba(232, 181, 71, 0.06) 100%);
+    box-shadow: inset 0 0 0 1px rgba(232, 181, 71, 0.28);
+  }
+
+  /* Hide once we reach the footer/CTA band so it doesn't sit over the footer. */
+  .section-nav.is-hidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(16px);
+    pointer-events: none;
+  }
+
+  @media (max-width: 640px) {
+    .section-nav { bottom: calc(14px + env(safe-area-inset-bottom)); }
+    .section-nav-link { padding: 8px 14px; font-size: 0.8125rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section-nav,
+    .section-nav.is-hidden { transition: opacity 0.4s var(--ease); }
+    .section-nav.is-hidden { transform: translateX(-50%); }
+    .section-nav-scroll { scroll-behavior: auto; }
+  }
+</style>
