@@ -125,4 +125,17 @@ const groups = [
     line-height: 1.65;
     color: var(--text-muted);
   }
+  /* On the homepage teaser the service-card sub-lists collapse on mobile, but
+     here those items are LINKS to the vertical pages — keep them expanded so the
+     pages stay reachable on mobile, stacked in a column like desktop. */
+  @media (max-width: 768px) {
+    .vhub-grid :global(.service-list) {
+      display: block;
+    }
+    .vhub-grid :global(.service-head) {
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--border-default);
+    }
+  }
 </style>
