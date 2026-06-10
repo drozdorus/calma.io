@@ -7,6 +7,8 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://calma.io',
   trailingSlash: 'always',
+  // Prefetch internal links on hover — near-instant page transitions for free.
+  prefetch: { prefetchAll: true },
   build: {
     format: 'directory',
   },

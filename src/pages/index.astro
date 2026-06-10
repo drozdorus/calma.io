@@ -13,6 +13,47 @@ import SectionNav from '../components/SectionNav.astro';
 import IconSprite from '../components/IconSprite.astro';
 import ArticleCard from '../components/blog/ArticleCard.astro';
 import { events, formatUpcomingDate, formatPastDate } from '../data/events';
+import { team, accentFor } from '../data/team';
+
+// FAQ — one array drives both the visible <details> list and the FAQPage
+// JSON-LD, so the two can never drift apart again. Answers may contain inline
+// HTML (links); the JSON-LD text is the tag-stripped version.
+const faqs = [
+  {
+    q: 'What is Calma?',
+    a: 'Calma is a performance lead generation publisher — we generate, verify, and sell leads across our core verticals. Our compliant, high-intent acquisition systems connect lead buyers with qualified prospects through paid channels and AI-driven optimization.',
+  },
+  {
+    q: 'Which verticals do you work with?',
+    a: 'We generate leads across six main verticals: auto insurance, home insurance, health insurance, legal services, home improvement, and financial services (HELOC, credit, lending, personal finance).',
+  },
+  {
+    q: 'How does performance-based lead generation work?',
+    a: 'We run paid acquisition campaigns across Meta, Google, and TikTok using proprietary AI to optimize bids and creatives in real time. Every lead is verified for intent, authenticity, and compliance before delivery — so buyers only pay for quality.',
+  },
+  {
+    q: 'Do you work with media buyers and marketing partners?',
+    a: 'Yes. We work with a curated network of performance marketing partners who run compliant campaigns across paid social, search, and programmatic channels. To discuss a partnership, reach out to <a href="mailto:info@calma.io">info@calma.io</a>.',
+  },
+  {
+    q: 'How do you ensure lead quality and compliance?',
+    a: 'Compliance is central to our methodology. All campaigns meet platform policies and industry-specific regulations. Each lead passes multi-layer quality controls — intent verification, deduplication, and compliance checks — before delivery. We operate exclusively in white-hat verticals with consent-based lead collection.',
+  },
+  {
+    q: "What does Calma's pricing model look like?",
+    a: 'We operate on a performance basis — pricing is structured around qualified lead delivery, aligned with your downstream conversion goals. We focus on lead quality and long-term partner alignment, not raw volume.',
+  },
+  {
+    q: 'How do I get started?',
+    a: 'Send us a message through our <a href="/contacts/">contact page</a> or email <a href="mailto:info@calma.io">info@calma.io</a>. We\'ll discuss your vertical, volume requirements, and how our acquisition system fits your goals.',
+  },
+];
+
+const faqMainEntity = faqs.map((f) => ({
+  '@type': 'Question',
+  name: f.q,
+  acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]*>/g, '') },
+}));
 
 // Events split on the build date: still-running events stay in "upcoming".
 const today = new Date().toISOString().slice(0, 10);
@@ -138,64 +179,7 @@ const latestPosts = (await getCollection('blog'))
         {
           "@type": "FAQPage",
           "@id": "https://calma.io/#faq",
-          "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "What is Calma?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Calma is a performance lead generation publisher — we generate, verify, and sell leads across our core verticals. Our compliant, high-intent acquisition systems connect lead buyers with qualified prospects through paid channels and AI-driven optimization."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Which verticals do you work with?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "We generate leads across six main verticals: auto insurance, home insurance, health insurance, legal services, home improvement, and financial services (HELOC, credit, lending, personal finance)."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "How does performance-based lead generation work?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "We run paid acquisition campaigns across Meta, Google, and TikTok using proprietary AI to optimize bids and creatives in real time. Every lead is verified for intent, authenticity, and compliance before delivery — so buyers only pay for quality."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "Do you work with media buyers and marketing partners?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes. We work with a curated network of performance marketing partners who run compliant campaigns across paid social, search, and programmatic channels. To discuss a partnership, reach out to info@calma.io."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "How do you ensure lead quality and compliance?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Compliance is central to our methodology. All campaigns meet platform policies and industry-specific regulations. Each lead passes multi-layer quality controls — intent verification, deduplication, and compliance checks — before delivery. We operate exclusively in white-hat verticals with consent-based lead collection."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "What does Calma's pricing model look like?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "We operate on a performance basis — pricing is structured around qualified lead delivery, aligned with your downstream conversion goals. We focus on lead quality and long-term partner alignment, not raw volume."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "How do I get started?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Send us a message through our contact page or email info@calma.io. We'll discuss your vertical, volume requirements, and how our acquisition system fits your goals."
-              }
-            }
-          ]
+          "mainEntity": faqMainEntity
         }
       ]
     })} />
@@ -370,149 +354,42 @@ const latestPosts = (await getCollection('blog'))
 
       <div class="team-scroller">
         <div class="team-track">
-
-          <div class="team-card" style="--card-accent: rgba(61,214,140,0.6)">
-            <div class="team-avatar-wrap">
-              <div class="team-avatar">
-                <img src="/img/team/rus.svg" alt="Ruslan">
+          {team.map((m, i) => (
+            <div class="team-card" style={`--card-accent: ${accentFor(i, team.length)}`}>
+              <div class="team-avatar-wrap">
+                <div class="team-avatar">
+                  <img src={`/img/team/${m.img}`} alt={m.alt} />
+                </div>
+                {(m.website || m.linkedin) && (
+                  <div class="team-links">
+                    {m.website && (
+                      <a href={m.website} class="team-link" target="_blank" rel="noopener" aria-label="Website">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="2" y1="12" x2="22" y2="12" />
+                          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                        </svg>
+                      </a>
+                    )}
+                    {m.linkedin && (
+                      <a href={m.linkedin} class="team-link" target="_blank" rel="noopener" aria-label="LinkedIn">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                          <rect x="2" y="9" width="4" height="12" />
+                          <circle cx="4" cy="4" r="2" />
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
-              <div class="team-links">
-                <a href="https://drozdorus.com" class="team-link" target="_blank" rel="noopener" aria-label="Website">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="2" y1="12" x2="22" y2="12" />
-                    <path
-                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                  </svg>
-                </a>
-                <a href="https://www.linkedin.com/in/drozdorus/" class="team-link" target="_blank" rel="noopener"
-                  aria-label="LinkedIn">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                    <rect x="2" y="9" width="4" height="12" />
-                    <circle cx="4" cy="4" r="2" />
-                  </svg>
-                </a>
-              </div>
-            </div>
-            <div class="team-info">
-              <div class="team-name">Rus</div>
-              <div class="team-role">Chief of Chaos</div>
-            </div>
-          </div>
-
-          <div class="team-card" style="--card-accent: rgba(82,210,131,0.6)">
-            <div class="team-avatar-wrap">
-              <div class="team-avatar">
-                <img src="/img/team/yehor.svg" alt="Yehor">
+              <div class="team-info">
+                <div class="team-name">{m.name}</div>
+                <div class="team-role">{m.role}</div>
               </div>
             </div>
-            <div class="team-info">
-              <div class="team-name">Yehor</div>
-              <div class="team-role">Bizdev Machine</div>
-            </div>
-          </div>
-
-          <div class="team-card" style="--card-accent: rgba(104,206,123,0.6)">
-            <div class="team-avatar-wrap">
-              <div class="team-avatar">
-                <img src="/img/team/artur.svg" alt="Artur">
-              </div>
-              <div class="team-links">
-                <a href="https://www.linkedin.com/in/artur-bielyk-2351a5185/" class="team-link" target="_blank" rel="noopener" aria-label="LinkedIn">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                </a>
-              </div>
-            </div>
-            <div class="team-info">
-              <div class="team-name">Artur</div>
-              <div class="team-role">Traffic Tamer</div>
-            </div>
-          </div>
-
-          <div class="team-card" style="--card-accent: rgba(125,202,114,0.6)">
-            <div class="team-avatar-wrap">
-              <div class="team-avatar">
-                <img src="/img/team/zak.svg" alt="Zack">
-              </div>
-            </div>
-            <div class="team-info">
-              <div class="team-name">Zak</div>
-              <div class="team-role">Creative Ops Overlord</div>
-            </div>
-          </div>
-
-          <div class="team-card" style="--card-accent: rgba(147,198,106,0.6)">
-            <div class="team-avatar-wrap">
-              <div class="team-avatar">
-                <img src="/img/team/nastya.svg" alt="Nastia">
-              </div>
-              <div class="team-links">
-                <a href="https://www.linkedin.com/in/anastasiia-stefinin-140792256/" class="team-link" target="_blank" rel="noopener" aria-label="LinkedIn">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                </a>
-              </div>
-            </div>
-            <div class="team-info">
-              <div class="team-name">Nastia</div>
-              <div class="team-role">Process Ninja</div>
-            </div>
-          </div>
-
-          <div class="team-card" style="--card-accent: rgba(168,193,97,0.6)">
-            <div class="team-avatar-wrap">
-              <div class="team-avatar">
-                <img src="/img/team/vita.svg" alt="Vita">
-              </div>
-            </div>
-            <div class="team-info">
-              <div class="team-name">Vita</div>
-              <div class="team-role">100 Tasks Before Noon</div>
-            </div>
-          </div>
-
-          <div class="team-card" style="--card-accent: rgba(189,189,88,0.6)">
-            <div class="team-avatar-wrap">
-              <div class="team-avatar">
-                <img src="/img/team/lisa.svg" alt="Lisa">
-              </div>
-            </div>
-            <div class="team-info">
-              <div class="team-name">Lisa</div>
-              <div class="team-role">Cut & Hook Specialist</div>
-            </div>
-          </div>
-
-          <div class="team-card" style="--card-accent: rgba(211,185,80,0.6)">
-            <div class="team-avatar-wrap">
-              <div class="team-avatar">
-                <img src="/img/team/alex.svg" alt="Alex">
-              </div>
-            </div>
-            <div class="team-info">
-              <div class="team-name">Alex</div>
-              <div class="team-role">Pixel Perfectionist</div>
-            </div>
-          </div>
-
-          <div class="team-card" style="--card-accent: rgba(232,181,71,0.6)">
-            <div class="team-avatar-wrap">
-              <div class="team-avatar">
-                <img src="/img/team/julia.svg" alt="Julia">
-              </div>
-              <div class="team-links">
-                <a href="https://www.linkedin.com/in/yulia-gorodenska-a57109264/" class="team-link" target="_blank" rel="noopener" aria-label="LinkedIn">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                </a>
-              </div>
-            </div>
-            <div class="team-info">
-              <div class="team-name">Julia</div>
-              <div class="team-role">Numbers Whisperer</div>
-            </div>
-          </div>
-
+          ))}
           <div class="team-card team-card--more">
             <div class="team-avatar team-avatar--empty">
               <span>more<br>soon</span>
@@ -594,70 +471,12 @@ const latestPosts = (await getCollection('blog'))
       <p class="section-subtitle">Common questions about working with Calma</p>
 
       <div class="faq-list">
-
-        <details class="faq-item">
-          <summary>What is Calma?<span class="faq-icon" aria-hidden="true">+</span></summary>
-          <div class="faq-answer">
-            <p>Calma is a performance lead generation publisher — we generate, verify, and sell leads across our core
-              verticals. Our compliant, high-intent acquisition systems connect lead buyers with qualified prospects
-              through paid channels and AI-driven optimization.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary>Which verticals do you work with?<span class="faq-icon" aria-hidden="true">+</span></summary>
-          <div class="faq-answer">
-            <p>We generate leads across six main verticals: auto insurance, home insurance, health insurance, legal
-              services, home improvement, and financial services (HELOC, credit, lending, personal finance).</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary>How does performance-based lead generation work?<span class="faq-icon" aria-hidden="true">+</span></summary>
-          <div class="faq-answer">
-            <p>We run paid acquisition campaigns across Meta, Google, and TikTok using proprietary AI to optimize bids
-              and creatives in real time. Every lead is verified for intent, authenticity, and compliance before
-              delivery — so buyers only pay for quality.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary>Do you work with media buyers and marketing partners?<span class="faq-icon" aria-hidden="true">+</span></summary>
-          <div class="faq-answer">
-            <p>Yes. We work with a curated network of performance marketing partners who run compliant campaigns across
-              paid social, search, and programmatic channels. To discuss a partnership, reach out to <a
-                href="mailto:info@calma.io">info@calma.io</a>.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary>How do you ensure lead quality and compliance?<span class="faq-icon" aria-hidden="true">+</span></summary>
-          <div class="faq-answer">
-            <p>Compliance is central to our methodology. All campaigns meet platform policies and industry-specific
-              regulations. Each lead passes multi-layer quality controls — intent verification, deduplication, and
-              compliance checks — before delivery. We operate exclusively in white-hat verticals with consent-based
-              lead collection.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary>What does Calma's pricing model look like?<span class="faq-icon" aria-hidden="true">+</span></summary>
-          <div class="faq-answer">
-            <p>We operate on a performance basis — pricing is structured around qualified lead delivery, aligned with
-              your downstream conversion goals. We focus on lead quality and long-term partner alignment, not raw
-              volume.</p>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary>How do I get started?<span class="faq-icon" aria-hidden="true">+</span></summary>
-          <div class="faq-answer">
-            <p>Send us a message through our <a href="/contacts/">contact page</a> or email <a
-                href="mailto:info@calma.io">info@calma.io</a>. We'll discuss your vertical, volume requirements, and how
-              our acquisition system fits your goals.</p>
-          </div>
-        </details>
-
+        {faqs.map((f) => (
+          <details class="faq-item">
+            <summary>{f.q}<span class="faq-icon" aria-hidden="true">+</span></summary>
+            <div class="faq-answer"><p set:html={f.a} /></div>
+          </details>
+        ))}
       </div>
     </div>
   </section>
