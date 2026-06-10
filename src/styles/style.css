@@ -587,6 +587,42 @@ body {
   transform: translateY(3px);
 }
 
+/* 404 page — hero-style error screen ("zero-intent URL" joke). Reuses the
+   hero centering + gradient title; the button mirrors .home-cta's
+   .vertical-cta-btn (that declaration is scoped, so redeclared here). */
+.error-hero .error-code {
+  font-size: clamp(5rem, 18vw, 9rem);
+  margin-bottom: var(--space-sm);
+}
+
+.error-hero .error-heading {
+  font-size: clamp(1.3rem, 3vw, 1.6rem);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+.error-hero .hero-subtitle {
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.error-hero .vertical-cta-btn {
+  display: inline-block;
+  padding: 0.8rem 1.6rem;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: #0a0a0a;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+
+.error-hero .vertical-cta-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+
 /* Sections */
 .section {
   padding: 80px 0;

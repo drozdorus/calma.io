@@ -1,0 +1,36 @@
+---
+// 404 — hero-style error screen with the lead-gen joke ("zero-intent URL").
+// Astro emits this as dist/404.html, which GitHub Pages serves automatically
+// for any unknown path. Wave canvas + Header/Footer keep it on-brand;
+// noindex since error pages have no business in the index.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="404 — Page Not Found — Calma"
+  description="This URL has zero intent — no clicks, no leads, no conversions. Head back to calma.io."
+  canonical="https://calma.io/404/"
+  robots="noindex, follow"
+>
+  <canvas id="waveCanvas"></canvas>
+
+  <Header />
+
+  <main id="main-content">
+    <section class="hero error-hero" aria-label="Page not found">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title error-code">404</h1>
+          <p class="error-heading">You've reached a zero-intent URL</p>
+          <p class="hero-subtitle">No clicks, no leads, no conversions here. Let us redirect you to
+            something with a higher conversion rate.</p>
+          <a href="/" class="vertical-cta-btn">Take me somewhere useful</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
