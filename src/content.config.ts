@@ -17,6 +17,8 @@ const blog = defineCollection({
     /** Article JSON-LD description (defaults to `description`; legacy differs on some pages) */
     articleDescription: z.string().optional(),
     date: z.coerce.date(),
+    /** listing tie-break for equal dates — lower shows first (homepage + /blog/) */
+    order: z.number().default(0),
     // Presentation metadata for the article hero + cards (parity with legacy HTML).
     tag: z.string(),
     /** mint variant of the .article-tag pill (Paid Acquisition) */

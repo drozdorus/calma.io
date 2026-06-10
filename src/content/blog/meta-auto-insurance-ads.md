@@ -7,6 +7,7 @@ ogDescription: "How Meta's Andromeda engine and Special Ad Category restrictions
 ogImage: 'https://calma.io/img/metaimg.png'
 articleDescription: "How Meta's Andromeda engine and Special Ad Category restrictions reshaped creative strategy for auto insurance advertisers."
 date: 2026-05-30
+order: 2
 tag: 'Paid Acquisition'
 tagMint: true
 readTime: '5 min read'

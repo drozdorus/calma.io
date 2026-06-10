@@ -5,12 +5,52 @@
 // Footer gets home={true} so its section links render as bare `#anchor`,
 // which is what script.js's smooth-scroll (`a[href^="#"]`) matches. The header
 // is page-level only now (no section anchors), so it takes no `home` prop.
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SectionNav from '../components/SectionNav.astro';
 import IconSprite from '../components/IconSprite.astro';
-import { cardCovers } from '../components/blog/cardCovers';
+import ArticleCard from '../components/blog/ArticleCard.astro';
+import { events, formatUpcomingDate, formatPastDate } from '../data/events';
+
+// Events split on the build date: still-running events stay in "upcoming".
+const today = new Date().toISOString().slice(0, 10);
+const upcomingEvents = events
+  .filter((e) => e.end >= today)
+  .sort((a, b) => a.start.localeCompare(b.start));
+const pastEvents = events
+  .filter((e) => e.end < today)
+  .sort((a, b) => b.end.localeCompare(a.end));
+
+// JSON-LD Event entries — only events with full schema data (description).
+const eventsJsonLd = events
+  .filter((e) => e.description)
+  .map((e) => ({
+    '@type': 'Event',
+    name: e.schemaName ?? e.name,
+    description: e.description,
+    startDate: e.start,
+    endDate: e.end,
+    eventStatus: e.end < today ? 'https://schema.org/EventPast' : 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: { '@type': 'Place', name: e.location },
+    url: e.url,
+    organizer: { '@type': 'Organization', name: e.organizer!.name, url: e.organizer!.url },
+    offers: {
+      '@type': 'Offer',
+      url: e.url,
+      availability: `https://schema.org/${e.availability ?? 'InStock'}`,
+    },
+  }));
+
+// Blog teaser — latest three from the collection (ties resolved by `order`).
+const latestPosts = (await getCollection('blog'))
+  .sort(
+    (a, b) =>
+      b.data.date.valueOf() - a.data.date.valueOf() || a.data.order - b.data.order
+  )
+  .slice(0, 3);
 ---
 
 <BaseLayout
@@ -94,97 +134,7 @@ import { cardCovers } from '../components/blog/cardCovers';
           "publisher": { "@id": "https://calma.io/#organization" },
           "description": "Performance lead generation publisher for insurance, legal, financial, and home improvement verticals"
         },
-        {
-          "@type": "Event",
-          "name": "DigiMarCon Midwest 2026",
-          "description": "Digital marketing conference covering SEO, PPC, social media, content marketing, and lead generation strategies.",
-          "startDate": "2026-05-19",
-          "endDate": "2026-05-20",
-          "eventStatus": "https://schema.org/EventPast",
-          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-          "location": { "@type": "Place", "name": "Chicago, US" },
-          "url": "https://digimarconmidwest.com/",
-          "organizer": { "@type": "Organization", "name": "DigiMarCon", "url": "https://digimarcon.com" },
-          "offers": { "@type": "Offer", "url": "https://digimarconmidwest.com/", "availability": "https://schema.org/SoldOut" }
-        },
-        {
-          "@type": "Event",
-          "name": "Miami Tech Mixer 2026",
-          "description": "Networking event for tech professionals, entrepreneurs, and investors in Miami.",
-          "startDate": "2026-05-28",
-          "endDate": "2026-05-28",
-          "eventStatus": "https://schema.org/EventPast",
-          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-          "location": { "@type": "Place", "name": "Miami, US" },
-          "url": "https://www.eventbrite.com/e/miami-tech-mixer-2026-tickets-1988572379518",
-          "organizer": { "@type": "Organization", "name": "Miami Tech Mixer", "url": "https://www.eventbrite.com/o/78289113293" },
-          "offers": { "@type": "Offer", "url": "https://www.eventbrite.com/e/miami-tech-mixer-2026-tickets-1988572379518", "availability": "https://schema.org/InStock" }
-        },
-        {
-          "@type": "Event",
-          "name": "SBC Summit Americas 2026",
-          "description": "Premier gaming and sports betting conference connecting operators, affiliates, and technology providers across the Americas.",
-          "startDate": "2026-06-09",
-          "endDate": "2026-06-11",
-          "eventStatus": "https://schema.org/EventScheduled",
-          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-          "location": { "@type": "Place", "name": "Fort Lauderdale, US" },
-          "url": "https://sbcevents.com/sbc-summit-americas/",
-          "organizer": { "@type": "Organization", "name": "SBC Events", "url": "https://sbcevents.com" },
-          "offers": { "@type": "Offer", "url": "https://sbcevents.com/sbc-summit-americas/", "availability": "https://schema.org/InStock" }
-        },
-        {
-          "@type": "Event",
-          "name": "Affiliate World Europe 2026",
-          "description": "Premier affiliate marketing conference bringing together top affiliates, networks, and advertisers.",
-          "startDate": "2026-07-09",
-          "endDate": "2026-07-10",
-          "eventStatus": "https://schema.org/EventScheduled",
-          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-          "location": { "@type": "Place", "name": "Budapest, Hungary" },
-          "url": "https://affiliateworldconferences.com/europe",
-          "organizer": { "@type": "Organization", "name": "Affiliate World Conferences", "url": "https://affiliateworldconferences.com" },
-          "offers": { "@type": "Offer", "url": "https://affiliateworldconferences.com/europe", "availability": "https://schema.org/InStock" }
-        },
-        {
-          "@type": "Event",
-          "name": "Affiliate Takeover Barcelona 2026",
-          "description": "Exclusive affiliate marketing event focused on networking and advanced performance marketing strategies.",
-          "startDate": "2026-07-16",
-          "endDate": "2026-07-17",
-          "eventStatus": "https://schema.org/EventScheduled",
-          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-          "location": { "@type": "Place", "name": "Barcelona, Spain" },
-          "url": "https://www.affiliatetakeover.com/barcelona",
-          "organizer": { "@type": "Organization", "name": "Affiliate Takeover", "url": "https://www.affiliatetakeover.com" },
-          "offers": { "@type": "Offer", "url": "https://www.affiliatetakeover.com/barcelona", "availability": "https://schema.org/InStock" }
-        },
-        {
-          "@type": "Event",
-          "name": "Affiliate Summit East 2026",
-          "description": "North America's largest performance marketing event connecting affiliates, advertisers, networks, and technology providers.",
-          "startDate": "2026-07-27",
-          "endDate": "2026-07-28",
-          "eventStatus": "https://schema.org/EventScheduled",
-          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-          "location": { "@type": "Place", "name": "New York, US" },
-          "url": "https://affiliatesummit.com/east",
-          "organizer": { "@type": "Organization", "name": "Affiliate Summit", "url": "https://affiliatesummit.com" },
-          "offers": { "@type": "Offer", "url": "https://affiliatesummit.com/east", "availability": "https://schema.org/InStock" }
-        },
-        {
-          "@type": "Event",
-          "name": "Affiliate Summit West 2027",
-          "description": "The flagship performance marketing conference in Las Vegas, connecting affiliates, advertisers, and industry leaders.",
-          "startDate": "2027-01-12",
-          "endDate": "2027-01-14",
-          "eventStatus": "https://schema.org/EventScheduled",
-          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-          "location": { "@type": "Place", "name": "Las Vegas, US" },
-          "url": "https://affiliatesummit.com/west",
-          "organizer": { "@type": "Organization", "name": "Affiliate Summit", "url": "https://affiliatesummit.com" },
-          "offers": { "@type": "Offer", "url": "https://affiliatesummit.com/west", "availability": "https://schema.org/InStock" }
-        },
+        ...eventsJsonLd,
         {
           "@type": "FAQPage",
           "@id": "https://calma.io/#faq",
@@ -590,68 +540,17 @@ import { cardCovers } from '../components/blog/cardCovers';
         <h3 class="events-section-title">Upcoming Events</h3>
         <div class="upcoming-events-scroller">
           <div class="upcoming-events-track">
-
-            <!--<a href="https://affiliateworldconferences.com/dubai" target="_blank" rel="noopener" class="conference-card">
+            {upcomingEvents.map((e) => (
+              <a href={e.url} target="_blank" rel="noopener" class="conference-card">
                 <div class="conference-logo-wrapper">
-                  <img src="img/aw-logo.png" alt="Affiliate World">
+                  {e.logo && <img src={e.logo.src} alt={e.logo.alt} />}
                 </div>
-                <div class="conference-date">4-5 Mar 2026</div>
-                <h4 class="conference-name">Affiliate World</h4>
-                <p class="conference-location">Dubai, UAE</p>
-                <span class="conference-link">affiliateworldconferences.com</span>
-              </a>-->
-
-
-            <a href="https://sbcevents.com/sbc-summit-americas/" target="_blank" rel="noopener" class="conference-card">
-              <div class="conference-logo-wrapper">
-                <img src="/img/sbc-logo-white.svg" alt="SBC Summit Americas">
-              </div>
-              <time class="conference-date" datetime="2026-06-09">9-11 Jun 2026</time>
-              <h4 class="conference-name">SBC Summit Americas</h4>
-              <p class="conference-location">Fort Lauderdale, US</p>
-              <span class="conference-link">sbcevents.com</span>
-            </a>
-
-            <a href="https://affiliateworldconferences.com/europe" target="_blank" rel="noopener" class="conference-card">
-              <div class="conference-logo-wrapper">
-                <img src="/img/aw-logo.png" alt="Affiliate World">
-              </div>
-              <time class="conference-date" datetime="2026-07-09">9-10 Jul 2026</time>
-              <h4 class="conference-name">Affiliate World</h4>
-              <p class="conference-location">Budapest, Hungary</p>
-              <span class="conference-link">affiliateworldconferences.com</span>
-            </a>
-
-            <a href="https://www.affiliatetakeover.com/barcelona" target="_blank" rel="noopener" class="conference-card">
-              <div class="conference-logo-wrapper">
-                <img src="/img/ato-logo.png" alt="Affiliate Takeover">
-              </div>
-              <time class="conference-date" datetime="2026-07-16">16-17 Jul 2026</time>
-              <h4 class="conference-name">Affiliate Takeover</h4>
-              <p class="conference-location">Barcelona, Spain</p>
-              <span class="conference-link">affiliatetakeover.com</span>
-            </a>
-
-            <a href="https://affiliatesummit.com/east" target="_blank" rel="noopener" class="conference-card">
-              <div class="conference-logo-wrapper">
-                <img src="/img/ase-logo.png" alt="Affiliate Summit">
-              </div>
-              <time class="conference-date" datetime="2026-07-27">27-28 Jul 2026</time>
-              <h4 class="conference-name">Affiliate Summit East</h4>
-              <p class="conference-location">New York, US</p>
-              <span class="conference-link">affiliatesummit.com</span>
-            </a>
-
-            <a href="https://affiliatesummit.com/west" target="_blank" rel="noopener" class="conference-card">
-              <div class="conference-logo-wrapper">
-                <img src="/img/asw-logo.png" alt="Affiliate Summit">
-              </div>
-              <time class="conference-date" datetime="2027-01-12">12-14 Jan 2027</time>
-              <h4 class="conference-name">Affiliate Summit West</h4>
-              <p class="conference-location">Las Vegas, US</p>
-              <span class="conference-link">affiliatesummit.com</span>
-            </a>
-
+                <time class="conference-date" datetime={e.start}>{formatUpcomingDate(e)}</time>
+                <h4 class="conference-name">{e.name}</h4>
+                <p class="conference-location">{e.location}</p>
+                <span class="conference-link">{e.linkLabel}</span>
+              </a>
+            ))}
           </div>
         </div>
       </div>
@@ -661,56 +560,13 @@ import { cardCovers } from '../components/blog/cardCovers';
         <h3 class="events-section-title">Past Events</h3>
         <div class="past-events-scroller">
           <div class="past-events-track">
-            <div class="past-conference-card">
-              <time class="past-conference-date" datetime="2026-05">May 2026</time>
-              <h4 class="past-conference-name">Miami Tech Mixer</h4>
-              <p class="past-conference-location">Miami, US</p>
-            </div>
-            <div class="past-conference-card">
-              <time class="past-conference-date" datetime="2026-05">May 2026</time>
-              <h4 class="past-conference-name">DigiMarCon Midwest</h4>
-              <p class="past-conference-location">Chicago, US</p>
-            </div>
-            <div class="past-conference-card">
-              <time class="past-conference-date" datetime="2026-04">Apr 2026</time>
-              <h4 class="past-conference-name">LeadsCon</h4>
-              <p class="past-conference-location">Las Vegas, US</p>
-            </div>
-            <div class="past-conference-card">
-              <time class="past-conference-date" datetime="2026-01">Jan 2026</time>
-              <h4 class="past-conference-name">Affiliate Summit West</h4>
-              <p class="past-conference-location">Las Vegas, USA</p>
-            </div>
-            <div class="past-conference-card">
-              <time class="past-conference-date" datetime="2025-11">Nov 2025</time>
-              <h4 class="past-conference-name">Web Summit</h4>
-              <p class="past-conference-location">Lisbon, Portugal</p>
-            </div>
-            <div class="past-conference-card">
-              <time class="past-conference-date" datetime="2025-09">Sep 2025</time>
-              <h4 class="past-conference-name">SBC</h4>
-              <p class="past-conference-location">Lisbon, Portugal</p>
-            </div>
-            <div class="past-conference-card">
-              <time class="past-conference-date" datetime="2025-09">Sep 2025</time>
-              <h4 class="past-conference-name">Affiliate World Europe</h4>
-              <p class="past-conference-location">Budapest, Hungary</p>
-            </div>
-            <div class="past-conference-card">
-              <time class="past-conference-date" datetime="2025-08">Aug 2025</time>
-              <h4 class="past-conference-name">Affiliate Summit East</h4>
-              <p class="past-conference-location">New York, US</p>
-            </div>
-            <div class="past-conference-card">
-              <time class="past-conference-date" datetime="2025-04">Apr 2025</time>
-              <h4 class="past-conference-name">AppGala</h4>
-              <p class="past-conference-location">Warsaw, Poland</p>
-            </div>
-            <div class="past-conference-card">
-              <time class="past-conference-date" datetime="2024-07">Jul 2024</time>
-              <h4 class="past-conference-name">Affiliate Takeover</h4>
-              <p class="past-conference-location">Barcelona, Spain</p>
-            </div>
+            {pastEvents.map((e) => (
+              <div class="past-conference-card">
+                <time class="past-conference-date" datetime={e.end.slice(0, 7)}>{formatPastDate(e)}</time>
+                <h4 class="past-conference-name">{e.name}</h4>
+                <p class="past-conference-location">{e.location}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -723,37 +579,7 @@ import { cardCovers } from '../components/blog/cardCovers';
       <h2 class="section-title">Blog</h2>
       <p class="section-subtitle">Perspectives on performance marketing and lead generation</p>
       <div class="blog-grid">
-
-        <a href="/blog/us-auto-insurance-market/" class="article-card">
-          <div class="article-cover" set:html={cardCovers['us-auto-insurance-market']} />
-          <div class="article-body">
-            <span class="article-tag">Market Overview</span>
-            <h3 class="article-title">The US Auto Insurance Market: Structure, Players, and Lead Economics</h3>
-            <p class="article-desc">How the $312B market is structured, who buys leads and why, and where performance acquisition fits in the ecosystem.</p>
-            <span class="article-read">Read</span>
-          </div>
-        </a>
-
-        <a href="/blog/meta-auto-insurance-ads/" class="article-card">
-          <div class="article-cover" set:html={cardCovers['meta-auto-insurance-ads']} />
-          <div class="article-body">
-            <span class="article-tag article-tag--mint">Paid Acquisition</span>
-            <h3 class="article-title">Running Auto Insurance Ads on Meta: What Changed in 2025–2026</h3>
-            <p class="article-desc">How Meta's Andromeda engine and Special Ad Category restrictions reshaped creative strategy for insurance advertisers.</p>
-            <span class="article-read">Read</span>
-          </div>
-        </a>
-
-        <a href="/blog/ny-ai-advertising-law/" class="article-card">
-          <div class="article-cover" set:html={cardCovers['ny-ai-advertising-law']} />
-          <div class="article-body">
-            <span class="article-tag">Regulation</span>
-            <h3 class="article-title">New York's AI Advertising Law: What Lead Gen Operators Need to Know</h3>
-            <p class="article-desc">NY's SB-8420A synthetic performer law, FTC rules, and state ADMT frameworks — what lead gen operators need to act on now.</p>
-            <span class="article-read">Read</span>
-          </div>
-        </a>
-
+        {latestPosts.map((post) => <ArticleCard post={post} />)}
       </div>
       <div class="blog-view-all">
         <a href="/blog/" class="text-link">View all articles</a>

@@ -7,6 +7,7 @@ ogDescription: "NY SB-8420A takes effect June 9, 2026. Here's what lead gen oper
 ogImage: 'https://calma.io/img/metaimg.png'
 articleDescription: 'NY SB-8420A (synthetic performer disclosure, effective June 9, 2026), the parallel digital replicas law, FTC Endorsement Guides, and state ADMT frameworks — what lead gen operators need to act on now.'
 date: 2026-05-30
+order: 3
 tag: 'Regulation'
 tagMint: false
 readTime: '5 min read'

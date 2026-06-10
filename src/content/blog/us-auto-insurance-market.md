@@ -6,6 +6,7 @@ ogTitle: 'The US Auto Insurance Market: Structure, Players, and Lead Economics'
 ogDescription: 'How the $312B US auto insurance market is structured, who the key players are, and where performance lead generation fits in the ecosystem.'
 ogImage: 'https://calma.io/img/metaimg.png'
 date: 2026-05-30
+order: 1
 tag: 'Market Overview'
 tagMint: false
 readTime: '5 min read'

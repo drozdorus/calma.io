@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Weekly rebuild so date-derived content (upcoming → past events) rolls
+    # over even without pushes. Mondays 06:00 UTC.
+    - cron: '0 6 * * 1'
 
 # Allow this job to clone the repo and create a page deployment
 permissions:

@@ -5,9 +5,10 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import ArticleCard from '../../components/blog/ArticleCard.astro';
 
-// Newest first; ties keep collection order.
+// Newest first; ties resolved by `order` (lower first).
 const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  (a, b) =>
+    b.data.date.valueOf() - a.data.date.valueOf() || a.data.order - b.data.order
 );
 ---
 
