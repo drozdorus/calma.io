@@ -18,54 +18,23 @@
   text-decoration: none;
 }
 
-/* Fonts */
+/* Fonts — Geologica variable (wght 300–900), self-hosted woff2 subsets from
+   Google Fonts. Replaces the seven static TTF weights; rendering is identical
+   (the statics were instances of this same variable font). */
 @font-face {
   font-family: 'Geologica';
-  src: url('/fonts/geologica/Geologica-Light.ttf') format('truetype');
-  font-weight: 300;
+  src: url('/fonts/geologica-vf-latin.woff2') format('woff2');
+  font-weight: 300 900;
   font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
   font-family: 'Geologica';
-  src: url('/fonts/geologica/Geologica-Regular.ttf') format('truetype');
-  font-weight: 400;
+  src: url('/fonts/geologica-vf-latin-ext.woff2') format('woff2');
+  font-weight: 300 900;
   font-display: swap;
-}
-
-@font-face {
-  font-family: 'Geologica';
-  src: url('/fonts/geologica/Geologica-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Geologica';
-  src: url('/fonts/geologica/Geologica-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Geologica';
-  src: url('/fonts/geologica/Geologica-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Geologica';
-  src: url('/fonts/geologica/Geologica-ExtraBold.ttf') format('truetype');
-  font-weight: 800;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Geologica';
-  src: url('/fonts/geologica/Geologica-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 /* Design System */
@@ -130,6 +99,31 @@
 html {
   scroll-behavior: smooth;
   overflow-x: clip;
+}
+
+/* Anchor targets stop short of the fixed header (replaces the old JS
+   offset-scroll handler; native hash navigation handles the rest). */
+[id] {
+  scroll-margin-top: 80px;
+}
+
+/* Skip link — visually hidden until focused (keyboard / screen reader). */
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 2000;
+  padding: 10px 16px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 body {

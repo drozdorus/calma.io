@@ -11,10 +11,11 @@
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    // Re-anchor each wave to its relative position (set after waves init).
+    waves.forEach(w => { w.yOffset = canvas.height * w.relY; });
   }
 
   window.addEventListener('resize', resize);
-  resize();
 
   // Dynamic wave system with multiple layers
   const waves = [];
@@ -24,16 +25,17 @@
     const relY = 0.1 + i * 0.11; // 0.1..0.87
     const distFromCenter = Math.abs(relY - 0.5) / 0.4; // 0=center, 1=edge
     const depth = distFromCenter; // 1=near (top/bottom), 0=far (center)
-    const ampScale = canvas.width > 768 ? 1.6 : 1;
+    const ampScale = window.innerWidth > 768 ? 1.6 : 1;
     const amp = (20 + Math.random() * 30) * ampScale;
     waves.push({
+      relY,
       amplitude: amp,
       targetAmplitude: amp,
       baseAmp: amp,
       wavelength: 400 + Math.random() * 500,
       speed: 0.001 + depth * 0.001,
       phase: Math.random() * Math.PI * 2,
-      yOffset: canvas.height * relY,
+      yOffset: window.innerHeight * relY,
       opacity: 0.65 - depth * 0.45,
       lineWidth: 0.5 + (1 - depth) * 1.5,
       blur: (1 - depth) * 4,
@@ -86,27 +88,37 @@
     animationId = requestAnimationFrame(animate);
   }
 
-  animate();
+  // The canvas is fully faded out past 300px of scroll (see updateScrollState),
+  // so stop the rAF loop there — 8 blurred strokes per frame are not free.
+  let running = false;
+
+  function start() {
+    if (running || document.hidden) return;
+    running = true;
+    animationId = requestAnimationFrame(animate);
+  }
+
+  function stop() {
+    if (!running) return;
+    running = false;
+    cancelAnimationFrame(animationId);
+  }
+
+  function syncToScroll() {
+    if (window.pageYOffset >= 300) stop();
+    else start();
+  }
+
+  resize();
+  syncToScroll();
+
+  window.addEventListener('scroll', syncToScroll, { passive: true });
 
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) cancelAnimationFrame(animationId);
-    else animate();
+    if (document.hidden) stop();
+    else syncToScroll();
   });
 })();
-
-// Smooth scroll navigation
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    const target = document.querySelector(link.getAttribute('href'));
-    if (target) {
-      window.scrollTo({
-        top: target.offsetTop - 80,
-        behavior: 'smooth'
-      });
-    }
-  });
-});
 
 // Optimized scroll handler
 const headerEl = document.querySelector('.header');

@@ -89,7 +89,7 @@ const faqJsonLd = {
           <div class="faq-list">
             {data.faq.map((item) => (
               <details class="faq-item">
-                <summary>{item.question}<span class="faq-icon">+</span></summary>
+                <summary>{item.question}<span class="faq-icon" aria-hidden="true">+</span></summary>
                 <div class="faq-answer"><p>{item.answer}</p></div>
               </details>
             ))}

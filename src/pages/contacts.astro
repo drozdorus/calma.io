@@ -30,7 +30,7 @@ import Footer from '../components/Footer.astro';
         </nav>
 
         <section class="section contact" aria-label="Contact Us">
-          <h2 class="section-title">Get In Touch</h2>
+          <h1 class="section-title">Get In Touch</h1>
           <div class="contact-content">
             <div class="contact-info">
               <h3>Ready to generate quality leads?</h3>
@@ -47,6 +47,8 @@ import Footer from '../components/Footer.astro';
             </div>
 
             <form class="contact-form" id="contactForm" action="https://formspree.io/f/xzzgddjo" method="POST">
+              <!-- Formspree honeypot — bots fill it, humans never see it -->
+              <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
               <div class="form-group">
                 <input type="text" id="name" name="name" placeholder="Your Name" autocomplete="name" required>
               </div>

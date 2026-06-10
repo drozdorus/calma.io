@@ -31,8 +31,10 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
   builds on push to `main` and deploys `dist/`). `CNAME`/`.nojekyll`/`robots.txt` live
   in `public/`. Repo-level Actions had to be enabled for this (was branch-deploy before).
 - **Form backend**: Formspree (`https://formspree.io/f/xzzgddjo`)
-- **Fonts**: Geologica (local TTF in `public/fonts/`, 9 weights) — primary. `@font-face`
-  uses absolute `/fonts/...` paths (relative would 404 once CSS is bundled).
+- **Fonts**: Geologica variable (wght 300–900), self-hosted woff2 subsets
+  (`public/fonts/geologica-vf-latin{,-ext}.woff2`, ~47KB total; replaced the static
+  TTFs in June 2026). `@font-face` uses absolute `/fonts/...` paths (relative would
+  404 once CSS is bundled). Latin subset is preloaded in `BaseLayout.astro`.
 - **No analytics** currently in the source
 
 ### Files
