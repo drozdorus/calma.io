@@ -43,6 +43,7 @@ const founderNotes: Record<string, string> = {
       "name": "Ruslan Drozdov",
       "alternateName": "Руслан Дроздов",
       "description": "Ukrainian entrepreneur and investor, key ideologist behind Calma. Started in online marketing in 2013 at Everad, founded Traffinad in 2018, partner at Adventures Lab and Astroid.",
+      "image": "https://calma.io/img/team/ruslan-drozdov.webp",
       "url": "https://drozdorus.com/",
       "worksFor": { "@id": "https://calma.io/#organization" },
       "sameAs": [
@@ -132,6 +133,15 @@ const founderNotes: Record<string, string> = {
         <div class="service-card founder-panel" id="founder-panel">
           <div class="founder-panel-inner">
           <div class="founder-panel-head">
+            <div class="founder-panel-avatar">
+              <img
+                src="/img/team/ruslan-drozdov.webp"
+                alt="Ruslan Drozdov — founder of Calma, performance lead generation agency"
+                width="480"
+                height="480"
+                loading="lazy"
+              />
+            </div>
             <div>
               <h3 class="service-title">Ruslan Drozdov</h3>
               <p class="founder-panel-role">Chief of Chaos</p>
@@ -323,6 +333,23 @@ const founderNotes: Record<string, string> = {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
+  }
+  /* Real photo (not the team-card illustration, which sits right above) —
+     full-bleed circle, the photo's own branded backdrop does the tinting. */
+  .founder-panel-avatar {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--border-default);
+    box-shadow: 0 0 14px rgba(61, 214, 140, 0.18);
+  }
+  .founder-panel-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .founder-panel-role {
     font-size: 0.8rem;
