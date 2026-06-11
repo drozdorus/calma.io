@@ -16,10 +16,12 @@ import { team, accentFor } from '../data/team';
 
 const foundingNames = ['Rus', 'Yehor', 'Artur'];
 const founding = team.filter((m) => foundingNames.includes(m.name));
+// Same "tap for the … ↓" shape on all three so each note reads as an
+// affordance, not a caption; the jokes live in the panels themselves.
 const founderNotes: Record<string, string> = {
   Rus: 'tap for the story ↓',
-  Yehor: 'bio? he’s on a call',
-  Artur: 'traffic won’t tame itself',
+  Yehor: 'tap for the bio ↓',
+  Artur: 'tap for the excuse ↓',
 };
 ---
 
