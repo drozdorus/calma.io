@@ -130,8 +130,9 @@ const founderNotes: Record<string, string> = {
         </div>
 
         <div class="service-card founder-panel" id="founder-panel">
+          <div class="founder-panel-inner">
           <div class="founder-panel-head">
-            <div class="team-avatar founder-panel-avatar">
+            <div class="founder-panel-avatar">
               <img src="/img/team/rus.svg" alt="Ruslan" />
             </div>
             <div>
@@ -173,6 +174,7 @@ const founderNotes: Record<string, string> = {
               Crunchbase
             </a>
           </div>
+          </div>
         </div>
 
         <div class="home-cta about-cta">
@@ -191,9 +193,11 @@ const founderNotes: Record<string, string> = {
 <script>
   const toggle = document.getElementById('founder-toggle');
   const panel = document.getElementById('founder-panel');
+  const note = toggle?.querySelector('.founder-note');
   toggle?.addEventListener('click', () => {
     const open = panel?.classList.toggle('open') ?? false;
     toggle.setAttribute('aria-expanded', String(open));
+    if (note) note.textContent = open ? 'tap to hide ↑' : 'tap for the story ↓';
     if (open) panel?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 </script>
@@ -206,8 +210,7 @@ const founderNotes: Record<string, string> = {
   /* .service-card defaults to opacity:0 until inside a scroll-observed
      .section.visible on the homepage — force visible on this static page
      (same workaround as the lead-generation hub). */
-  .about-grid :global(.service-card),
-  .founder-panel {
+  .about-grid :global(.service-card) {
     opacity: 1;
     transform: none;
   }
@@ -242,6 +245,17 @@ const founderNotes: Record<string, string> = {
     font: inherit;
     color: inherit;
     cursor: pointer;
+    border-radius: var(--radius-md);
+  }
+  /* No default blue outline on click; keyboard users get a soft primary ring
+     around the avatar circle instead. */
+  .founder-toggle:focus {
+    outline: none;
+  }
+  .founder-toggle:focus-visible :global(.team-avatar) {
+    box-shadow:
+      0 0 0 2px rgba(232, 181, 71, 0.55),
+      0 0 18px rgba(232, 181, 71, 0.25);
   }
   /* hover glow comes from team.css (.team-card:hover); keep it lit while open */
   .founder-toggle[aria-expanded='true'] :global(.team-avatar-wrap::before) {
@@ -255,25 +269,86 @@ const founderNotes: Record<string, string> = {
   .founder-toggle .founder-note {
     color: var(--primary);
   }
-  /* Profile panel: hidden until Rus's card is tapped, but kept in the DOM so
-     the bio stays indexable. */
+  /* Profile panel: collapsed until Rus's card is tapped, but kept in the DOM so
+     the bio stays indexable. Animated with the grid-template-rows 0fr→1fr trick;
+     the card's own padding/border/shadow collapse alongside so nothing leaks
+     through when closed. visibility:hidden keeps the collapsed links out of the
+     tab order. */
   .founder-panel {
-    display: none;
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    visibility: hidden;
+    transform: none;
     max-width: 720px;
-    margin: var(--space-md) auto 0;
+    margin: 0 auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-color: transparent;
+    box-shadow: none;
+    transition:
+      grid-template-rows 0.4s var(--ease),
+      opacity 0.3s var(--ease),
+      padding 0.4s var(--ease),
+      margin 0.4s var(--ease),
+      border-color 0.3s var(--ease),
+      visibility 0s linear 0.4s;
   }
   .founder-panel.open {
-    display: block;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+    margin-top: var(--space-md);
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-lg);
+    border-color: var(--border-default);
+    box-shadow: var(--glass-shadow);
+    transition:
+      grid-template-rows 0.4s var(--ease),
+      opacity 0.3s var(--ease) 0.05s,
+      padding 0.4s var(--ease),
+      margin 0.4s var(--ease),
+      border-color 0.3s var(--ease),
+      visibility 0s;
+  }
+  .founder-panel-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .founder-panel,
+    .founder-panel.open {
+      transition: none;
+    }
   }
   .founder-panel-head {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--space-sm);
   }
+  /* Standalone avatar for the panel head — .team-avatar from team.css relies on
+     its scroller-card context (width:100% + percentage padding off the parent),
+     which collapses the image here, so it's styled from scratch. The radial tint
+     echoes the glow behind Rus's team card. */
   .founder-panel-avatar {
-    width: 64px;
-    height: 64px;
+    width: 60px;
+    height: 60px;
     flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    padding: 7px;
+    border: 1px solid var(--border-default);
+    background: radial-gradient(
+      circle at 50% 42%,
+      rgba(61, 214, 140, 0.35) 0%,
+      rgba(61, 214, 140, 0.06) 75%
+    );
+  }
+  .founder-panel-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
   }
   .founder-panel-role {
     font-size: 0.8rem;
