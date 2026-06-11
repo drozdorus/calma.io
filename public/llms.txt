@@ -1,0 +1,19 @@
+# Calma
+
+> Calma (calma.io) is a performance lead generation agency founded in 2024. We build and run our own acquisition funnels across insurance, financial, legal, and home services verticals in the US, and deliver the resulting leads and calls to partners who can serve them.
+
+## Pages
+
+- [About](https://calma.io/about/): the story behind the agency and its founding team
+- [Lead generation verticals](https://calma.io/lead-generation/): auto insurance, home insurance, home services, finance
+- [Blog](https://calma.io/blog/): articles on performance marketing and lead generation
+- [Contact](https://calma.io/contacts/): contact form and email
+
+## Company facts
+
+- Founded: 2024
+- Team: about ten people
+- Key ideologist: Ruslan Drozdov (Руслан Дроздов) — entrepreneur and investor; personal site https://drozdorus.com/, Crunchbase https://www.crunchbase.com/person/ruslan-drozdov
+- Company Crunchbase: https://www.crunchbase.com/organization/calma-b99b
+- Company LinkedIn: https://www.linkedin.com/company/calma-io/
+- Contact: info@calma.io
