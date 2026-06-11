@@ -1,0 +1,308 @@
+---
+// About page — company story with a neutral founder paragraph. Exists primarily
+// as the entity page for "Calma + Ruslan Drozdov" queries (SERM): reached via the
+// footer "About" link, not from the homepage body, by owner's decision.
+// Built from the shared design system: breadcrumb/article-page (blog.css),
+// section-title/subtitle + service-card glass cards (style.css), team cards
+// (team.css, founding trio from src/data/team.ts), and the homepage .home-cta
+// band before the footer. Rus's card toggles an expandable profile panel; the
+// panel stays in the DOM when collapsed so search engines index the bio.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { team, accentFor } from '../data/team';
+
+const foundingNames = ['Rus', 'Yehor', 'Artur'];
+const founding = team.filter((m) => foundingNames.includes(m.name));
+const founderNotes: Record<string, string> = {
+  Rus: 'tap for the story ↓',
+  Yehor: 'bio? he’s on a call',
+  Artur: 'traffic won’t tame itself',
+};
+---
+
+<BaseLayout
+  title="About Calma — Performance Lead Generation Agency"
+  description="Calma is a performance lead generation agency founded in 2024. The story behind the agency and the people who run it, including key ideologist Ruslan Drozdov."
+  canonical="https://calma.io/about/"
+  ogTitle="About Calma"
+  ogDescription="The story behind Calma, a performance lead generation agency founded in 2024."
+  useBlogCss={true}
+  useTeamCss={true}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": "https://calma.io/about/#aboutpage",
+    "url": "https://calma.io/about/",
+    "name": "About Calma",
+    "about": { "@id": "https://calma.io/#organization" },
+    "mainEntity": {
+      "@type": "Person",
+      "@id": "https://calma.io/#founder",
+      "name": "Ruslan Drozdov",
+      "alternateName": "Руслан Дроздов",
+      "description": "Ukrainian entrepreneur and investor, key ideologist behind Calma. Started in online marketing in 2013 at Everad, founded Traffinad in 2018, partner at Adventures Lab and Astroid.",
+      "url": "https://drozdorus.com/",
+      "worksFor": { "@id": "https://calma.io/#organization" },
+      "sameAs": [
+        "https://drozdorus.com/",
+        "https://www.linkedin.com/in/drozdorus/",
+        "https://www.crunchbase.com/person/ruslan-drozdov"
+      ]
+    }
+  })} />
+
+  <Header />
+
+  <main id="main-content">
+    <div class="article-page">
+      <div class="container">
+
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/">calma.io</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current">About</span>
+        </nav>
+
+        <header class="about-hero">
+          <h1 class="section-title">About Calma</h1>
+          <p class="section-subtitle">Keep calm, here's the story behind the agency</p>
+        </header>
+
+        <div class="services-grid about-grid">
+          <div class="service-card">
+            <h3 class="service-title">What we do</h3>
+            <p class="about-copy">
+              Calma is a performance lead generation agency. We build and run our own
+              acquisition funnels across insurance, financial, legal, and home services
+              verticals in the US, and deliver the resulting leads and calls to partners
+              who can serve them.
+            </p>
+          </div>
+          <div class="service-card">
+            <h3 class="service-title">How it started</h3>
+            <p class="about-copy">
+              The agency was founded in 2024 by a team that had spent years in performance
+              marketing and wanted to do it calmly: sustainable funnels, compliance where
+              it matters, and AI in the parts of the pipeline where it actually saves time.
+              Today Calma is a team of about ten people.
+            </p>
+          </div>
+        </div>
+
+        <h2 class="section-title about-subhead">Founding team</h2>
+        <div class="team-scroller about-founders">
+          <div class="team-track">
+            {founding.map((m, i) => {
+              const card = (
+                <>
+                  <div class="team-avatar-wrap">
+                    <div class="team-avatar">
+                      <img src={`/img/team/${m.img}`} alt={m.alt} />
+                    </div>
+                  </div>
+                  <div class="team-info">
+                    <div class="team-name">{m.name}</div>
+                    <div class="team-role">{m.role}</div>
+                    <div class="founder-note">{founderNotes[m.name]}</div>
+                  </div>
+                </>
+              );
+              return m.name === 'Rus' ? (
+                <button
+                  type="button"
+                  class="team-card founder-toggle"
+                  id="founder-toggle"
+                  style={`--card-accent: ${accentFor(i, founding.length)}`}
+                  aria-expanded="false"
+                  aria-controls="founder-panel"
+                >
+                  {card}
+                </button>
+              ) : (
+                <div class="team-card" style={`--card-accent: ${accentFor(i, founding.length)}`}>
+                  {card}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div class="service-card founder-panel" id="founder-panel">
+          <div class="founder-panel-head">
+            <div class="team-avatar founder-panel-avatar">
+              <img src="/img/team/rus.svg" alt="Ruslan" />
+            </div>
+            <div>
+              <h3 class="service-title">Ruslan Drozdov</h3>
+              <p class="founder-panel-role">Key ideologist · Chief of Chaos</p>
+            </div>
+          </div>
+          <p class="about-copy">
+            The key ideologist behind Calma is
+            <a href="https://drozdorus.com/" class="text-link" target="_blank" rel="noopener">Ruslan Drozdov</a>,
+            an entrepreneur and investor. He got into online marketing in 2013 at Everad,
+            an international affiliate network, founded the media-buying agency Traffinad
+            in 2018, and later moved to the investment side as a partner at the Ukrainian
+            venture fund Adventures Lab and the web3 venture studio Astroid. Calma is where
+            that experience came back to hands-on marketing.
+          </p>
+          <div class="founder-links">
+            <a href="https://drozdorus.com/" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+              drozdorus.com
+            </a>
+            <a href="https://www.linkedin.com/in/drozdorus/" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                <rect x="2" y="9" width="4" height="12" />
+                <circle cx="4" cy="4" r="2" />
+              </svg>
+              LinkedIn
+            </a>
+            <a href="https://www.crunchbase.com/person/ruslan-drozdov" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M21.6 0H2.4A2.41 2.41 0 0 0 0 2.4v19.2A2.41 2.41 0 0 0 2.4 24h19.2a2.41 2.41 0 0 0 2.4-2.4V2.4A2.41 2.41 0 0 0 21.6 0zM7.045 14.465A2.11 2.11 0 0 0 9.84 13.42h1.66a3.69 3.69 0 1 1 0-1.75H9.84a2.11 2.11 0 1 0-2.795 2.795zm11.345.845a3.55 3.55 0 0 1-1.06.63 3.68 3.68 0 0 1-3.39-.38v.38h-1.51V5.37h1.5v4.11a3.74 3.74 0 0 1 1.8-.63H16a3.67 3.67 0 0 1 2.39 6.46zm-.223-2.766a2.104 2.104 0 1 1-4.207 0 2.104 2.104 0 0 1 4.207 0z" />
+              </svg>
+              Crunchbase
+            </a>
+          </div>
+        </div>
+
+        <div class="home-cta about-cta">
+          <h2 class="home-cta-heading">Ready to generate leads?</h2>
+          <p class="home-cta-text">Tell us about your vertical and volume goals — we'll show you how our acquisition system fits.</p>
+          <a href="/contacts/" class="vertical-cta-btn">Get in touch</a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  const toggle = document.getElementById('founder-toggle');
+  const panel = document.getElementById('founder-panel');
+  toggle?.addEventListener('click', () => {
+    const open = panel?.classList.toggle('open') ?? false;
+    toggle.setAttribute('aria-expanded', String(open));
+    if (open) panel?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+</script>
+
+<style>
+  .about-hero {
+    margin: 1.75rem 0 0;
+    text-align: center;
+  }
+  /* .service-card defaults to opacity:0 until inside a scroll-observed
+     .section.visible on the homepage — force visible on this static page
+     (same workaround as the lead-generation hub). */
+  .about-grid :global(.service-card),
+  .founder-panel {
+    opacity: 1;
+    transform: none;
+  }
+  .about-grid {
+    margin-bottom: var(--space-xl);
+  }
+  .about-copy {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    margin-top: var(--space-sm);
+  }
+  .about-subhead {
+    margin-top: var(--space-xl);
+  }
+  /* Center the three founder cards instead of the homepage drag-scroller look. */
+  .about-founders :global(.team-track) {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .about-founders {
+    cursor: default;
+    overflow-x: visible;
+  }
+  /* Rus's card is a <button>: reset chrome, keep the team-card look, hint
+     interactivity with the shared accent on hover/expand. */
+  .founder-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+  /* hover glow comes from team.css (.team-card:hover); keep it lit while open */
+  .founder-toggle[aria-expanded='true'] :global(.team-avatar-wrap::before) {
+    opacity: 1;
+  }
+  .founder-note {
+    margin-top: 4px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  .founder-toggle .founder-note {
+    color: var(--primary);
+  }
+  /* Profile panel: hidden until Rus's card is tapped, but kept in the DOM so
+     the bio stays indexable. */
+  .founder-panel {
+    display: none;
+    max-width: 720px;
+    margin: var(--space-md) auto 0;
+  }
+  .founder-panel.open {
+    display: block;
+  }
+  .founder-panel-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+  .founder-panel-avatar {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+  }
+  .founder-panel-role {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .founder-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+  .founder-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.2s var(--ease);
+  }
+  .founder-links a:hover {
+    color: var(--text);
+    border-color: var(--primary);
+  }
+  .about-cta {
+    margin-top: var(--space-xl);
+  }
+</style>
