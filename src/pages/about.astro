@@ -5,8 +5,10 @@
 // Built from the shared design system: breadcrumb/article-page (blog.css),
 // section-title/subtitle + service-card glass cards (style.css), team cards
 // (team.css, founding trio from src/data/team.ts), and the homepage .home-cta
-// band before the footer. Rus's card toggles an expandable profile panel; the
-// panel stays in the DOM when collapsed so search engines index the bio.
+// band before the footer. Each founder card toggles its own expandable panel
+// (accordion): Rus's holds the real bio — kept in the DOM when collapsed so
+// search engines index it — the other two hold a running "bio coming soon" joke
+// so the page doesn't read as built by the founder about himself.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -42,7 +44,7 @@ const founderNotes: Record<string, string> = {
       "@id": "https://calma.io/#founder",
       "name": "Ruslan Drozdov",
       "alternateName": "Руслан Дроздов",
-      "description": "Ukrainian entrepreneur and investor, key ideologist behind Calma. Started in online marketing in 2013 at Everad, founded Traffinad in 2018, then spent eight years in the startup ecosystem as a partner at Adventures Lab and Astroid.",
+      "description": "Ukrainian entrepreneur and investor, key ideologist behind Calma. Started in online marketing in 2013, worked at Everad 2014–2018, founded Traffinad in 2018, then spent eight years in the startup ecosystem as a partner at Adventures Lab and Astroid.",
       "image": "https://calma.io/img/team/ruslan-drozdov.webp",
       "url": "https://drozdorus.com/",
       "worksFor": { "@id": "https://calma.io/#organization" },
@@ -95,42 +97,30 @@ const founderNotes: Record<string, string> = {
         <h2 class="section-title about-subhead">Founding team</h2>
         <div class="team-scroller about-founders">
           <div class="team-track">
-            {founding.map((m, i) => {
-              const card = (
-                <>
-                  <div class="team-avatar-wrap">
-                    <div class="team-avatar">
-                      <img src={`/img/team/${m.img}`} alt={m.alt} />
-                    </div>
+            {founding.map((m, i) => (
+              <button
+                type="button"
+                class="team-card founder-toggle"
+                style={`--card-accent: ${accentFor(i, founding.length)}`}
+                aria-expanded="false"
+                aria-controls={`founder-panel-${m.name.toLowerCase()}`}
+              >
+                <div class="team-avatar-wrap">
+                  <div class="team-avatar">
+                    <img src={`/img/team/${m.img}`} alt={m.alt} />
                   </div>
-                  <div class="team-info">
-                    <div class="team-name">{m.name}</div>
-                    <div class="team-role">{m.role}</div>
-                    <div class="founder-note">{founderNotes[m.name]}</div>
-                  </div>
-                </>
-              );
-              return m.name === 'Rus' ? (
-                <button
-                  type="button"
-                  class="team-card founder-toggle"
-                  id="founder-toggle"
-                  style={`--card-accent: ${accentFor(i, founding.length)}`}
-                  aria-expanded="false"
-                  aria-controls="founder-panel"
-                >
-                  {card}
-                </button>
-              ) : (
-                <div class="team-card" style={`--card-accent: ${accentFor(i, founding.length)}`}>
-                  {card}
                 </div>
-              );
-            })}
+                <div class="team-info">
+                  <div class="team-name">{m.name}</div>
+                  <div class="team-role">{m.role}</div>
+                  <div class="founder-note">{founderNotes[m.name]}</div>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
 
-        <div class="service-card founder-panel" id="founder-panel">
+        <div class="service-card founder-panel" id="founder-panel-rus">
           <div class="founder-panel-inner">
           <div class="founder-panel-head">
             <div class="founder-panel-avatar">
@@ -149,14 +139,15 @@ const founderNotes: Record<string, string> = {
           </div>
           <p class="about-copy">
             The key ideologist behind Calma is Ruslan Drozdov, an entrepreneur and investor.
-            He got into online marketing in 2013 at Everad, an international affiliate
-            network, where he spent four years before founding the media-buying agency
-            Traffinad in 2018.
+            He got into online marketing in 2013, a year later landed at Everad, an
+            international affiliate network, and in 2018 founded the media-buying
+            agency Traffinad.
           </p>
           <p class="about-copy">
-            After that he spent eight years deep in the startup ecosystem — as a partner
-            at the Ukrainian venture fund Adventures Lab and the web3 venture studio
-            Astroid. Calma is where that experience came back to hands-on marketing.
+            Later he moved to the investment side — eight years deep in the startup
+            ecosystem as a partner at the Ukrainian venture fund Adventures Lab and the
+            web3 venture studio Astroid. Calma is where that experience came back to
+            hands-on marketing.
           </p>
           <div class="founder-links">
             <a href="https://drozdorus.com/" target="_blank" rel="noopener">
@@ -186,6 +177,36 @@ const founderNotes: Record<string, string> = {
           </div>
         </div>
 
+        <div class="service-card founder-panel" id="founder-panel-yehor">
+          <div class="founder-panel-inner">
+            <div class="founder-panel-head">
+              <div>
+                <h3 class="service-title">Yehor</h3>
+                <p class="founder-panel-role">Bizdev Machine</p>
+              </div>
+            </div>
+            <p class="about-copy">
+              Yehor promised to write his bio right after this call. That was about
+              three hundred calls ago. We'll publish it the moment he hangs up.
+            </p>
+          </div>
+        </div>
+
+        <div class="service-card founder-panel" id="founder-panel-artur">
+          <div class="founder-panel-inner">
+            <div class="founder-panel-head">
+              <div>
+                <h3 class="service-title">Artur</h3>
+                <p class="founder-panel-role">Traffic Tamer</p>
+              </div>
+            </div>
+            <p class="about-copy">
+              Artur also promised a bio — then the traffic spiked, and it won't tame
+              itself. He said “tomorrow”. He says that every day.
+            </p>
+          </div>
+        </div>
+
         <div class="home-cta about-cta">
           <h2 class="home-cta-heading">Ready to generate leads?</h2>
           <p class="home-cta-text">Tell us about your vertical and volume goals — we'll show you how our acquisition system fits.</p>
@@ -200,14 +221,29 @@ const founderNotes: Record<string, string> = {
 </BaseLayout>
 
 <script>
-  const toggle = document.getElementById('founder-toggle');
-  const panel = document.getElementById('founder-panel');
-  const note = toggle?.querySelector('.founder-note');
-  toggle?.addEventListener('click', () => {
-    const open = panel?.classList.toggle('open') ?? false;
-    toggle.setAttribute('aria-expanded', String(open));
-    if (note) note.textContent = open ? 'tap to hide ↑' : 'tap for the story ↓';
-    if (open) panel?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  // Accordion over the three founder cards: each toggles its own panel, opening
+  // one closes the rest. Card notes are jokes at rest and "tap to hide" while open.
+  const entries = [...document.querySelectorAll('.founder-toggle')].map((toggle) => ({
+    toggle,
+    panel: document.getElementById(toggle.getAttribute('aria-controls') ?? ''),
+    note: toggle.querySelector('.founder-note'),
+    resting: toggle.querySelector('.founder-note')?.textContent ?? '',
+  }));
+  const close = (e: (typeof entries)[number]) => {
+    e.panel?.classList.remove('open');
+    e.toggle.setAttribute('aria-expanded', 'false');
+    if (e.note) e.note.textContent = e.resting;
+  };
+  entries.forEach((entry) => {
+    entry.toggle.addEventListener('click', () => {
+      const open = entry.panel?.classList.toggle('open') ?? false;
+      entry.toggle.setAttribute('aria-expanded', String(open));
+      if (entry.note) entry.note.textContent = open ? 'tap to hide ↑' : entry.resting;
+      if (open) {
+        entries.filter((other) => other !== entry).forEach(close);
+        entry.panel?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
   });
 </script>
 
@@ -245,7 +281,7 @@ const founderNotes: Record<string, string> = {
     cursor: default;
     overflow-x: visible;
   }
-  /* Rus's card is a <button>: reset chrome, keep the team-card look, hint
+  /* Founder cards are <button>s: reset chrome, keep the team-card look, hint
      interactivity with the shared accent on hover/expand. */
   .founder-toggle {
     background: none;
@@ -278,7 +314,7 @@ const founderNotes: Record<string, string> = {
   .founder-toggle .founder-note {
     color: var(--primary);
   }
-  /* Profile panel: collapsed until Rus's card is tapped, but kept in the DOM so
+  /* Profile panels: collapsed until their card is tapped, but kept in the DOM so
      the bio stays indexable. Animated with the grid-template-rows 0fr→1fr trick;
      the card's own padding/border/shadow collapse alongside so nothing leaks
      through when closed. visibility:hidden keeps the collapsed links out of the
