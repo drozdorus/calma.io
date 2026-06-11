@@ -223,6 +223,11 @@ const founderNotes: Record<string, string> = {
 </BaseLayout>
 
 <script>
+  // On phones the founders row is a horizontal scroller (see the 640px media
+  // query below) — init drag/fade like team.js does on the homepage. No-op
+  // for the centered desktop layout (nothing overflows, fades stay 0).
+  (window as any).initHScroller?.(document.querySelector('.about-founders'));
+
   // Accordion over the three founder cards: each toggles its own panel, opening
   // one closes the rest. Card notes are jokes at rest and "tap to hide" while open.
   const entries = [...document.querySelectorAll('.founder-toggle')].map((toggle) => ({
@@ -273,15 +278,20 @@ const founderNotes: Record<string, string> = {
   .about-subhead {
     margin-top: var(--space-xl);
   }
-  /* Center the three founder cards instead of the homepage drag-scroller look. */
-  .about-founders :global(.team-track) {
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .about-founders {
-    cursor: default;
-    overflow-x: visible;
+  /* Center the three founder cards instead of the homepage drag-scroller look —
+     but only where they fit on one row. On phones wrapping put the third card
+     (and the opened panel) far below the fold, so the row falls back to
+     team.css's horizontal scroller, same UX as the homepage team section. */
+  @media (min-width: 640px) {
+    .about-founders :global(.team-track) {
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .about-founders {
+      cursor: default;
+      overflow-x: visible;
+    }
   }
   /* Founder cards are <button>s: reset chrome, keep the team-card look, hint
      interactivity with the shared accent on hover/expand. */
