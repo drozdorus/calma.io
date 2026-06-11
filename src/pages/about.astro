@@ -335,7 +335,9 @@ const founderNotes: Record<string, string> = {
     gap: var(--space-sm);
   }
   /* Real photo (not the team-card illustration, which sits right above) —
-     full-bleed circle, the photo's own branded backdrop does the tinting. */
+     full-bleed circle, the photo's own branded backdrop does the tinting.
+     No glow shadow: a faint large-blur box-shadow on the near-black card
+     clips into a visible square halo on some displays. */
   .founder-panel-avatar {
     width: 64px;
     height: 64px;
@@ -343,7 +345,6 @@ const founderNotes: Record<string, string> = {
     border-radius: 50%;
     overflow: hidden;
     border: 1px solid var(--border-default);
-    box-shadow: 0 0 14px rgba(61, 214, 140, 0.18);
   }
   .founder-panel-avatar img {
     width: 100%;
