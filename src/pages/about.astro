@@ -132,22 +132,20 @@ const founderNotes: Record<string, string> = {
         <div class="service-card founder-panel" id="founder-panel">
           <div class="founder-panel-inner">
           <div class="founder-panel-head">
-            <div class="founder-panel-avatar">
-              <img src="/img/team/rus.svg" alt="Ruslan" />
-            </div>
             <div>
               <h3 class="service-title">Ruslan Drozdov</h3>
-              <p class="founder-panel-role">Key ideologist · Chief of Chaos</p>
+              <p class="founder-panel-role">Chief of Chaos</p>
             </div>
           </div>
           <p class="about-copy">
-            The key ideologist behind Calma is
-            <a href="https://drozdorus.com/" class="text-link" target="_blank" rel="noopener">Ruslan Drozdov</a>,
-            an entrepreneur and investor. He got into online marketing in 2013 at Everad,
-            an international affiliate network, founded the media-buying agency Traffinad
-            in 2018, and later moved to the investment side as a partner at the Ukrainian
-            venture fund Adventures Lab and the web3 venture studio Astroid. Calma is where
-            that experience came back to hands-on marketing.
+            The key ideologist behind Calma is Ruslan Drozdov, an entrepreneur and investor.
+            He got into online marketing in 2013 at Everad, an international affiliate
+            network, and in 2018 founded the media-buying agency Traffinad.
+          </p>
+          <p class="about-copy">
+            Later he moved to the investment side as a partner at the Ukrainian venture
+            fund Adventures Lab and the web3 venture studio Astroid. Calma is where that
+            experience came back to hands-on marketing.
           </p>
           <div class="founder-links">
             <a href="https://drozdorus.com/" target="_blank" rel="noopener">
@@ -325,30 +323,6 @@ const founderNotes: Record<string, string> = {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-  }
-  /* Standalone avatar for the panel head — .team-avatar from team.css relies on
-     its scroller-card context (width:100% + percentage padding off the parent),
-     which collapses the image here, so it's styled from scratch. The radial tint
-     echoes the glow behind Rus's team card. */
-  .founder-panel-avatar {
-    width: 60px;
-    height: 60px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    overflow: hidden;
-    padding: 7px;
-    border: 1px solid var(--border-default);
-    background: radial-gradient(
-      circle at 50% 42%,
-      rgba(61, 214, 140, 0.35) 0%,
-      rgba(61, 214, 140, 0.06) 75%
-    );
-  }
-  .founder-panel-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
   }
   .founder-panel-role {
     font-size: 0.8rem;
