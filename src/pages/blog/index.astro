@@ -38,7 +38,7 @@ const posts = (await getCollection('blog')).sort(
         </header>
 
         <div class="blog-grid">
-          {posts.map((post) => <ArticleCard post={post} />)}
+          {posts.map((post) => <ArticleCard post={post} headingLevel="h2" />)}
         </div>
 
       </div>

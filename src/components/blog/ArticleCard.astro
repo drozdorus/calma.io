@@ -4,9 +4,12 @@ import { cardCovers } from './cardCovers';
 
 interface Props {
   post: CollectionEntry<'blog'>;
+  /** h3 under a section h2 (homepage); h2 straight under the page h1 (/blog/) */
+  headingLevel?: 'h2' | 'h3';
 }
 
-const { post } = Astro.props;
+const { post, headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
 const { data } = post;
 const href = `/blog/${post.id}/`;
 const cover = cardCovers[post.id] ?? '';
@@ -17,7 +20,7 @@ const title = data.ogTitle ?? data.title;
   <div class="article-cover" set:html={cover} />
   <div class="article-body">
     <span class={`article-tag${data.tagMint ? ' article-tag--mint' : ''}`}>{data.tag}</span>
-    <h3 class="article-title">{title}</h3>
+    <Heading class="article-title">{title}</Heading>
     <p class="article-desc">{data.relatedDesc}</p>
     <span class="article-read">Read</span>
   </div>

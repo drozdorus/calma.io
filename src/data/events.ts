@@ -55,7 +55,7 @@ export const events: CalmaEvent[] = [
     location: 'Budapest, Hungary',
     url: 'https://affiliateworldconferences.com/europe',
     organizer: { name: 'Affiliate World Conferences', url: 'https://affiliateworldconferences.com' },
-    logo: { src: '/img/aw-logo.png', alt: 'Affiliate World' },
+    logo: { src: '/img/aw-logo.webp', alt: 'Affiliate World' },
     linkLabel: 'affiliateworldconferences.com',
   },
   {
@@ -68,7 +68,7 @@ export const events: CalmaEvent[] = [
     location: 'Barcelona, Spain',
     url: 'https://www.affiliatetakeover.com/barcelona',
     organizer: { name: 'Affiliate Takeover', url: 'https://www.affiliatetakeover.com' },
-    logo: { src: '/img/ato-logo.png', alt: 'Affiliate Takeover' },
+    logo: { src: '/img/ato-logo.webp', alt: 'Affiliate Takeover' },
     linkLabel: 'affiliatetakeover.com',
   },
   {
@@ -81,7 +81,7 @@ export const events: CalmaEvent[] = [
     location: 'New York, US',
     url: 'https://affiliatesummit.com/east',
     organizer: { name: 'Affiliate Summit', url: 'https://affiliatesummit.com' },
-    logo: { src: '/img/ase-logo.png', alt: 'Affiliate Summit' },
+    logo: { src: '/img/ase-logo.webp', alt: 'Affiliate Summit' },
     linkLabel: 'affiliatesummit.com',
   },
   {
@@ -94,7 +94,7 @@ export const events: CalmaEvent[] = [
     location: 'Las Vegas, US',
     url: 'https://affiliatesummit.com/west',
     organizer: { name: 'Affiliate Summit', url: 'https://affiliatesummit.com' },
-    logo: { src: '/img/asw-logo.png', alt: 'Affiliate Summit' },
+    logo: { src: '/img/asw-logo.webp', alt: 'Affiliate Summit' },
     linkLabel: 'affiliatesummit.com',
   },
   {

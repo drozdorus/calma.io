@@ -30,13 +30,13 @@ const year = new Date().getFullYear();
   <div class="container">
     <div class="footer-grid">
       <div class="footer-col footer-col--brand">
-        <a href={logoHref} class="footer-logo"><img src="/img/logo.svg" height="16" alt="Calma" /></a>
+        <a href={logoHref} class="footer-logo"><img src="/img/logo.svg" width="104" height="16" alt="Calma" /></a>
         <p class="footer-tagline">Performance lead generation across insurance, financial, legal, and home services
           verticals.</p>
       </div>
 
       <div class="footer-col">
-        <h4 class="footer-heading">What we do</h4>
+        <p class="footer-heading">What we do</p>
         {verticals.map((v) => (
           <a href={`/lead-generation/${v.id}/`} class="footer-link">{v.data.breadcrumbLabel}</a>
         ))}
@@ -44,7 +44,7 @@ const year = new Date().getFullYear();
       </div>
 
       <div class="footer-col">
-        <h4 class="footer-heading">Company</h4>
+        <p class="footer-heading">Company</p>
         <a href="/about/" class="footer-link">About</a>
         <a href={`${base}#team`} class="footer-link">Team</a>
         <a href={`${base}#conferences`} class="footer-link">Events</a>
@@ -53,7 +53,7 @@ const year = new Date().getFullYear();
       </div>
 
       <div class="footer-col">
-        <h4 class="footer-heading">Get in touch</h4>
+        <p class="footer-heading">Get in touch</p>
         <a href="/contacts/" class="footer-link">Contact</a>
         <a href="mailto:info@calma.io" class="footer-link">info@calma.io</a>
         <a href="https://www.linkedin.com/company/calma-io/" target="_blank" rel="noopener" class="footer-link">LinkedIn</a>

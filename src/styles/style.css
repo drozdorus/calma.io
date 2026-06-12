@@ -1190,7 +1190,7 @@ body {
   margin: 0 auto;
 }
 
-.contact-info h3 {
+.contact-info h2 {
   font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: var(--space-sm);
