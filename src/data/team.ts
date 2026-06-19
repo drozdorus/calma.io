@@ -40,7 +40,6 @@ export const team: TeamMember[] = [
     role: 'Process Ninja',
     linkedin: 'https://www.linkedin.com/in/anastasiia-stefinin-140792256/',
   },
-  { name: 'Vita', alt: 'Vita', img: 'vita.svg', role: '100 Tasks Before Noon' },
   { name: 'Val', alt: 'Val', img: 'val.svg', role: 'Encoded' },
   { name: 'Lisa', alt: 'Lisa', img: 'lisa.svg', role: 'Cut & Hook Specialist' },
   { name: 'Max', alt: 'Max', img: 'max.svg', role: 'Frame Surgeon' },
