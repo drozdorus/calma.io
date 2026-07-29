@@ -54,9 +54,9 @@ const isHiring = path.startsWith('/hiring');
 
         <a href="/blog/" class:list={['nav-link', { active: isBlog }]}>Blog</a>
         <a href="/contacts/" class:list={['nav-link', { active: isContact }]}>Contact</a>
-        <a href="/hiring/" class:list={['hiring-link', { active: isHiring }]}>
+        <a href="/hiring/" class:list={['nav-link', 'nav-link--dot', { active: isHiring }]}>
           Hiring
-          <span class="notification-dot"></span>
+          <span class="notification-dot" aria-hidden="true"></span>
         </a>
       </nav>
 
@@ -93,9 +93,9 @@ const isHiring = path.startsWith('/hiring');
 
   <a href="/blog/" class="nav-link" onclick="closeMobileMenu()">Blog</a>
   <a href="/contacts/" class="nav-link" onclick="closeMobileMenu()">Contact</a>
-  <a href="/hiring/" class:list={['hiring-link', { active: isHiring }]} onclick="closeMobileMenu()">
+  <a href="/hiring/" class:list={['nav-link', 'nav-link--dot', { active: isHiring }]} onclick="closeMobileMenu()">
     Hiring
-    <span class="notification-dot"></span>
+    <span class="notification-dot" aria-hidden="true"></span>
   </a>
 </div>
 

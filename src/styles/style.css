@@ -384,26 +384,13 @@ body {
   transform: translateY(-2px);
 }
 
-/* Hiring Link */
-.hiring-link {
-  display: flex;
+/* Hiring is an ordinary nav link — the pulsing dot is the only thing marking it
+   as "we're hiring". Inline-flex so the dot sits on the text baseline row; the
+   ::after underline inherited from .nav-link still spans the whole link. */
+.nav-link--dot {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: var(--text);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  padding: 10px 18px;
-  border: 1px solid rgba(232, 181, 71, 0.3);
-  border-radius: 20px;
-  transition: all 0.3s var(--ease-spring);
-}
-
-.hiring-link:hover {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: var(--bg);
-  transform: translateY(-2px);
-  box-shadow: var(--glow);
 }
 
 .notification-dot {
@@ -962,7 +949,8 @@ body {
   font-style: italic;
 }
 
-.services-cta {
+.services-cta,
+.team-join-cta {
   margin-top: var(--space-lg);
   text-align: center;
 }
