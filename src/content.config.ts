@@ -82,4 +82,43 @@ const verticals = defineCollection({
   }),
 });
 
-export const collections = { blog, verticals };
+// Open positions rendered at /hiring/. The Markdown body is the job description;
+// everything the page chrome and the JobPosting JSON-LD need lives in frontmatter.
+//
+// These files are meant to be written by an n8n sync from the Notion Vacancies DB
+// — Notion is the editing surface, this collection is the built artefact. Hand
+// edits are fine too; the sync overwrites whole files.
+const vacancies = defineCollection({
+  // Underscore-prefixed files are ignored, so `_template.md` can document the
+  // shape for the n8n sync (and for anyone adding a role by hand) without ever
+  // rendering as a live posting.
+  loader: glob({ pattern: '[^_]*.md', base: './src/content/vacancies' }),
+  schema: z.object({
+    /** Role name — used as the card title, the dropdown option and JobPosting.title */
+    title: z.string(),
+    /** One-liner under the card title, also JobPosting.description fallback */
+    shortDescription: z.string(),
+    /** Full-time / Part-time / Contract / Internship — see employmentTypeMap */
+    type: z.string().default('Full-time'),
+    department: z.string().default(''),
+    /** Human-readable location badge, e.g. "Remote" */
+    location: z.string().default('Remote'),
+    /** Drives JobPosting.jobLocationType: TELECOMMUTE */
+    remote: z.boolean().default(true),
+    /**
+     * Closed roles stay in the repo for history but drop off the page. Google
+     * requires expired postings to be removed, so this also pulls the JSON-LD.
+     */
+    status: z.enum(['open', 'closed']).default('open'),
+    datePosted: z.coerce.date(),
+    /**
+     * Required by Google for JobPosting. A stale validThrough is worse than none
+     * — the sync should refresh it, and closed roles should flip `status`.
+     */
+    validThrough: z.coerce.date(),
+    /** lower shows first */
+    order: z.number().default(0),
+  }),
+});
+
+export const collections = { blog, verticals, vacancies };

@@ -2,11 +2,59 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
 import { team, accentFor } from '../data/team';
-import { getOpenVacancies } from '../lib/notion';
+import {
+  applyWebhook,
+  applyEmail,
+  hiringUrl,
+  openApplicationLabel,
+  organization,
+  defaultJobLocation,
+  employmentTypeMap,
+} from '../data/hiring';
 
-const vacancies = await getOpenVacancies();
-const webhookUrl = import.meta.env.PUBLIC_N8N_WEBHOOK ?? '';
+// Vacancies come from the repo, not from the Notion API at build time: Notion is
+// the editing surface and an n8n sync writes these files. That keeps the build
+// independent of Notion being up, keeps edits in git history, and lets `npm run
+// dev` show real postings with no token.
+const all = await getCollection('vacancies', (v) => v.data.status === 'open');
+const vacancies = all.sort(
+  (a, b) => a.data.order - b.data.order || +b.data.datePosted - +a.data.datePosted
+);
+
+// Render each Markdown body to HTML for the expandable job description.
+const rendered = await Promise.all(
+  vacancies.map(async (v) => ({ ...v, html: (await render(v)).Content }))
+);
+
+const webhookUrl = applyWebhook;
+
+// JobPosting JSON-LD — what puts these roles into Google's jobs experience.
+// Closed roles are already filtered out above, which is also what Google
+// requires (expired postings must not linger).
+const jobPostings = vacancies.map((v) => ({
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title: v.data.title,
+  description: v.data.shortDescription,
+  datePosted: v.data.datePosted.toISOString().slice(0, 10),
+  validThrough: v.data.validThrough.toISOString().slice(0, 10),
+  employmentType: employmentTypeMap[v.data.type] ?? 'FULL_TIME',
+  hiringOrganization: {
+    '@type': 'Organization',
+    name: organization.name,
+    sameAs: organization.url,
+    logo: organization.logo,
+  },
+  jobLocation: {
+    '@type': 'Place',
+    address: { '@type': 'PostalAddress', ...defaultJobLocation },
+  },
+  ...(v.data.remote ? { jobLocationType: 'TELECOMMUTE' } : {}),
+  directApply: true,
+  url: hiringUrl,
+}));
 ---
 
 <BaseLayout
@@ -18,6 +66,12 @@ const webhookUrl = import.meta.env.PUBLIC_N8N_WEBHOOK ?? '';
   useBlogCss={true}
   useTeamCss={true}
 >
+  <Fragment slot="head">
+    {jobPostings.map((posting) => (
+      <script type="application/ld+json" set:html={JSON.stringify(posting)} />
+    ))}
+  </Fragment>
+
   <Header />
 
   <main id="main-content">
@@ -44,19 +98,19 @@ const webhookUrl = import.meta.env.PUBLIC_N8N_WEBHOOK ?? '';
             <a href="#apply" class="job-apply-link">Send an open application →</a>
           </div>
         ) : (
-          vacancies.map((v, i) => (
+          rendered.map((v, i) => (
             <>
               <div class="service-card job-card">
                 <div class="job-card-top">
                   <div class="job-title-row">
-                    <h2 class="service-title">{v.name}</h2>
+                    <h2 class="service-title">{v.data.title}</h2>
                     <div class="job-badges">
-                      {v.type && <span class="job-badge">{v.type}</span>}
-                      {v.location && <span class="job-badge">{v.location}</span>}
-                      {v.department && <span class="job-badge job-badge--dept">{v.department}</span>}
+                      {v.data.type && <span class="job-badge">{v.data.type}</span>}
+                      {v.data.location && <span class="job-badge">{v.data.location}</span>}
+                      {v.data.department && <span class="job-badge job-badge--dept">{v.data.department}</span>}
                     </div>
                   </div>
-                  {v.shortDescription && <p class="about-copy job-short-desc">{v.shortDescription}</p>}
+                  {v.data.shortDescription && <p class="about-copy job-short-desc">{v.data.shortDescription}</p>}
                 </div>
                 <button
                   class="job-toggle"
@@ -68,15 +122,13 @@ const webhookUrl = import.meta.env.PUBLIC_N8N_WEBHOOK ?? '';
                 </button>
               </div>
 
-              <div class="job-panel" id={`job-panel-${i}`} data-role={v.name}>
+              <div class="job-panel" id={`job-panel-${i}`} data-role={v.data.title}>
                 <div class="job-panel-inner">
-                  {v.blocks ? (
-                    <div class="article-prose job-jd" set:html={v.blocks} />
-                  ) : (
-                    <p class="about-copy">Full job description coming soon.</p>
-                  )}
+                  <div class="article-prose job-jd">
+                    <v.html />
+                  </div>
                   <div class="job-apply-wrap">
-                    <a href="#apply" class="vertical-cta-btn job-apply-btn" data-role={v.name}>
+                    <a href="#apply" class="vertical-cta-btn job-apply-btn" data-role={v.data.title}>
                       Apply for this role →
                     </a>
                   </div>
@@ -129,7 +181,7 @@ const webhookUrl = import.meta.env.PUBLIC_N8N_WEBHOOK ?? '';
               <p>Fill in the form and we'll get back to you within a few business days.</p>
               <div class="contact-email">
                 <span>Or email: </span>
-                <a href="mailto:info@calma.io">info@calma.io</a>
+                <a href={`mailto:${applyEmail}`}>{applyEmail}</a>
               </div>
             </div>
 
@@ -137,6 +189,7 @@ const webhookUrl = import.meta.env.PUBLIC_N8N_WEBHOOK ?? '';
               class="contact-form"
               id="hiringForm"
               data-webhook={webhookUrl}
+              data-email={applyEmail}
               novalidate
             >
               <div class="form-group">
@@ -148,8 +201,8 @@ const webhookUrl = import.meta.env.PUBLIC_N8N_WEBHOOK ?? '';
               <div class="form-group">
                 <select name="role" id="roleSelect" required>
                   <option value="" disabled selected>Position you're applying for</option>
-                  {vacancies.map((v) => <option value={v.name}>{v.name}</option>)}
-                  <option value="Open Application">Open Application</option>
+                  {vacancies.map((v) => <option value={v.data.title}>{v.data.title}</option>)}
+                  <option value={openApplicationLabel}>{openApplicationLabel}</option>
                 </select>
               </div>
               <div class="form-group">
@@ -223,11 +276,14 @@ const webhookUrl = import.meta.env.PUBLIC_N8N_WEBHOOK ?? '';
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const webhookUrl = form.dataset.webhook ?? '';
+    // Fallback address comes from src/data/hiring.ts via a data attribute, so
+    // the contact lives in exactly one place even inside the client script.
+    const fallbackEmail = form.dataset.email ?? '';
     const data = new FormData(form);
     const button = form.querySelector<HTMLButtonElement>('.submit-button')!;
 
     if (!webhookUrl) {
-      (window as any).showNotification?.('Application form is not configured yet. Please email info@calma.io', 'error');
+      (window as any).showNotification?.(`Application form is not configured yet. Please email ${fallbackEmail}`, 'error');
       return;
     }
 
@@ -263,7 +319,7 @@ const webhookUrl = import.meta.env.PUBLIC_N8N_WEBHOOK ?? '';
         throw new Error();
       }
     } catch {
-      (window as any).showNotification?.('Something went wrong. Please try again or email info@calma.io', 'error');
+      (window as any).showNotification?.(`Something went wrong. Please try again or email ${fallbackEmail}`, 'error');
     } finally {
       button.textContent = 'Send Application';
       button.disabled = false;
