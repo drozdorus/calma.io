@@ -85,6 +85,49 @@ export const events: CalmaEvent[] = [
     linkLabel: 'affiliatesummit.com',
   },
   {
+    name: 'SBC Summit',
+    schemaName: 'SBC Summit Lisbon 2026',
+    description:
+      'The flagship global gaming and betting conference, bringing operators, affiliates, and technology providers together in Lisbon.',
+    // Pushed later than SBC's usual mid-September slot for 2026 only, to avoid
+    // clashing with Jewish religious holidays; returns to normal from 2027.
+    start: '2026-09-29',
+    end: '2026-10-01',
+    location: 'Lisbon, Portugal',
+    url: 'https://sbcevents.com/sbc-summit/',
+    organizer: { name: 'SBC Events', url: 'https://sbcevents.com' },
+    // Cropped variant of the Americas mark — same wordmark, "AMERICAS" cropped
+    // out via viewBox, since this is the Lisbon (global) edition.
+    logo: { src: '/img/sbc-summit-logo-white.svg', alt: 'SBC Summit' },
+    linkLabel: 'sbcevents.com',
+  },
+  {
+    name: 'AppGala',
+    schemaName: 'AppGala Conference Barcelona 2026',
+    description:
+      'B2B conference for the mobile app and gaming industry, focused on user acquisition, creatives, and product growth.',
+    start: '2026-10-22',
+    end: '2026-10-23',
+    location: 'Barcelona, Spain',
+    url: 'https://appgala.events/barcelona2026-conference/',
+    organizer: { name: 'AppGala', url: 'https://appgala.events' },
+    logo: { src: '/img/ag-logo-white.svg', alt: 'AppGala' },
+    linkLabel: 'appgala.events',
+  },
+  {
+    name: 'Web Summit',
+    schemaName: 'Web Summit 2026',
+    description:
+      "Europe's largest technology conference, connecting founders, investors, and media across the whole tech industry.",
+    start: '2026-11-09',
+    end: '2026-11-12',
+    location: 'Lisbon, Portugal',
+    url: 'https://websummit.com/',
+    organizer: { name: 'Web Summit', url: 'https://websummit.com' },
+    logo: { src: '/img/ws-logo.webp', alt: 'Web Summit' },
+    linkLabel: 'websummit.com',
+  },
+  {
     name: 'Affiliate Summit West',
     schemaName: 'Affiliate Summit West 2027',
     description:
