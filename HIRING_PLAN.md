@@ -1,7 +1,9 @@
 # Hiring page — plan
 
-Status: **design agreed, not implemented.** Branch `feature/hiring-page`, not merged.
-Last revised 2026-07-27.
+Status: **page built, sync pending.** Branch `feature/hiring-page`, not merged.
+Steps 1–3 and 6 are done; steps 4–5 need the owner; step 7 is deliberately held
+until the public Notion page stops being used for the current hiring round.
+Last revised 2026-07-28.
 
 Delete this file once the page is live and stable.
 
@@ -96,27 +98,54 @@ because it will carry the funnel.
 
 ## Steps
 
-1. **Strip the build-time Notion read.** Delete `src/lib/notion.ts`, drop the
-   `@notionhq/client` dependency, drop `NOTION_TOKEN` and `NOTION_VACANCIES_DB_ID`
-   from `deploy.yml` and `.env.example`. Move vacancies to a `vacancies` content
-   collection, same pattern as `blog` and `verticals`. The 465 lines of page markup
-   in `hiring.astro` stay as they are — only the data source changes.
-2. **`src/data/hiring.ts`** — form endpoint, contact, CTA copy. Single source.
-3. **`JobPosting` JSON-LD** from frontmatter. Add `validThrough` and `slug` to the
-   Notion DB schema to feed it.
+1. ~~**Strip the build-time Notion read.**~~ **Done.** `src/lib/notion.ts` and the
+   `@notionhq/client` dependency are gone; `NOTION_TOKEN` and
+   `NOTION_VACANCIES_DB_ID` are out of `deploy.yml` and `.env.example`. Vacancies
+   are a `vacancies` content collection, same pattern as `blog` and `verticals`.
+   The page markup was untouched — only the data source changed.
+2. ~~**`src/data/hiring.ts`**~~ **Done.** Form endpoint, contact, org details for
+   JSON-LD. The client script reads the fallback address from it through a
+   `data-email` attribute, so the contact is not duplicated even there.
+3. ~~**`JobPosting` JSON-LD**~~ **Done.** Generated from frontmatter; `closed`
+   roles drop both the card and the markup. `Date Posted`, `Valid Through`,
+   `Slug` and `Order` were added to the Notion DB schema to feed it.
 4. **n8n workflow #2** — Notion → markdown → commit to repo → `repository_dispatch`.
-   Needs a GitHub PAT stored in n8n.
+   Needs a GitHub PAT stored in n8n. **Owner.**
 5. **n8n workflow #1** — `yeqK7GR7QKScSmIN`, "Calma.io Hiring | Application Intake",
-   already built, still **inactive**. Activation was permission-blocked; owner flips it.
-6. **Switch the links.** Four places still point at the public Notion page:
-   `Header.astro:9`, `:59`, `:98`, `Footer.astro:17`, `contacts.astro:44` → `/hiring/`.
-7. **Close the public Notion share.** `calma-io.notion.site/Open-Vacancies-...` is
-   indexed and will compete with `/hiring/` for the same queries — and the version
-   without our brand, analytics or form would be the one winning. Unpublish, or
-   redirect if any external link is known to point there.
+   already built, still **inactive**. Activation was permission-blocked. **Owner.**
+   Until `PUBLIC_N8N_WEBHOOK` is set, the form tells the candidate to email instead.
+6. ~~**Switch the links.**~~ **Done** — header (×3), footer and `/contacts/` all
+   point at `/hiring/`. Note this means merging removes the site's last link to
+   the public Notion page.
+7. **Close the public Notion share.** Held on purpose: the page is still in use
+   for the current round. Once it isn't, unpublish it —
+   `calma-io.notion.site/Open-Vacancies-...` is indexed and competes with
+   `/hiring/` for the same queries, and the version without our brand, analytics
+   or form is the one that would win.
 
-Steps 1–3 are self-contained. Steps 4–5 need the owner: a GitHub PAT in n8n, and
-workflow activation.
+## Seeded content
+
+Both live roles were translated from the Ukrainian originals and now exist in
+three places, which will collapse to one once the sync runs:
+
+| Role | Repo | Notion DB | Public Notion page |
+|---|---|---|---|
+| Video Editor | `video-editor.md` | created 2026-07-28 | still live |
+| Creative Producer | `creative-producer.md` | created 2026-07-28 | still live |
+
+The site is English-only and both roles ask for English, so the postings are in
+English — a Ukrainian JD on an English page would break both the reading
+experience and the JobPosting markup Google reads.
+
+Two things found in the originals that the new page deliberately drops:
+
+- Creative Producer linked a Google Form using a `/edit` URL, which sends a
+  candidate into the form editor they have no access to. It was broken for
+  anyone who clicked it.
+- Between the index page and the two postings there were three different ways to
+  apply — a Google Form, `info@calma.io`, and a Telegram handle. That is the
+  incongruence this rebuild exists to remove; if the Telegram route should
+  survive, it belongs in `src/data/hiring.ts`, not in a job description.
 
 ## Known IDs
 
