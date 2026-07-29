@@ -9,6 +9,15 @@ status: open
 datePosted: 2026-01-01
 validThrough: 2026-12-31
 order: 0
+# Optional. Where else this role is posted — shown as a quieter second route
+# under the apply button, for candidates who already have a profile there.
+# Omit or leave empty and nothing renders. Note that applications arriving this
+# way land in the platform's inbox, not in the Notion Applications DB.
+applyLinks:
+  - platform: DOU
+    url: https://jobs.dou.ua/companies/example/vacancies/
+  - platform: Djinni
+    url: https://djinni.co/jobs/example/
 ---
 
 Underscore-prefixed files never render — this one exists to document the shape.

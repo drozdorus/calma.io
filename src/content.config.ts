@@ -118,6 +118,19 @@ const vacancies = defineCollection({
     validThrough: z.coerce.date(),
     /** lower shows first */
     order: z.number().default(0),
+    /**
+     * Where else this role is posted. Offered as a secondary route next to the
+     * form: on DOU or Djinni a candidate already has a filled-in profile, so
+     * applying is one click, while our form asks them to type. Optional and
+     * per-vacancy — an empty list renders nothing.
+     *
+     * The form stays primary: it's the only route that lands in the Notion
+     * Applications DB. Anything arriving through a platform lands in that
+     * platform's own inbox, so the recruiter has to watch both.
+     */
+    applyLinks: z
+      .array(z.object({ platform: z.string(), url: z.string().url() }))
+      .default([]),
   }),
 });
 

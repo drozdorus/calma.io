@@ -131,6 +131,17 @@ const jobPostings = vacancies.map((v) => ({
                     <a href="#apply" class="vertical-cta-btn job-apply-btn" data-role={v.data.title}>
                       Apply for this role →
                     </a>
+                    {v.data.applyLinks.length > 0 && (
+                      <p class="job-apply-alt">
+                        Already have a profile there? Apply via{' '}
+                        {v.data.applyLinks.map((l, n) => (
+                          <>
+                            {n > 0 && ' or '}
+                            <a href={l.url} class="text-link" target="_blank" rel="noopener">{l.platform}</a>
+                          </>
+                        ))}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -471,6 +482,13 @@ const jobPostings = vacancies.map((v) => ({
 
   .job-apply-wrap {
     margin-top: var(--space-lg);
+  }
+
+  /* Secondary route, deliberately quieter than the button above it. */
+  .job-apply-alt {
+    margin-top: var(--space-sm);
+    font-size: 0.875rem;
+    color: var(--text-muted);
   }
 
   .job-apply-link {
