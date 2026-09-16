@@ -12,7 +12,6 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
 import ApplyForm from '../../components/ApplyForm.astro';
 import {
   getOpenVacancies,
-  formatDate,
   organization,
   defaultJobLocation,
   defaultValidityDays,
@@ -88,27 +87,30 @@ const jobPosting = {
 
         <Breadcrumb items={[{ label: 'Hiring', href: '/hiring/' }, { label: data.title }]} />
 
-        <header class="article-hero vacancy-hero">
-          <div class="article-hero-meta">
-            {data.department && <span class="article-tag">{data.department}</span>}
-            <span class="article-tag article-tag--muted">{data.type}</span>
-            <span class="article-tag article-tag--muted">{data.location}</span>
-            <time class="article-read-time" datetime={iso(data.datePosted)}>
-              Posted {formatDate(data.datePosted)}
-            </time>
-          </div>
-          <h1 class="article-hero-title">{data.title}</h1>
-          <p class="article-hero-lead">{data.shortDescription}</p>
-        </header>
+        <!-- The whole posting sits on one "sheet": a lifted surface that separates
+             the role from the page chrome and reads like a document. The posted
+             date is deliberately not shown — it only ages a role that is still
+             open; JSON-LD carries it for Google. -->
+        <div class="vacancy-sheet">
+          <header class="article-hero vacancy-hero">
+            <div class="article-hero-meta">
+              {data.department && <span class="article-tag">{data.department}</span>}
+              <span class="article-tag article-tag--muted">{data.type}</span>
+              <span class="article-tag article-tag--muted">{data.location}</span>
+            </div>
+            <h1 class="article-hero-title">{data.title}</h1>
+            <p class="article-hero-lead">{data.shortDescription}</p>
+          </header>
 
-        <article class="article-prose">
-          <Content />
-        </article>
+          <article class="article-prose">
+            <Content />
+          </article>
+        </div>
 
         <ApplyForm
           role={data.title}
           applyLinks={data.applyLinks}
-          text="Tell us about yourself and drop a portfolio or CV link. We'll get back to you within a few business days."
+          text="Tell us about yourself and drop a portfolio or CV link. If we see a match, we get on a call fast."
         />
 
       </div>

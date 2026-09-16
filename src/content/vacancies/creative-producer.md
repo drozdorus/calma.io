@@ -62,7 +62,3 @@ be comfortable here.
 
 What matters to us isn't a polished deck — it's strong hypotheses that open new
 points of growth.
-
-## Want in?
-
-Apply below. If we see a match, we get on a call fast.

@@ -71,10 +71,3 @@ export async function getOpenVacancies() {
       b.data.datePosted.valueOf() - a.data.datePosted.valueOf()
   );
 }
-
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-/** "24 Jul 2026" — zero-padded day, same shape as the conference dates. */
-export function formatDate(d: Date): string {
-  return `${String(d.getUTCDate()).padStart(2, '0')} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
-}

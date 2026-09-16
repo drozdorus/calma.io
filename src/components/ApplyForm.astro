@@ -2,7 +2,9 @@
 // Shared application form. The hub renders it with a role dropdown (open roles
 // + "Open application"); each role page renders it with the role fixed. Posts
 // JSON to the n8n intake webhook from src/data/hiring.ts, which writes a row in
-// the Notion "Applications (website)" DB. Without a webhook the form is not
+// the Notion "Applications (website)" DB. The email address is deliberately
+// not shown next to the form (owner, 2026-09-16: one route, straight into the
+// form); it only backs the error toast. Without a webhook the form is not
 // rendered at all — a dead form is worse than an email address.
 import { applyWebhook, applyEmail, openApplicationLabel } from '../data/hiring';
 
@@ -31,10 +33,6 @@ const {
     <div class="contact-info">
       <h2 id="apply-heading">{heading}</h2>
       <p>{text}</p>
-      <div class="contact-email">
-        <span>Or email: </span>
-        <a href={`mailto:${applyEmail}`} class="text-link">{applyEmail}</a>
-      </div>
       {applyLinks.length > 0 && (
         <p class="apply-alt">
           Already have a profile there? Apply via{' '}
