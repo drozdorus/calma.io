@@ -6,8 +6,8 @@ department: Marketing
 location: Remote
 remote: true
 status: open
-datePosted: 2026-07-08
-order: 1
+datePosted: 2026-09-16
+order: 0
 ---
 
 Calma is a performance marketing company. We build and scale campaigns for the
@@ -62,3 +62,7 @@ be comfortable here.
 
 What matters to us isn't a polished deck — it's strong hypotheses that open new
 points of growth.
+
+## Want in?
+
+Apply below. If we see a match, we get on a call fast.

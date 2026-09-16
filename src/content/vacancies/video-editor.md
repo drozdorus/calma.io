@@ -5,7 +5,7 @@ type: Full-time
 department: Marketing
 location: Remote
 remote: true
-status: open
+status: closed
 datePosted: 2026-07-24
 order: 0
 ---
