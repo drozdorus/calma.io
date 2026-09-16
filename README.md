@@ -25,7 +25,11 @@ link 404s, which is what Google asks for); the file stays for the next time.
 n8n webhook in `src/data/hiring.ts` → workflow **"Calma.io Hiring | Application Intake"**
 (`yeqK7GR7QKScSmIN` on `apps`, active since 2026-09-16, CORS: calma.io + localhost:4321)
 → Notion DB **Applications (website)** (`25db583f-46d6-4e95-8241-9f0eb3dedeb5`, under
-Staff; fields Name, Email, Role, Portfolio, Message, Status). An empty webhook constant
+Staff; fields Name, Email, Role, Portfolio, Message, Status) → a Telegram post through
+**Morse** (`@calmamorsebot`, n8n credential "Morse (@calmamorsebot)") into the team group's
+**hiring** topic (chat `-1002210960589`, thread `63288`; since 2026-09-16) with role, name,
+email, portfolio, message and the Notion link. The Telegram node continues on failure, so a
+missing notification never fails the candidate's submission. An empty webhook constant
 swaps the form for the email route. Where to apply is decided only in `hiring.ts` —
 never write a contact address into a job description.
 
