@@ -82,51 +82,49 @@ const verticals = defineCollection({
   }),
 });
 
-// Open positions rendered at /hiring/. The Markdown body is the job description;
-// everything the page chrome and the JobPosting JSON-LD need lives in frontmatter.
-//
-// These files are meant to be written by an n8n sync from the Notion Vacancies DB
-// — Notion is the editing surface, this collection is the built artefact. Hand
-// edits are fine too; the sync overwrites whole files.
+// Open positions rendered at /hiring/ (hub cards) and /hiring/<slug>/ (one page
+// per role). The Markdown body is the job description; the frontmatter feeds the
+// cards, the page chrome and the JobPosting JSON-LD. Add a role = add a file,
+// close it = flip `status`. `_template.md` documents the shape and never renders.
 const vacancies = defineCollection({
-  // Underscore-prefixed files are ignored, so `_template.md` can document the
-  // shape for the n8n sync (and for anyone adding a role by hand) without ever
-  // rendering as a live posting.
+  // Underscore-prefixed files are ignored by the glob, so the template can sit
+  // next to the real postings without ever becoming one.
   loader: glob({ pattern: '[^_]*.md', base: './src/content/vacancies' }),
   schema: z.object({
-    /** Role name — used as the card title, the dropdown option and JobPosting.title */
+    /** Role name — card title, page h1, form value and JobPosting.title */
     title: z.string(),
-    /** One-liner under the card title, also JobPosting.description fallback */
+    /** One-liner under the title; also the page's meta description */
     shortDescription: z.string(),
     /** Full-time / Part-time / Contract / Internship — see employmentTypeMap */
     type: z.string().default('Full-time'),
     department: z.string().default(''),
-    /** Human-readable location badge, e.g. "Remote" */
+    /** Human-readable badge, e.g. "Remote" */
     location: z.string().default('Remote'),
     /** Drives JobPosting.jobLocationType: TELECOMMUTE */
     remote: z.boolean().default(true),
     /**
-     * Closed roles stay in the repo for history but drop off the page. Google
-     * requires expired postings to be removed, so this also pulls the JSON-LD.
+     * Closed roles stay in the repo for history but build no page and no
+     * markup — their old URL 404s, which is what Google asks for.
      */
     status: z.enum(['open', 'closed']).default('open'),
     datePosted: z.coerce.date(),
     /**
-     * Required by Google for JobPosting. A stale validThrough is worse than none
-     * — the sync should refresh it, and closed roles should flip `status`.
+     * Optional. Defaults to datePosted + defaultValidityDays in the JSON-LD.
+     * preprocess rather than z.coerce.date().optional(): with Zod 4 the
+     * coercion runs before the optional check and turns "absent" into an
+     * Invalid Date.
      */
-    validThrough: z.coerce.date(),
+    validThrough: z.preprocess(
+      (v) => (v == null || v === '' ? undefined : new Date(v as string | number | Date)),
+      z.date().optional()
+    ),
     /** lower shows first */
     order: z.number().default(0),
     /**
-     * Where else this role is posted. Offered as a secondary route next to the
-     * form: on DOU or Djinni a candidate already has a filled-in profile, so
-     * applying is one click, while our form asks them to type. Optional and
-     * per-vacancy — an empty list renders nothing.
-     *
-     * The form stays primary: it's the only route that lands in the Notion
-     * Applications DB. Anything arriving through a platform lands in that
-     * platform's own inbox, so the recruiter has to watch both.
+     * Where else this role is posted (DOU, Djinni…). Shown as a quieter second
+     * route next to the form: on those boards a candidate already has a filled
+     * profile, so applying is one click. Applications that arrive this way land
+     * in that platform's inbox, not in the Notion Applications DB.
      */
     applyLinks: z
       .array(z.object({ platform: z.string(), url: z.string().url() }))

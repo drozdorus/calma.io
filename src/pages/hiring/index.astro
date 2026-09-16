@@ -1,0 +1,106 @@
+---
+// Careers hub — /hiring/. Open roles as cards linking to their own page, the
+// team strip, and the shared apply form with an "Open application" option so
+// the page still earns its place with zero roles open. That is the normal state
+// for most of the year (we run 0–2 openings at a time), so the empty state is a
+// designed state, not an error.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import PageHero from '../../components/PageHero.astro';
+import TeamCards from '../../components/TeamCards.astro';
+import ApplyForm from '../../components/ApplyForm.astro';
+import { getOpenVacancies, hiringUrl } from '../../data/hiring';
+
+const vacancies = await getOpenVacancies();
+const open = vacancies.length;
+---
+
+<BaseLayout
+  title="Join the Team — Calma"
+  description="Open positions at Calma, a performance lead generation agency for US insurance, home services and financial verticals. Remote-first, fast decisions."
+  canonical={hiringUrl}
+  ogTitle="Join the Team — Calma"
+  ogDescription="Open positions at Calma. Performance marketing, fully remote."
+>
+  <Header />
+
+  <main id="main-content">
+    <div class="article-page">
+      <div class="container">
+
+        <Breadcrumb items={[{ label: 'Hiring' }]} />
+
+        <PageHero title="Join the Team" subtitle="Remote-first. Fast decisions. Campaigns that actually convert." />
+
+        <section aria-labelledby="open-roles">
+          <h2 class="section-title hiring-subhead" id="open-roles">Open roles</h2>
+
+          {open === 0 ? (
+            <div class="service-card vacancy-empty">
+              <p>
+                Nothing open right now. We still read every application — tell us
+                what you'd bring, and we'll come back to you when a role fits.
+              </p>
+              <a href="#apply" class="text-link">Send an open application</a>
+            </div>
+          ) : (
+            <div class="vacancy-list">
+              {vacancies.map((v) => (
+                <a href={`/hiring/${v.id}/`} class="vacancy-card">
+                  <div class="vacancy-head">
+                    <h3 class="vacancy-title">{v.data.title}</h3>
+                    <div class="vacancy-tags">
+                      {v.data.department && <span class="article-tag">{v.data.department}</span>}
+                      <span class="article-tag article-tag--muted">{v.data.type}</span>
+                      <span class="article-tag article-tag--muted">{v.data.location}</span>
+                    </div>
+                  </div>
+                  <p class="vacancy-desc">{v.data.shortDescription}</p>
+                  <span class="vacancy-read">View role</span>
+                </a>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <h2 class="section-title hiring-subhead">Who you'd work with</h2>
+        <div class="team-scroller hiring-team">
+          <div class="team-track">
+            <TeamCards />
+          </div>
+        </div>
+
+        <ApplyForm
+          roles={vacancies.map((v) => v.data.title)}
+          text={
+            open
+              ? "Pick a role or send an open application. We'll get back to you within a few business days."
+              : "Send an open application and we'll get back to you within a few business days."
+          }
+        />
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* Same centered layout as the /about/ founders row where the cards fit on
+     one or two rows; phones keep the shared .team-scroller drag-scroller,
+     which script.js already initialises for the first .team-scroller it finds. */
+  @media (min-width: 640px) {
+    .hiring-team :global(.team-track) {
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hiring-team {
+      overflow-x: visible;
+      cursor: default;
+    }
+  }
+</style>

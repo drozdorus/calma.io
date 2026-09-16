@@ -7,6 +7,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import TeamCards from '../components/TeamCards.astro';
 import SectionNav from '../components/SectionNav.astro';
 import IconSprite from '../components/IconSprite.astro';
 import ArticleCard from '../components/blog/ArticleCard.astro';
@@ -343,42 +344,7 @@ const latestPosts = (await getCollection('blog'))
 
       <div class="team-scroller">
         <div class="team-track">
-          {team.map((m, i) => (
-            <div class="team-card" style={`--card-accent: ${accentFor(i, team.length)}`}>
-              <div class="team-avatar-wrap">
-                <div class="team-avatar">
-                  <img src={`/img/team/${m.img}`} alt={m.alt} />
-                </div>
-                {(m.website || m.linkedin) && (
-                  <div class="team-links">
-                    {m.website && (
-                      <a href={m.website} class="team-link" target="_blank" rel="noopener" aria-label="Website">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                          stroke-linecap="round" stroke-linejoin="round">
-                          <circle cx="12" cy="12" r="10" />
-                          <line x1="2" y1="12" x2="22" y2="12" />
-                          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                        </svg>
-                      </a>
-                    )}
-                    {m.linkedin && (
-                      <a href={m.linkedin} class="team-link" target="_blank" rel="noopener" aria-label="LinkedIn">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                          <rect x="2" y="9" width="4" height="12" />
-                          <circle cx="4" cy="4" r="2" />
-                        </svg>
-                      </a>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div class="team-info">
-                <div class="team-name">{m.name}</div>
-                <div class="team-role">{m.role}</div>
-              </div>
-            </div>
-          ))}
+          <TeamCards />
           {/* <div class="team-card team-card--more">
             <div class="team-avatar team-avatar--empty">
               <span>more<br>soon</span>

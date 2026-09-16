@@ -6,6 +6,7 @@
 // The scroll-progress bar and mobile-menu open/close are wired in script.js.
 import { getCollection } from 'astro:content';
 import { site } from '../data/site';
+import { getOpenVacancies } from '../data/hiring';
 
 // Drive the Verticals dropdown from the content collection.
 const verticals = (await getCollection('verticals')).sort(
@@ -16,6 +17,11 @@ const path = Astro.url.pathname;
 const isVerticals = path.startsWith('/lead-generation');
 const isBlog = path.startsWith('/blog');
 const isContact = path.startsWith('/contacts');
+const isHiring = path.startsWith('/hiring');
+
+// The pulsing dot next to "Hiring" is data-driven: it only shows while a role
+// is open, so the link never advertises openings that don't exist.
+const hiringOpen = (await getOpenVacancies()).length > 0;
 ---
 
 <!-- Header -->
@@ -54,9 +60,9 @@ const isContact = path.startsWith('/contacts');
 
         <a href="/blog/" class:list={['nav-link', { active: isBlog }]}>Blog</a>
         <a href="/contacts/" class:list={['nav-link', { active: isContact }]}>Contact</a>
-        <a href={site.vacanciesUrl} target="_blank" rel="noopener" class="hiring-link">
+        <a href={site.hiring} class:list={['nav-link', 'nav-link--dot', { active: isHiring }]}>
           Hiring
-          <span class="notification-dot"></span>
+          {hiringOpen && <span class="notification-dot" aria-hidden="true"></span>}
         </a>
       </nav>
 
@@ -93,9 +99,9 @@ const isContact = path.startsWith('/contacts');
 
   <a href="/blog/" class="nav-link" onclick="closeMobileMenu()">Blog</a>
   <a href="/contacts/" class="nav-link" onclick="closeMobileMenu()">Contact</a>
-  <a href={site.vacanciesUrl} target="_blank" rel="noopener" class="hiring-link">
+  <a href={site.hiring} class:list={['nav-link', 'nav-link--dot', { active: isHiring }]} onclick="closeMobileMenu()">
     Hiring
-    <span class="notification-dot"></span>
+    {hiringOpen && <span class="notification-dot" aria-hidden="true"></span>}
   </a>
 </div>
 

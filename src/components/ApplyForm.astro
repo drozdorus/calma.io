@@ -1,0 +1,156 @@
+---
+// Shared application form. The hub renders it with a role dropdown (open roles
+// + "Open application"); each role page renders it with the role fixed. Posts
+// JSON to the n8n intake webhook from src/data/hiring.ts, which writes a row in
+// the Notion "Applications (website)" DB. Without a webhook the form is not
+// rendered at all — a dead form is worse than an email address.
+import { applyWebhook, applyEmail, openApplicationLabel } from '../data/hiring';
+
+export interface Props {
+  /** Titles of the open roles for the dropdown. Ignored when `role` is set. */
+  roles?: string[];
+  /** Fix the role (vacancy page): hidden field, no dropdown. */
+  role?: string;
+  heading?: string;
+  text?: string;
+  /** Secondary routes for a fixed role (DOU, Djinni), rendered under the copy. */
+  applyLinks?: { platform: string; url: string }[];
+}
+
+const {
+  roles = [],
+  role,
+  heading = role ? `Apply for ${role}` : 'Apply',
+  text = "Fill in the form and we'll get back to you within a few business days.",
+  applyLinks = [],
+} = Astro.props;
+---
+
+<section class="hiring-apply" id="apply" aria-labelledby="apply-heading">
+  <div class="contact-content">
+    <div class="contact-info">
+      <h2 id="apply-heading">{heading}</h2>
+      <p>{text}</p>
+      <div class="contact-email">
+        <span>Or email: </span>
+        <a href={`mailto:${applyEmail}`} class="text-link">{applyEmail}</a>
+      </div>
+      {applyLinks.length > 0 && (
+        <p class="apply-alt">
+          Already have a profile there? Apply via{' '}
+          {applyLinks.map((l, n) => (
+            <>
+              {n > 0 && ' or '}
+              <a href={l.url} class="text-link" target="_blank" rel="noopener">{l.platform}</a>
+            </>
+          ))}.
+        </p>
+      )}
+    </div>
+
+    {applyWebhook ? (
+      <form class="contact-form" id="hiringForm" data-webhook={applyWebhook} data-email={applyEmail} novalidate>
+        <!-- Honeypot — bots fill it, humans never see it -->
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <div class="form-group">
+          <input type="text" name="name" placeholder="Your Name" autocomplete="name" required />
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Your Email" autocomplete="email" required />
+        </div>
+        {role ? (
+          <input type="hidden" name="role" value={role} />
+        ) : (
+          <div class="form-group">
+            <select name="role" required aria-label="Position">
+              <option value="" disabled selected>Position you're applying for</option>
+              {roles.map((r) => <option value={r}>{r}</option>)}
+              <option value={openApplicationLabel}>{openApplicationLabel}</option>
+            </select>
+          </div>
+        )}
+        <div class="form-group">
+          <input type="url" name="portfolio" placeholder="Portfolio / LinkedIn / CV link" />
+        </div>
+        <div class="form-group">
+          <textarea name="message" placeholder="Tell us about yourself and why Calma" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary submit-button">Send Application</button>
+      </form>
+    ) : (
+      <div class="contact-form apply-email-only">
+        <p>
+          Send your CV and a few lines about yourself to{' '}
+          <a href={`mailto:${applyEmail}`} class="text-link">{applyEmail}</a>
+          {role ? ` with "${role}" in the subject.` : '.'}
+        </p>
+      </div>
+    )}
+  </div>
+</section>
+
+<script>
+  // Posts the form as JSON to the intake webhook. The fallback address arrives
+  // through a data attribute so the contact lives in exactly one place
+  // (src/data/hiring.ts) even inside this client script.
+  const form = document.getElementById('hiringForm') as HTMLFormElement | null;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const notify = (window as any).showNotification as
+      | ((message: string, type?: string) => void)
+      | undefined;
+    const data = new FormData(form);
+    const button = form.querySelector<HTMLButtonElement>('.submit-button')!;
+    const fallback = form.dataset.email ?? '';
+    const sent = "Application sent! We'll be in touch soon.";
+
+    // Honeypot hit: pretend it worked, send nothing.
+    if (data.get('_gotcha')) {
+      form.reset();
+      notify?.(sent, 'success');
+      return;
+    }
+
+    const field = (name: string) => String(data.get(name) ?? '').trim();
+    const payload = {
+      name: field('name'),
+      email: field('email'),
+      role: field('role'),
+      portfolio: field('portfolio'),
+      message: field('message'),
+    };
+
+    if (!payload.name || !payload.email || !payload.role || !payload.message) {
+      notify?.('Please fill in all required fields', 'error');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+      notify?.('Please enter a valid email', 'error');
+      return;
+    }
+
+    button.textContent = 'Sending...';
+    button.disabled = true;
+
+    try {
+      const res = await fetch(form.dataset.webhook!, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      // n8n answers 200 even when the workflow fails downstream (the Notion
+      // write, say) — only the Respond node sends { ok: true }, so that is
+      // the success signal, not the status code.
+      const body = res.ok ? await res.json().catch(() => null) : null;
+      if (!body?.ok) throw new Error(String(res.status));
+      notify?.(sent, 'success');
+      form.reset();
+    } catch {
+      notify?.(`Something went wrong. Please try again or email ${fallback}`, 'error');
+    } finally {
+      button.textContent = 'Send Application';
+      button.disabled = false;
+    }
+  });
+</script>

@@ -1,0 +1,13 @@
+# TODO
+
+Backlog for calma.io. Closed items get checked off with the date, not deleted.
+
+## Hiring
+
+- [ ] **Owner, blocks the merge:** share the Notion DB "Applications (website)" with the `n8n` integration (open the DB → ••• → Connections → n8n). The intake workflow is active but its Notion write fails with "Could not find database … make sure it is shared with your integration" (execution 101990, 2026-09-16). Then re-run the smoke test: `curl -X POST https://nnnnnnnn.calma.ad/webhook/calma-hiring-apply -H 'Content-Type: application/json' -d '{"name":"TEST","email":"t@example.com","role":"Open application","message":"test"}'` must return `{ "ok": true }` and a row must appear in the DB.
+- [ ] Alert on intake failures: n8n has no error workflow yet, so a failing Notion write is visible only to the candidate (the form now treats anything but `{ ok: true }` as an error and shows the email route). Add an Error Trigger workflow posting to the owner's DM through Morse (`@calmamorsebot`, token in team vault `Dev`) and set it as the intake workflow's error workflow.
+- [ ] Unpublish the public Notion page "Open Vacancies" (`169f120c65df806bba68fc5163bcfa52`, under Staff) once the current round closes. It is indexed and competes with `/hiring/` for the same queries, and it still advertises the old apply routes (Google Form via an `/edit` link, `info@`, a Telegram handle). Nothing on the site links to it since the hiring page shipped.
+- [ ] Delete the Notion "Vacancies (website)" DB (`481ef85f-ed6f-42e6-87af-b9049779913a`). It was created for a Notion → repo n8n sync that was never built; the repo is the source of truth for vacancies now and nothing reads that DB.
+- [ ] Ukrainian version of the hiring pages — decision pending (2026-09-16). If it happens: hiring-only (`/uk/hiring/`, `/uk/hiring/<slug>/`), same templates with a strings map, `hreflang` pairs with `x-default` = EN, never a site-wide i18n.
+- [ ] After the first deploy: Google Search Console → Enhancements → Job postings. Both role pages carry JobPosting JSON-LD; confirm they validate and note any warnings here.
+- [ ] Refactor candidate: `/about/` founders row still hand-writes its team-card markup (it renders buttons, not the shared `TeamCards`). Fold it in if the founders row and the roster ever need to change together.

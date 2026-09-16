@@ -7,7 +7,6 @@ location: Remote
 remote: true
 status: open
 datePosted: 2026-07-24
-validThrough: 2026-10-22
 order: 0
 ---
 

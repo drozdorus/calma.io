@@ -13,7 +13,7 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 - **Team**: ~10 members
 - **Target market**: US (primary)
 - **Contact**: info@calma.io · [LinkedIn](https://www.linkedin.com/company/calma-io/)
-- **Careers**: Managed in Notion — [Open Vacancies](https://calma-io.notion.site/Open-Vacancies-Calma-Agency-169f120c65df806bba68fc5163bcfa52)
+- **Careers**: `/hiring/` hub + `/hiring/<slug>/` per open role; vacancies are Markdown in `src/content/vacancies/`, applications go form → n8n → Notion (runbook in README → Hiring)
 
 > **Positioning note:** we no longer frame the brand around "regulated verticals."
 > The portfolio includes home services (home improvement), which isn't regulated.
@@ -49,12 +49,16 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 | `src/pages/blog/[...slug].astro` / `blog/index.astro` | Article template + `/blog/` library index (`ArticleCard` + `cardCovers`) |
 | `src/pages/lead-generation/[...slug].astro` / `index.astro` | Per-vertical "what we do" pages + the hub (mirrors homepage "What We Do" groups) |
 | `src/pages/contacts.astro` | Contact page (Formspree form + email + careers) — moved off the homepage |
+| `src/pages/hiring/index.astro` / `hiring/[slug].astro` | Careers hub (role cards, team strip, apply form with an "Open application" option — designed for 0–2 open roles) + one page per open role (article scaffold, JobPosting JSON-LD, form with the role fixed) |
+| `src/components/ApplyForm.astro` · `TeamCards.astro` | Shared apply form (posts JSON to the n8n intake webhook; renders the email route if the webhook is empty) · the team roster cards used by the homepage and `/hiring/` |
+| `src/content/vacancies/<slug>.md` · `_template.md` | Open positions — Markdown + frontmatter; `_template.md` documents the shape and never renders |
+| `src/data/hiring.ts` | Apply webhook, fallback email, JobPosting org/location, `getOpenVacancies()` — the one place that decides where applications go |
 | `src/pages/privacy.astro` | Privacy Policy |
 | `src/content/blog/<slug>.md` · `src/content/verticals/<slug>.md` | Articles (3) + vertical pages (4) — Markdown + frontmatter |
-| `src/content.config.ts` | `blog` + `verticals` collection schemas |
+| `src/content.config.ts` | `blog` + `verticals` + `vacancies` collection schemas |
 | `src/components/IconSprite.astro` | Shared hidden SVG icon sprite (homepage + hub) |
 | `src/components/Breadcrumb.astro` · `PageHero.astro` · `CtaBand.astro` | Shared inner-page scaffold: breadcrumb nav, centered h1+subtitle hero, "Ready to generate leads?" glass band (+ global `.btn-primary`) |
-| `src/data/site.ts` | Sitewide constants: contact email, vacancies URL, LinkedIn/Crunchbase |
+| `src/data/site.ts` | Sitewide constants: contact email, careers path (`/hiring/`), LinkedIn/Crunchbase |
 | `src/styles/style.css` | **The** stylesheet — design system, sections, blog/inner-page scaffold, team (blog.css/team.css merged in 2026-08-25) |
 | `src/scripts/script.js` | **The** script — wave canvas, island header, scroll-spy, drag scrollers (events/team), FAQ, form |
 | `public/` | `img/`, `fonts/`, `CNAME`, `.nojekyll`, `robots.txt`, favicons |
@@ -68,8 +72,9 @@ Navigation is **split by purpose** (rebuilt 2026-06-02, Flighty-style):
 
 - **Top header = pages** (`Header.astro`): logo · **Verticals ▾** (glass dropdown → 4
   vertical pages + "All verticals" hub) · **Blog** (`/blog/`) · **Contact** (`/contacts/`)
-  · **Hiring** pill (Notion). Active state is **pathname-based** (Verticals on
-  `/lead-generation/*`, Blog on `/blog/*`, Contact on `/contacts/*`). On mobile the nav
+  · **Hiring** (`/hiring/`; a pulsing dot next to it renders only while a role is open).
+  Active state is **pathname-based** (Verticals on `/lead-generation/*`, Blog on `/blog/*`,
+  Contact on `/contacts/*`, Hiring on `/hiring/*`). On mobile the nav
   collapses to a burger → full-screen page menu (Verticals + 4 sub-pages, Blog, Contact, Hiring).
 - **Floating bottom pill = homepage sections** (`SectionNav.astro`, homepage only): a glass
   pill that jumps between homepage sections and highlights the active one on scroll
@@ -129,8 +134,8 @@ Audience Intelligence · Automated Optimization · Lead Verification
   the link: shared `.text-link` = amber→mint, **underlined** (matches `.article-prose a`);
   use this, don't invent per-block link styles. (2) **card links** — the whole card is the
   link: no underline/arrow, the card's hover-lift is the affordance (blog, related, event,
-  hub-vertical cards). Plus **buttons** (Hiring pill, the homepage CTA-band button) for
-  prominent CTAs. Underline therefore = "link inside text"; no stray arrows.
+  hub-vertical cards, vacancy cards). Plus **buttons** (`.btn-primary`: CTA bands, form
+  submits) for prominent CTAs. Underline therefore = "link inside text"; no stray arrows.
 
 ### Key interactions
 
@@ -210,6 +215,6 @@ Collapsed the link zoo to two affordances (text-link underline / card-link card)
 |---------|---------|
 | Formspree | Contact form (`/f/xzzgddjo`) |
 | LinkedIn | Company page (header? no — footer + JSON-LD `sameAs`) |
-| Notion | Careers / open vacancies (external) |
+| n8n → Notion | Apply form on `/hiring/` → workflow "Calma.io Hiring \| Application Intake" on `apps` → Notion DB "Applications (website)" |
 | GitHub Pages | Hosting & deploy — source = GitHub Actions (`astro build` on push to `main`) |
 </content>

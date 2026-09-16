@@ -1,0 +1,119 @@
+---
+// One page per open role — /hiring/<slug>/. This is the URL that goes on job
+// boards and in Telegram posts, and the page Google reads for the JobPosting
+// markup (it wants the markup on the role's own page, not on a listing).
+// Closed roles build nothing: their old URL 404s, which is what Google asks
+// for once a posting expires.
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import ApplyForm from '../../components/ApplyForm.astro';
+import {
+  getOpenVacancies,
+  formatDate,
+  organization,
+  defaultJobLocation,
+  defaultValidityDays,
+  employmentTypeMap,
+} from '../../data/hiring';
+
+export async function getStaticPaths() {
+  const vacancies = await getOpenVacancies();
+  return vacancies.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const canonical = `https://calma.io/hiring/${entry.id}/`;
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+const validThrough =
+  data.validThrough ?? new Date(data.datePosted.valueOf() + defaultValidityDays * 86_400_000);
+// Past validThrough the page stays up (the role is still open until someone
+// closes it) but the markup goes: Google flags expired postings as errors.
+const listed = validThrough.valueOf() >= Date.now();
+
+// Google wants the full description. The Markdown body flattened to text is
+// honest and enough — headings and bullets read fine as plain lines.
+const descriptionText = (entry.body ?? '')
+  .replace(/^#+\s*/gm, '')
+  .replace(/\*\*/g, '')
+  .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+  .replace(/\n{3,}/g, '\n\n')
+  .trim();
+
+const jobPosting = {
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title: data.title,
+  description: descriptionText,
+  datePosted: iso(data.datePosted),
+  validThrough: iso(validThrough),
+  employmentType: employmentTypeMap[data.type] ?? 'FULL_TIME',
+  hiringOrganization: {
+    '@type': 'Organization',
+    name: organization.name,
+    sameAs: organization.url,
+    logo: organization.logo,
+  },
+  jobLocation: {
+    '@type': 'Place',
+    address: { '@type': 'PostalAddress', ...defaultJobLocation },
+  },
+  ...(data.remote ? { jobLocationType: 'TELECOMMUTE' } : {}),
+  directApply: true,
+  url: canonical,
+};
+---
+
+<BaseLayout
+  title={`${data.title} — Calma`}
+  description={data.shortDescription}
+  canonical={canonical}
+  ogTitle={`${data.title} at Calma`}
+  ogDescription={data.shortDescription}
+>
+  <Fragment slot="head">
+    {listed && <script type="application/ld+json" set:html={JSON.stringify(jobPosting)} />}
+  </Fragment>
+
+  <Header />
+
+  <main id="main-content">
+    <div class="article-page">
+      <div class="container">
+
+        <Breadcrumb items={[{ label: 'Hiring', href: '/hiring/' }, { label: data.title }]} />
+
+        <header class="article-hero vacancy-hero">
+          <div class="article-hero-meta">
+            {data.department && <span class="article-tag">{data.department}</span>}
+            <span class="article-tag article-tag--muted">{data.type}</span>
+            <span class="article-tag article-tag--muted">{data.location}</span>
+            <time class="article-read-time" datetime={iso(data.datePosted)}>
+              Posted {formatDate(data.datePosted)}
+            </time>
+          </div>
+          <h1 class="article-hero-title">{data.title}</h1>
+          <p class="article-hero-lead">{data.shortDescription}</p>
+        </header>
+
+        <article class="article-prose">
+          <Content />
+        </article>
+
+        <ApplyForm
+          role={data.title}
+          applyLinks={data.applyLinks}
+          text="Tell us about yourself and drop a portfolio or CV link. We'll get back to you within a few business days."
+        />
+
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

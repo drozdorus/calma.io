@@ -7,12 +7,11 @@ location: Remote
 remote: true
 status: open
 datePosted: 2026-01-01
-validThrough: 2026-12-31
 order: 0
 # Optional. Where else this role is posted — shown as a quieter second route
-# under the apply button, for candidates who already have a profile there.
-# Omit or leave empty and nothing renders. Note that applications arriving this
-# way land in the platform's inbox, not in the Notion Applications DB.
+# next to the form, for candidates who already have a profile there. Omit and
+# nothing renders. Applications arriving this way land in the platform's inbox,
+# not in the Notion Applications DB.
 applyLinks:
   - platform: DOU
     url: https://jobs.dou.ua/companies/example/vacancies/
@@ -20,18 +19,26 @@ applyLinks:
     url: https://djinni.co/jobs/example/
 ---
 
-Underscore-prefixed files never render — this one exists to document the shape.
-The n8n sync writes real postings here as `<slug>.md`; the body below is the job
-description and accepts ordinary Markdown (headings, lists, bold, links).
+Underscore-prefixed files never render — this one documents the shape.
 
-Two rules that matter beyond formatting:
+**To open a role:** copy this file to `<slug>.md` (the slug becomes the URL,
+`/hiring/<slug>/`), fill in the frontmatter, write the body in ordinary
+Markdown, push to `main`. The card, the page, the form option, the nav dot and
+the JobPosting markup all follow from the file.
+
+**To close a role:** set `status: closed` and push. The page and its markup
+disappear; the file stays for history and for the next time we hire the role.
+
+Three rules that matter beyond formatting:
 
 1. **Never put a contact address in here.** Where to apply is decided by
-   `src/data/hiring.ts`, so it can be changed in one place. A job description
-   says what the role is, nothing about how to reach us.
-2. **Keep `validThrough` ahead of today and flip `status` to `closed` when the
-   role is filled.** Google requires expired postings to disappear; `closed`
-   pulls both the card and its JobPosting JSON-LD.
+   `src/data/hiring.ts`, so it can change in one place. A job description says
+   what the role is, nothing about how to reach us.
+2. **`datePosted` is the day it went live.** Google lists the posting for 90
+   days from it (`validThrough` is optional and overrides that). A role still
+   open after 90 days is a re-post: bump `datePosted`, don't let it expire.
+3. **The body is the whole story.** Google reads it as the job description, so
+   write it for the candidate, not as a teaser for the "real" posting elsewhere.
 
 ## What you'll do
 

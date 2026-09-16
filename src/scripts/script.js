@@ -324,6 +324,8 @@ function closeMenu() {
 }
 
 window.closeMobileMenu = closeMenu;
+// Page scripts (the hiring apply form) reuse the same toast.
+window.showNotification = showNotification;
 
 document.getElementById('mobileMenuBtn')?.addEventListener('click', toggleMenu);
 document.getElementById('mobileMenuClose')?.addEventListener('click', closeMenu);
