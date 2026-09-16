@@ -1,10 +1,8 @@
 ---
-// Homepage — pixel-for-pixel port of the legacy index.html. All 9 sections
-// (Hero, About, Verticals, Team, Events, Blog teaser, FAQ, Contact, Footer).
-// Loads blog.css + team.css + team.js (homepage uses all three); bodyId="top".
-// Footer gets home={true} so its section links render as bare `#anchor`,
-// which is what script.js's smooth-scroll (`a[href^="#"]`) matches. The header
-// is page-level only now (no section anchors), so it takes no `home` prop.
+// Homepage — all main sections in one page: Hero, About, Verticals, Team,
+// Events, Blog teaser, FAQ, CTA band. bodyId="top" is the anchor the footer
+// logo (/#top) targets. Section navigation lives in the floating SectionNav
+// pill; the header carries page-level links only.
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
@@ -12,6 +10,7 @@ import Footer from '../components/Footer.astro';
 import SectionNav from '../components/SectionNav.astro';
 import IconSprite from '../components/IconSprite.astro';
 import ArticleCard from '../components/blog/ArticleCard.astro';
+import CtaBand from '../components/CtaBand.astro';
 import { events, formatUpcomingDate, formatPastDate } from '../data/events';
 import { team, accentFor } from '../data/team';
 
@@ -25,7 +24,7 @@ const faqs = [
   },
   {
     q: 'Which verticals do you work with?',
-    a: 'We generate leads across six main verticals: auto insurance, home insurance, health insurance, legal services, home improvement, and financial services (HELOC, credit, lending, personal finance).',
+    a: 'We generate leads across five main verticals: auto insurance, home insurance, health insurance, home improvement, and financial services (HELOC, credit, lending, personal finance).',
   },
   {
     q: 'How does performance-based lead generation work?',
@@ -96,17 +95,13 @@ const latestPosts = (await getCollection('blog'))
 
 <BaseLayout
   title="Calma — Performance Lead Generation Agency"
-  description="Calma is a performance lead generation publisher specializing in insurance, legal, financial, and home improvement verticals. Compliance-first, AI-optimized lead acquisition."
+  description="Calma is a performance lead generation publisher specializing in insurance, financial, and home improvement verticals. Compliance-first, AI-optimized lead acquisition."
   canonical="https://calma.io/"
-  keywords="lead generation, lead gen agency, performance lead generation, insurance lead generation, auto insurance leads, home insurance leads, health insurance leads, legal leads, financial services leads, home improvement leads, compliance lead generation, AI lead generation, performance marketing agency, calma, calma agency, calma io, calma marketing, calma lead gen"
   ogTitle="Calma — Performance Lead Generation Agency"
-  ogDescription="Compliance-first, AI-optimized lead acquisition for insurance, legal, financial, and home improvement verticals."
+  ogDescription="Compliance-first, AI-optimized lead acquisition for insurance, financial, and home improvement verticals."
   ogImage="https://calma.io/img/metaimg.png"
   twitterTitle="Calma — Performance Lead Generation Agency"
-  twitterDescription="Compliance-first, AI-optimized lead acquisition for insurance, legal, financial, and home improvement verticals."
-  useBlogCss={true}
-  useTeamCss={true}
-  useTeamScript={true}
+  twitterDescription="Compliance-first, AI-optimized lead acquisition for insurance, financial, and home improvement verticals."
   bodyId="top"
 >
   <Fragment slot="head">
@@ -124,7 +119,7 @@ const latestPosts = (await getCollection('blog'))
             "url": "https://calma.io/img/logo.svg"
           },
           "image": "https://calma.io/img/metaimg.png",
-          "description": "Calma is a performance lead generation publisher specializing in compliance-first, AI-optimized lead acquisition across auto insurance, home insurance, health insurance, legal services, home improvement, and financial services verticals.",
+          "description": "Calma is a performance lead generation publisher specializing in compliance-first, AI-optimized lead acquisition across auto insurance, home insurance, health insurance, home improvement, and financial services verticals.",
           "email": "info@calma.io",
           "areaServed": "United States",
           "contactPoint": {
@@ -136,7 +131,7 @@ const latestPosts = (await getCollection('blog'))
             "https://www.linkedin.com/company/calma-io/",
             "https://www.crunchbase.com/organization/calma-b99b"
           ],
-          "founder": { "@id": "https://calma.io/#founder" },
+          "founder": { "@id": "https://drozdorus.com/#person" },
           "knowsAbout": [
             "Lead Generation",
             "Performance Marketing",
@@ -154,7 +149,6 @@ const latestPosts = (await getCollection('blog'))
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Auto Insurance Lead Generation" } },
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Home Insurance Lead Generation" } },
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Health Insurance Lead Generation" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Legal Services Lead Generation" } },
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Home Improvement Lead Generation" } },
               { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Financial Services Lead Generation" } }
             ]
@@ -162,7 +156,7 @@ const latestPosts = (await getCollection('blog'))
         },
         {
           "@type": "Person",
-          "@id": "https://calma.io/#founder",
+          "@id": "https://drozdorus.com/#person",
           "name": "Ruslan Drozdov",
           "jobTitle": "Founder",
           "url": "https://drozdorus.com",
@@ -180,7 +174,7 @@ const latestPosts = (await getCollection('blog'))
           "name": "Calma",
           "url": "https://calma.io",
           "publisher": { "@id": "https://calma.io/#organization" },
-          "description": "Performance lead generation publisher for insurance, legal, financial, and home improvement verticals"
+          "description": "Performance lead generation publisher for insurance, financial, and home improvement verticals"
         },
         ...eventsJsonLd,
         {
@@ -264,22 +258,10 @@ const latestPosts = (await getCollection('blog'))
         <h3 class="traffic-sources-title">Acquisition Channels</h3>
         <p class="traffic-sources-desc">We deploy performance across major acquisition channels with compliance-first
           creative and measurement</p>
-        <div class="traffic-sources-grid">
-          <div class="traffic-source">
-            <div class="traffic-source-logo">
-              <img src="/img/meta.svg" alt="Meta">
-            </div>
-          </div>
-          <div class="traffic-source">
-            <div class="traffic-source-logo">
-              <img src="/img/google.svg" alt="Google Ads">
-            </div>
-          </div>
-          <div class="traffic-source">
-            <div class="traffic-source-logo">
-              <img src="/img/tt.svg" alt="TikTok Ads">
-            </div>
-          </div>
+        <div class="traffic-logos">
+          <img src="/img/meta.svg" alt="Meta">
+          <img src="/img/google.svg" alt="Google Ads">
+          <img src="/img/tt.svg" alt="TikTok Ads">
         </div>
       </div>
     </div>
@@ -446,16 +428,14 @@ const latestPosts = (await getCollection('blog'))
       <!-- Past Events -->
       <div class="past-events-section">
         <h3 class="events-section-title">Past Events</h3>
-        <div class="past-events-scroller">
-          <div class="past-events-track">
-            {pastEvents.map((e) => (
-              <div class="past-conference-card">
-                <time class="past-conference-date" datetime={e.end.slice(0, 7)}>{formatPastDate(e)}</time>
-                <h4 class="past-conference-name">{e.name}</h4>
-                <p class="past-conference-location">{e.location}</p>
-              </div>
-            ))}
-          </div>
+        <div class="past-events-cloud">
+          {pastEvents.map((e) => (
+            <div class="past-conference-card">
+              <time class="past-conference-date" datetime={e.end.slice(0, 7)}>{formatPastDate(e)}</time>
+              <h4 class="past-conference-name">{e.name}</h4>
+              <p class="past-conference-location">{e.location}</p>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -498,11 +478,7 @@ const latestPosts = (await getCollection('blog'))
   <!-- CTA band -->
   <section class="section" aria-label="Get in touch">
     <div class="container">
-      <div class="home-cta">
-        <h2 class="home-cta-heading">Ready to generate leads?</h2>
-        <p class="home-cta-text">Tell us about your vertical and volume goals — we'll show you how our acquisition system fits.</p>
-        <a href="/contacts/" class="vertical-cta-btn">Get in touch</a>
-      </div>
+      <CtaBand />
     </div>
   </section>
 
@@ -510,5 +486,5 @@ const latestPosts = (await getCollection('blog'))
 
   <SectionNav />
 
-  <Footer home={true} />
+  <Footer />
 </BaseLayout>

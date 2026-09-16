@@ -1,0 +1,25 @@
+---
+// Shared page hero — title + optional subtitle, centered under the breadcrumb.
+// Bottom margin is 0: .section-subtitle already carries a global 64px
+// bottom margin, so the effective gap to the next block is the same whether
+// or not this wrapper adds its own — verified pixel-identical against the
+// four hero variants this replaces (.about-hero, .privacy-hero, .vhub-hero,
+// .blog-index-hero).
+export interface Props {
+  title: string;
+  subtitle?: string;
+}
+const { title, subtitle } = Astro.props;
+---
+
+<header class="page-hero">
+  <h1 class="section-title">{title}</h1>
+  {subtitle && <p class="section-subtitle">{subtitle}</p>}
+</header>
+
+<style>
+  .page-hero {
+    margin: 1.75rem 0 0;
+    text-align: center;
+  }
+</style>

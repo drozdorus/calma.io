@@ -2,11 +2,13 @@
 // Contact page — the "Get In Touch" content moved verbatim off the homepage
 // (#contact). Keeps the same markup/classes/ids so the global script.js form
 // handler (getElementById('contactForm') + Formspree submit) keeps working,
-// and the shared .contact-* styles in style.css still apply. useBlogCss loads
-// the breadcrumb + .article-page shell.
+// and the shared .contact-* styles in style.css still apply.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
 ---
 
 <BaseLayout
@@ -15,7 +17,6 @@ import Footer from '../components/Footer.astro';
   canonical="https://calma.io/contacts/"
   ogTitle="Contact — Calma"
   ogDescription="Get in touch with Calma — performance lead generation for insurance, home services, and financial verticals."
-  useBlogCss={true}
 >
   <Header />
 
@@ -23,24 +24,23 @@ import Footer from '../components/Footer.astro';
     <div class="article-page">
       <div class="container">
 
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a href="/">calma.io</a>
-          <span class="breadcrumb-sep">/</span>
-          <span class="breadcrumb-current">Contact</span>
-        </nav>
+        <Breadcrumb items={[{ label: 'Contact' }]} />
 
-        <section class="section contact" aria-label="Contact Us">
-          <h1 class="section-title">Get In Touch</h1>
+        <PageHero title="Get In Touch" />
+
+        <section class="contact" aria-label="Contact Us">
           <div class="contact-content">
             <div class="contact-info">
               <h2>Ready to generate quality leads?</h2>
               <p>Let's discuss how we can help grow your business.</p>
               <div class="contact-email">
                 <span>Email us: </span>
-                <a href="mailto:info@calma.io">info@calma.io</a>
+                <a href={`mailto:${site.email}`} class="text-link">{site.email}</a>
               </div>
               <div class="careers-link">
-                <p>Want to work with us? <a href="/hiring/" class="careers-link-text">Check out our open positions</a></p>
+                <p>Want to work with us? <a
+                    href={site.vacanciesUrl}
+                    target="_blank" rel="noopener" class="text-link">Check out our open positions</a></p>
               </div>
             </div>
 
@@ -59,7 +59,7 @@ import Footer from '../components/Footer.astro';
               <div class="form-group">
                 <textarea id="message" name="message" placeholder="Tell us about your project" rows="4" required></textarea>
               </div>
-              <button type="submit" class="submit-button">Send Message</button>
+              <button type="submit" class="btn-primary submit-button">Send Message</button>
             </form>
           </div>
         </section>

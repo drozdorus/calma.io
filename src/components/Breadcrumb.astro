@@ -1,0 +1,19 @@
+---
+// Shared breadcrumb nav — used by every inner page. The leading "calma.io" → "/"
+// crumb is built in; pass the rest via `items` (last item with no `href` renders
+// as the current page). Markup/classes match style.css's .breadcrumb rules exactly.
+export interface Props {
+  items: { label: string; href?: string }[];
+}
+const { items } = Astro.props;
+---
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">calma.io</a>
+  {items.map((item) => (
+    <>
+      <span class="breadcrumb-sep">/</span>
+      {item.href ? <a href={item.href}>{item.label}</a> : <span class="breadcrumb-current">{item.label}</span>}
+    </>
+  ))}
+</nav>

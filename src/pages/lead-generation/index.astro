@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import IconSprite from '../../components/IconSprite.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import PageHero from '../../components/PageHero.astro';
 
 // Mirrors the homepage "What We Do" block. A link exists wherever there is a
 // dedicated page: sub-niches for insurance (auto, home), the group itself for
@@ -39,7 +41,6 @@ const groups = [
   canonical="https://calma.io/lead-generation/"
   ogTitle="Lead Generation by Vertical"
   ogDescription="The verticals Calma generates, qualifies, and delivers leads for."
-  useBlogCss={true}
 >
   <IconSprite />
   <Header />
@@ -48,16 +49,9 @@ const groups = [
     <div class="article-page">
       <div class="container">
 
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a href="/">calma.io</a>
-          <span class="breadcrumb-sep">/</span>
-          <span class="breadcrumb-current">Lead Generation</span>
-        </nav>
+        <Breadcrumb items={[{ label: 'Lead Generation' }]} />
 
-        <header class="vhub-hero">
-          <h1 class="section-title">Lead Generation by Vertical</h1>
-          <p class="section-subtitle">The verticals we generate, qualify, and deliver leads for</p>
-        </header>
+        <PageHero title="Lead Generation by Vertical" subtitle="The verticals we generate, qualify, and deliver leads for" />
 
         <div class="services-grid vhub-grid">
           {groups.map((g) => (
@@ -104,16 +98,6 @@ const groups = [
 </BaseLayout>
 
 <style>
-  .vhub-hero {
-    margin: 1.75rem 0 2.5rem;
-    text-align: center;
-  }
-  /* .service-card defaults to opacity:0 until inside a scroll-observed
-     .section.visible on the homepage — force visible on this static page. */
-  .vhub-grid :global(.service-card) {
-    opacity: 1;
-    transform: none;
-  }
   /* Linked items use the shared .text-link accent style. */
   .vhub-outro {
     max-width: 680px;

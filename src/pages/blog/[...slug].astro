@@ -2,7 +2,7 @@
 // Article template — renders every entry in the `blog` content collection at
 // /blog/<slug>/, pixel-for-pixel with the legacy blog/<slug>/index.html pages.
 // Prose comes from the Markdown body, wrapped in <article class="article-prose">
-// so blog.css's `.article-prose *` rules apply. The FAQ <details> block and the
+// so the shared `.article-prose *` rules apply. The FAQ <details> block and the
 // "More from Calma" related cards are generated from frontmatter (faq[]/related[]),
 // and the FAQPage + Article JSON-LD are emitted into BaseLayout's head slot.
 import { getCollection, render } from 'astro:content';
@@ -79,7 +79,6 @@ const articleJsonLd = {
   ogImage={data.ogImage}
   twitterTitle={data.ogTitle}
   twitterDescription={data.twitterDescription ?? data.ogDescription}
-  useBlogCss={true}
 >
   <Fragment slot="head">
     {data.faq && data.faq.length > 0 && (

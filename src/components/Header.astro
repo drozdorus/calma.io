@@ -5,6 +5,7 @@
 // Active state is pathname-based (server-side) via `Astro.url.pathname`.
 // The scroll-progress bar and mobile-menu open/close are wired in script.js.
 import { getCollection } from 'astro:content';
+import { site } from '../data/site';
 
 // Drive the Verticals dropdown from the content collection.
 const verticals = (await getCollection('verticals')).sort(
@@ -15,7 +16,6 @@ const path = Astro.url.pathname;
 const isVerticals = path.startsWith('/lead-generation');
 const isBlog = path.startsWith('/blog');
 const isContact = path.startsWith('/contacts');
-const isHiring = path.startsWith('/hiring');
 ---
 
 <!-- Header -->
@@ -54,9 +54,9 @@ const isHiring = path.startsWith('/hiring');
 
         <a href="/blog/" class:list={['nav-link', { active: isBlog }]}>Blog</a>
         <a href="/contacts/" class:list={['nav-link', { active: isContact }]}>Contact</a>
-        <a href="/hiring/" class:list={['nav-link', 'nav-link--dot', { active: isHiring }]}>
+        <a href={site.vacanciesUrl} target="_blank" rel="noopener" class="hiring-link">
           Hiring
-          <span class="notification-dot" aria-hidden="true"></span>
+          <span class="notification-dot"></span>
         </a>
       </nav>
 
@@ -93,9 +93,9 @@ const isHiring = path.startsWith('/hiring');
 
   <a href="/blog/" class="nav-link" onclick="closeMobileMenu()">Blog</a>
   <a href="/contacts/" class="nav-link" onclick="closeMobileMenu()">Contact</a>
-  <a href="/hiring/" class:list={['nav-link', 'nav-link--dot', { active: isHiring }]} onclick="closeMobileMenu()">
+  <a href={site.vacanciesUrl} target="_blank" rel="noopener" class="hiring-link">
     Hiring
-    <span class="notification-dot" aria-hidden="true"></span>
+    <span class="notification-dot"></span>
   </a>
 </div>
 

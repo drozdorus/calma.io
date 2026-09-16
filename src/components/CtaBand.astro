@@ -1,0 +1,29 @@
+---
+// Shared "Ready to generate leads?" glass band — one implementation for the
+// homepage, /about/, and the vertical pages, which each used to redeclare the
+// same band (and the vertical copy referenced a --border variable that never
+// existed, so its frame silently didn't render). Styles are global
+// (.cta-band / .btn-primary in style.css) so the band stays identical
+// everywhere; pass `class` for margin context (.cta-band--flow when the band
+// follows page content instead of sitting in its own padded section).
+export interface Props {
+  heading?: string;
+  text?: string;
+  href?: string;
+  label?: string;
+  class?: string;
+}
+const {
+  heading = 'Ready to generate leads?',
+  text = "Tell us about your vertical and volume goals — we'll show you how our acquisition system fits.",
+  href = '/contacts/',
+  label = 'Get in touch',
+  class: className,
+} = Astro.props;
+---
+
+<section class:list={['cta-band', className]}>
+  <h2 class="cta-band-heading">{heading}</h2>
+  <p class="cta-band-text">{text}</p>
+  <a href={href} class="btn-primary">{label}</a>
+</section>

@@ -42,12 +42,12 @@
   /* Colors */
   --primary: #E8B547;
   --secondary: #3DD68C;
-  --bg: #0a0a0a;
-  --surface: rgba(255, 255, 255, 0.03);
-  --surface-hover: rgba(255, 255, 255, 0.08);
-  --text: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-muted: rgba(255, 255, 255, 0.5);
+  --bg: #0c0a08;
+  --surface: rgba(246, 243, 236, 0.03);
+  --surface-hover: rgba(246, 243, 236, 0.08);
+  --text: #f6f3ec;
+  --text-secondary: rgba(246, 243, 236, 0.7);
+  --text-muted: rgba(246, 243, 236, 0.5);
   
   /* Spacing */
   --space-xs: 8px;
@@ -60,6 +60,10 @@
   /* Typography */
   --font-body: 'Geologica', sans-serif;
   --font-heading: 'Geologica', sans-serif;
+  /* System mono stack for micro-labels — zero bytes. Menlo-first on purpose:
+     thin, classic cut (the drozdorus.com status-label look), not the tall
+     heavy SF Mono. */
+  --font-mono: Menlo, Consolas, 'Cascadia Code', ui-monospace, monospace;
   
   /* Border Radius */
   --radius-sm: 8px;
@@ -78,15 +82,15 @@
   --glow-green: 0 0 40px rgba(61, 214, 140, 0.3);
 
   /* Borders */
-  --border-default: rgba(255, 255, 255, 0.09);
+  --border-default: rgba(246, 243, 236, 0.09);
   --border-hover: rgba(232, 181, 71, 0.30);
   --border-accent: rgba(232, 181, 71, 0.15);
 
   /* Glass */
-  --glass-bg: linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
-  --glass-bg-hover: linear-gradient(145deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
-  --glass-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 4px 24px rgba(0,0,0,0.20);
-  --glass-shadow-hover: inset 0 1px 0 rgba(255,255,255,0.15), 0 8px 32px rgba(0,0,0,0.28);
+  --glass-bg: linear-gradient(145deg, rgba(246,243,236,0.08) 0%, rgba(246,243,236,0.02) 100%);
+  --glass-bg-hover: linear-gradient(145deg, rgba(246,243,236,0.12) 0%, rgba(246,243,236,0.04) 100%);
+  --glass-shadow: inset 0 1px 0 rgba(246,243,236,0.10), 0 4px 24px rgba(0,0,0,0.20);
+  --glass-shadow-hover: inset 0 1px 0 rgba(246,243,236,0.15), 0 8px 32px rgba(0,0,0,0.28);
 }
 
 /* Reset */
@@ -99,6 +103,65 @@
 html {
   scroll-behavior: smooth;
   overflow-x: clip;
+}
+
+/* Cross-document view transitions — Chromium/Safari cross-fade between page
+   loads; browsers without support just navigate. Disabled for reduced motion. */
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+/* Brand text selection */
+::selection {
+  background: var(--primary);
+  color: #0c0a08;
+}
+
+/* One amber focus ring sitewide (replaces the default blue); components with
+   their own focus treatment (FAQ summary, founder cards) override it. */
+:focus-visible {
+  outline: 2px solid rgba(232, 181, 71, 0.6);
+  outline-offset: 2px;
+}
+
+/* Balanced line wrapping on display text — no orphan words in headings. */
+.hero-title,
+.section-title,
+.section-subtitle,
+.article-hero-title,
+.cta-band-heading,
+.error-heading {
+  text-wrap: balance;
+}
+
+/* Cap-height trimming on display headings — the font's built-in leading no
+   longer pads the box, so spacing lands exactly where the margins say.
+   Progressive (Chromium/Safari). .hero-title excluded: its gradient
+   background-clip depends on the untrimmed line box. */
+.section-title,
+.article-hero-title,
+.cta-band-heading {
+  text-box: trim-both cap alphabetic;
+}
+
+/* Film grain — static SVG noise over the whole viewport at ~3% opacity.
+   Kills the flat digital black; pointer-events off, no animation, so it
+   costs one cached 240px tile and nothing per-frame. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
 }
 
 /* Anchor targets stop short of the fixed header (replaces the old JS
@@ -134,7 +197,9 @@ body {
   line-height: 1.6;
   color: var(--text);
   background: var(--bg);
-  overflow-x: hidden;
+  /* clip, not hidden: hidden would make body a scroll container and hijack
+     the view() timelines of the scroll-driven reveal below. */
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -149,7 +214,7 @@ body {
 
 /* Container */
 .container {
-  max-width: 1000px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0 var(--space-sm);
 }
@@ -171,11 +236,11 @@ body {
 .header-inner {
   width: 100%;
   max-width: 3000px;
-  background: rgba(10, 10, 10, 0.7);
+  background: rgba(12, 10, 8, 0.7);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid transparent;
-  border-bottom-color: rgba(255, 255, 255, 0.08);
+  border-bottom-color: rgba(246, 243, 236, 0.08);
   border-radius: 0;
   pointer-events: auto;
   transform: translateY(0);
@@ -192,15 +257,15 @@ body {
 /* Scrolled island state */
 .header.scrolled .header-inner {
   max-width: 860px;
-  background: rgba(10, 10, 10, 0.82);
+  background: rgba(12, 10, 8, 0.82);
   border-radius: 100px;
-  border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  border-color: rgba(246, 243, 236, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(246, 243, 236, 0.05);
   transform: translateY(10px);
 }
 
 .header-content {
-  max-width: 1000px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 16px var(--space-sm);
   display: flex;
@@ -300,7 +365,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  background: rgba(16, 16, 16, 0.92);
+  background: rgba(17, 15, 12, 0.92);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
   backdrop-filter: blur(20px) saturate(180%);
@@ -384,13 +449,26 @@ body {
   transform: translateY(-2px);
 }
 
-/* Hiring is an ordinary nav link — the pulsing dot is the only thing marking it
-   as "we're hiring". Inline-flex so the dot sits on the text baseline row; the
-   ::after underline inherited from .nav-link still spans the whole link. */
-.nav-link--dot {
-  display: inline-flex;
+/* Hiring Link */
+.hiring-link {
+  display: flex;
   align-items: center;
   gap: 6px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 10px 18px;
+  border: 1px solid rgba(232, 181, 71, 0.3);
+  border-radius: 100px;
+  transition: all 0.3s var(--ease-spring);
+}
+
+.hiring-link:hover {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--bg);
+  transform: translateY(-2px);
+  box-shadow: var(--glow);
 }
 
 .notification-dot {
@@ -426,7 +504,7 @@ body {
   background:
     radial-gradient(circle at 18% 20%, rgba(232, 181, 71, 0.06), transparent 55%),
     radial-gradient(circle at 82% 78%, rgba(61, 214, 140, 0.05), transparent 55%),
-    rgba(10, 10, 10, 0.98);
+    rgba(12, 10, 8, 0.98);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   z-index: 1002;
@@ -452,7 +530,7 @@ body {
   top: calc(env(safe-area-inset-top) + 12px);
   right: 16px;
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(246, 243, 236, 0.08);
   color: var(--text-muted);
   cursor: pointer;
   padding: 8px;
@@ -465,7 +543,7 @@ body {
 
 .mobile-menu-close:hover {
   color: var(--text);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(246, 243, 236, 0.2);
 }
 
 @keyframes mmFadeIn {
@@ -531,7 +609,7 @@ body {
 }
 
 .hero-content {
-  max-width: 1000px;
+  max-width: 1120px;
   animation: fadeInUp 1s ease;
 }
 
@@ -564,7 +642,7 @@ body {
   padding: 8px;
   border-radius: 50%;
   background: var(--surface);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(246, 243, 236, 0.1);
   transition: all 0.3s var(--ease);
 }
 
@@ -574,9 +652,27 @@ body {
   transform: translateY(3px);
 }
 
+/* Buttons — one family, one pill geometry. Hierarchy comes from fill, not
+   shape: .btn-primary = filled amber (band CTAs, vertical heroes, 404, form
+   submit), .hiring-link = outline pill with gradient-fill hover (header nav). */
+.btn-primary {
+  display: inline-block;
+  padding: 0.8rem 1.6rem;
+  border-radius: 100px;
+  background: var(--primary);
+  color: #0c0a08;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+
 /* 404 page — hero-style error screen ("zero-intent URL" joke). Reuses the
-   hero centering + gradient title; the button mirrors .home-cta's
-   .vertical-cta-btn (that declaration is scoped, so redeclared here). */
+   hero centering + gradient title with the shared .btn-primary. */
 .error-hero .error-code {
   font-size: clamp(5rem, 18vw, 9rem);
   margin-bottom: var(--space-sm);
@@ -592,22 +688,6 @@ body {
   max-width: 520px;
   margin-left: auto;
   margin-right: auto;
-}
-
-.error-hero .vertical-cta-btn {
-  display: inline-block;
-  padding: 0.8rem 1.6rem;
-  border-radius: var(--radius-md);
-  background: var(--primary);
-  color: #0a0a0a;
-  font-weight: 600;
-  text-decoration: none;
-  transition: transform 0.2s var(--ease), opacity 0.2s var(--ease);
-}
-
-.error-hero .vertical-cta-btn:hover {
-  transform: translateY(-2px);
-  opacity: 0.92;
 }
 
 /* Sections */
@@ -643,7 +723,7 @@ body {
 
 /* About */
 .about-content {
-  max-width: 1000px;
+  max-width: 1120px;
   margin: 0 auto var(--space-2xl);
 }
 
@@ -690,16 +770,14 @@ body {
 }
 
 .badge-text {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
 }
 
 /* Methodology */
 .methodology {
-  max-width: 1000px;
+  max-width: 1120px;
   margin: 0 auto var(--space-2xl);
 }
 
@@ -753,7 +831,7 @@ body {
 
 /* Traffic Sources */
 .traffic-sources {
-  max-width: 1000px;
+  max-width: 1120px;
   margin: 0 auto;
 }
 
@@ -772,52 +850,27 @@ body {
   margin-bottom: var(--space-lg);
 }
 
-.traffic-sources-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-md);
-}
-
-.traffic-source {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: var(--space-md);
-  background: var(--glass-bg);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-default);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: var(--glass-shadow);
-  transition: all 0.3s var(--ease);
-}
-
-.traffic-source:hover {
-  background: var(--glass-bg-hover);
-  transform: translateY(-2px);
-  border-color: var(--border-hover);
-  box-shadow: var(--glass-shadow-hover);
-}
-
-.traffic-source-logo {
-  width: 180px;
-  height: 48px;
+/* Quiet logo strip — brand marks only, no boxes around them. */
+.traffic-logos {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(var(--space-lg), 8vw, 96px);
+  padding: var(--space-sm) 0;
 }
 
-.traffic-source-logo img {
-  width: 100%;
-  height: 100%;
+.traffic-logos img {
+  height: 34px;
+  width: auto;
+  max-width: 150px;
   object-fit: contain;
-  filter: brightness(1);
-  transition: all 0.3s;
+  opacity: 0.75;
+  transition: opacity 0.3s var(--ease);
 }
 
-.traffic-source:hover .traffic-source-logo img {
-  filter: brightness(1.2);
+.traffic-logos img:hover {
+  opacity: 1;
 }
 
 /* Services */
@@ -826,7 +879,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--space-md);
-  max-width: 1000px;
+  max-width: 1120px;
   margin: 0 auto;
 }
 
@@ -922,7 +975,7 @@ body {
 }
 
 .service-list li + li {
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 1px solid rgba(246, 243, 236, 0.04);
 }
 
 .service-more {
@@ -936,7 +989,7 @@ body {
 
 .approach {
   margin-top: var(--space-2xl);
-  max-width: 1000px;
+  max-width: 1120px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -949,8 +1002,7 @@ body {
   font-style: italic;
 }
 
-.services-cta,
-.team-join-cta {
+.services-cta {
   margin-top: var(--space-lg);
   text-align: center;
 }
@@ -979,8 +1031,7 @@ body {
 }
 
 /* Horizontal scrollers — shared */
-.upcoming-events-scroller,
-.past-events-scroller {
+.upcoming-events-scroller {
   --fade-start: 0%;
   --fade-end: 0%;
   mask-image: linear-gradient(90deg,
@@ -1065,8 +1116,8 @@ body {
 
 .conference-date {
   color: var(--secondary);
-  font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
   margin-bottom: var(--space-xs);
 }
 
@@ -1108,24 +1159,12 @@ body {
   margin-bottom: var(--space-md);
 }
 
-.past-events-scroller {
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 6px 0;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  cursor: grab;
-}
-
-.past-events-scroller::-webkit-scrollbar { display: none; }
-
-.past-events-scroller.dragging { cursor: grabbing; }
-
-.past-events-track {
+/* Wrapping pill cloud — every past event is visible at once, no scroll to hide behind. */
+.past-events-cloud {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-sm);
-  width: max-content;
 }
 
 .past-conference-card {
@@ -1149,10 +1188,8 @@ body {
 
 .past-conference-date {
   color: var(--text-muted);
-  font-weight: 600;
   font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
 }
 
 .past-conference-name {
@@ -1169,12 +1206,17 @@ body {
   margin: 0;
 }
 
-/* Contact */
+/* Contact — the page hero (Breadcrumb + PageHero) sits above; this block only
+   spaces the grid and pads the page bottom before the footer. */
+.contact {
+  padding: var(--space-md) 0 80px;
+}
+
 .contact-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-2xl);
-  max-width: 1000px;
+  max-width: 1120px;
   margin: 0 auto;
 }
 
@@ -1192,39 +1234,16 @@ body {
   margin-bottom: var(--space-lg);
 }
 
+/* Email and careers links use the shared .text-link convention. */
 .contact-email {
   font-size: 1.1rem;
   font-weight: 400;
   margin-bottom: var(--space-lg);
 }
 
-.contact-email a {
-  color: var(--primary);
-  text-decoration: none;
-  transition: all 0.3s;
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-}
-
-.contact-email a:hover {
-  color: var(--secondary);
-  background: var(--surface);
-}
-
 .careers-link {
   padding-top: var(--space-md);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.careers-link-text {
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s;
-}
-
-.careers-link-text:hover {
-  color: var(--secondary);
+  border-top: 1px solid rgba(246, 243, 236, 0.1);
 }
 
 /* Form */
@@ -1247,8 +1266,8 @@ body {
   font-family: var(--font-body);
   width: 100%;
   padding: 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(246, 243, 236, 0.05);
+  border: 1px solid rgba(246, 243, 236, 0.1);
   border-radius: var(--radius-sm);
   color: var(--text);
   font-size: 1rem;
@@ -1259,7 +1278,7 @@ body {
 .form-group textarea:focus {
   outline: none;
   border-color: var(--primary);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(246, 243, 236, 0.08);
   box-shadow: 0 0 0 3px rgba(232, 181, 71, 0.1);
 }
 
@@ -1268,23 +1287,14 @@ body {
   color: var(--text-muted);
 }
 
+/* Form submit = .btn-primary + these form-specific overrides (markup carries
+   both classes). Was a one-off gradient button before the button consolidation. */
 .submit-button {
   font-family: var(--font-body);
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: var(--bg);
   border: none;
-  border-radius: var(--radius-sm);
   font-size: 15px;
-  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s var(--ease-spring);
-}
-
-.submit-button:hover {
-  transform: scale(1.015) translateY(-1px);
-  box-shadow: var(--glow);
 }
 
 .submit-button:disabled {
@@ -1293,11 +1303,10 @@ body {
   transform: none;
 }
 
-/* Homepage CTA band — glass band linking to the contact page. Mirrors the
-   .vertical-cta band on the vertical pages (heading + line + button). The
-   button reuses the .vertical-cta-btn look, redeclared here because that
-   class is scoped to the vertical page's <style>. */
-.home-cta {
+/* CTA band — shared glass band (CtaBand.astro): homepage, /about/, vertical
+   pages. Default margin fits the homepage's own padded .section wrapper;
+   .cta-band--flow spaces it when the band follows page content directly. */
+.cta-band {
   margin: 1rem 0;
   padding: 2.5rem;
   text-align: center;
@@ -1306,38 +1315,26 @@ body {
   background: var(--glass-bg);
 }
 
-.home-cta-heading {
+.cta-band--flow {
+  margin: 3.5rem 0 1rem;
+}
+
+.cta-band-heading {
   font-size: 1.5rem;
   margin-bottom: 0.6rem;
 }
 
-.home-cta-text {
+.cta-band-text {
   color: var(--text-secondary);
   max-width: 520px;
   margin: 0 auto 1.5rem;
-}
-
-.home-cta .vertical-cta-btn {
-  display: inline-block;
-  padding: 0.8rem 1.6rem;
-  border-radius: var(--radius-md);
-  background: var(--primary);
-  color: #0a0a0a;
-  font-weight: 600;
-  text-decoration: none;
-  transition: transform 0.2s var(--ease), opacity 0.2s var(--ease);
-}
-
-.home-cta .vertical-cta-btn:hover {
-  transform: translateY(-2px);
-  opacity: 0.92;
 }
 
 /* Footer */
 .footer {
   background: rgba(0, 0, 0, 0.5);
   padding: var(--space-2xl) 0 var(--space-lg);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(246, 243, 236, 0.06);
 }
 
 .footer-grid {
@@ -1509,10 +1506,6 @@ body {
     font-size: 1rem;
   }
 
-  .traffic-sources-grid {
-    grid-template-columns: 1fr;
-  }
-
   .contact-content {
     grid-template-columns: 1fr;
     gap: var(--space-xl);
@@ -1556,33 +1549,29 @@ body {
   }
 }
 
-/* Staggered card entrance animations */
+/* Staggered card entrance animations. The hidden state is scoped to
+   `.section.pre-fade` (script.js adds it right before observing), so the
+   cards' natural state is visible: pages reusing them outside an observed
+   .section need no overrides, and nothing hides without JS. */
 .methodology-item,
-.service-card,
-.traffic-source {
-  opacity: 0;
-  transform: translateY(20px);
+.service-card {
   transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
 }
 
-.section.visible .methodology-item,
-.section.visible .service-card,
-.section.visible .traffic-source {
-  opacity: 1;
-  transform: translateY(0);
+.section.pre-fade .methodology-item,
+.section.pre-fade .service-card {
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .section.visible .methodology-item:nth-child(1),
-.section.visible .service-card:nth-child(1),
-.section.visible .traffic-source:nth-child(1) { transition-delay: 0ms; }
+.section.visible .service-card:nth-child(1) { transition-delay: 0ms; }
 
 .section.visible .methodology-item:nth-child(2),
-.section.visible .service-card:nth-child(2),
-.section.visible .traffic-source:nth-child(2) { transition-delay: 80ms; }
+.section.visible .service-card:nth-child(2) { transition-delay: 80ms; }
 
 .section.visible .methodology-item:nth-child(3),
-.section.visible .service-card:nth-child(3),
-.section.visible .traffic-source:nth-child(3) { transition-delay: 160ms; }
+.section.visible .service-card:nth-child(3) { transition-delay: 160ms; }
 
 .section.visible .service-card:nth-child(4) { transition-delay: 240ms; }
 .section.visible .service-card:nth-child(5) { transition-delay: 320ms; }
@@ -1620,7 +1609,7 @@ body {
 }
 
 /* Shared accordion mechanics — used by both the boxed homepage FAQ (.faq-list)
-   and the inline article FAQ (.article-faq, see blog.css). Native <details>;
+   and the inline article FAQ (.article-faq). Native <details>;
    script.js adds the height slide as a progressive enhancement (works without JS). */
 .faq-item > summary {
   list-style: none;
@@ -1660,7 +1649,7 @@ body {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(246, 243, 236, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1686,14 +1675,17 @@ body {
   line-height: 1.7;
 }
 
+/* Links inside FAQ answers follow the site's text-link convention
+   (underline = "link in text", amber → mint on hover). */
 .faq-answer a {
   color: var(--primary);
-  text-decoration: none;
-  transition: opacity 0.2s;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s var(--ease);
 }
 
 .faq-answer a:hover {
-  opacity: 0.8;
+  color: var(--secondary);
 }
 
 /* Boxed container (homepage) */
@@ -1711,7 +1703,7 @@ body {
 }
 
 .faq-list .faq-item:hover > summary {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(246, 243, 236, 0.03);
 }
 
 .faq-list .faq-answer p {
@@ -1828,7 +1820,6 @@ body {
 /* Cards sit above blobs — z-index 1 ensures backdrop-filter sees blobs below */
 .methodology-item,
 .service-card,
-.traffic-source,
 .conference-card,
 .past-conference-card,
 .faq-list {
@@ -1852,8 +1843,7 @@ body {
   }
 
   .methodology-item,
-  .service-card,
-  .traffic-source {
+  .service-card {
     opacity: 1;
     transform: none;
   }
@@ -1877,7 +1867,7 @@ body {
   position: fixed;
   top: 100px;
   right: 20px;
-  color: #0a0a0a;
+  color: #0c0a08;
   padding: 16px 20px;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -1913,3 +1903,664 @@ body {
 }
 
 .notification__close:hover { opacity: 1; }
+
+/* =====================================================================
+   Blog & inner-page scaffold (was blog.css — loaded sitewide anyway)
+   ===================================================================== */
+
+/* ─── Logo as link ─── */
+a.logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* ─── Blog section (main page) ─── */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.article-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s var(--ease);
+}
+
+.article-card:hover {
+  background: var(--glass-bg-hover);
+  transform: translateY(-2px);
+  border-color: var(--border-hover);
+  box-shadow: var(--glass-shadow-hover);
+}
+
+.article-cover {
+  height: 150px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #0d0c0a;
+}
+
+.article-cover svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Card hover zooms the cover art gently alongside the card lift; both
+   .article-card and .article-cover clip overflow, so the zoom stays framed. */
+.article-card .article-cover svg {
+  transition: transform 0.4s var(--ease);
+}
+
+.article-card:hover .article-cover svg {
+  transform: scale(1.06);
+}
+
+.article-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.article-tag {
+  font-size: 0.66rem;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  border: 1px solid rgba(232, 181, 71, 0.3);
+  border-radius: 100px;
+  padding: 2px 8px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.article-tag--mint {
+  color: var(--secondary);
+  border-color: rgba(61, 214, 140, 0.3);
+}
+
+.article-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.article-desc {
+  font-size: 0.78rem;
+  color: rgba(246, 243, 236, 0.6);
+  line-height: 1.55;
+  margin: 0;
+  flex: 1;
+}
+
+.article-read {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--primary);
+  margin-top: 0.25rem;
+}
+
+/* ─── Article page layout ─── */
+.article-page {
+  padding-top: 100px;
+  min-height: 100vh;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: rgba(246, 243, 236, 0.4);
+  padding: 1.5rem 0 0;
+  flex-wrap: wrap;
+}
+
+.breadcrumb a {
+  color: rgba(246, 243, 236, 0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+  color: rgba(246, 243, 236, 0.85);
+}
+
+.breadcrumb-sep {
+  opacity: 0.35;
+}
+
+.breadcrumb-current {
+  color: rgba(246, 243, 236, 0.55);
+}
+
+.article-hero {
+  padding: 2rem 0 0;
+  max-width: 760px;
+}
+
+.article-hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.article-read-time {
+  font-size: 0.72rem;
+  color: rgba(246, 243, 236, 0.4);
+}
+
+.article-hero-title {
+  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+}
+
+.article-hero-lead {
+  font-size: 1.05rem;
+  color: rgba(246, 243, 236, 0.6);
+  line-height: 1.65;
+  margin: 0 0 2rem;
+  max-width: 640px;
+}
+
+.article-cover--hero {
+  height: 240px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 3rem;
+}
+
+/* Article prose */
+.article-prose {
+  max-width: 680px;
+  padding-bottom: 5rem;
+}
+
+.article-prose p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.article-prose h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 3rem 0 1rem;
+  letter-spacing: -0.01em;
+}
+
+.article-prose h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 2rem 0 0.75rem;
+}
+
+.article-prose ul,
+.article-prose ol {
+  margin: 0 0 1.5rem 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.article-prose li {
+  margin-bottom: 0.4rem;
+}
+
+.article-prose strong {
+  color: rgba(246, 243, 236, 0.9);
+  font-weight: 600;
+}
+
+.article-prose a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-prose blockquote {
+  border-left: 3px solid var(--primary);
+  margin: 2rem 0;
+  padding: 0.75rem 0 0.75rem 1.5rem;
+  color: rgba(246, 243, 236, 0.75);
+  font-style: italic;
+}
+
+.article-callout {
+  background: rgba(232, 181, 71, 0.06);
+  border: 1px solid rgba(232, 181, 71, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+  color: rgba(246, 243, 236, 0.75);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.article-callout--mint {
+  background: rgba(61, 214, 140, 0.06);
+  border-color: rgba(61, 214, 140, 0.2);
+}
+
+/* Placeholder */
+.article-placeholder {
+  color: rgba(246, 243, 236, 0.25);
+  font-style: italic;
+}
+
+/* ─── FAQ (article reuses the shared .faq-list control; this is only spacing) ─── */
+.article-faq {
+  margin-top: 3rem;
+}
+
+/* ─── Related articles ─── */
+.article-related {
+  padding: 3rem 0 5rem;
+  border-top: 1px solid var(--border-default);
+}
+
+.article-related-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(246, 243, 236, 0.3);
+  margin-bottom: 1.25rem;
+}
+
+.article-related-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  max-width: 760px;
+}
+
+.related-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s var(--ease);
+}
+
+.related-card:hover {
+  background: var(--glass-bg-hover);
+  transform: translateY(-2px);
+  border-color: var(--border-hover);
+  box-shadow: var(--glass-shadow-hover);
+}
+
+.related-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.related-card-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.related-card-desc {
+  font-size: 0.78rem;
+  color: rgba(246, 243, 236, 0.42);
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+
+.related-card-read {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--primary);
+  margin-top: 0.25rem;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .article-cover {
+    height: 130px;
+  }
+
+  .article-page {
+    padding-top: 80px;
+  }
+
+  .article-cover--hero {
+    height: 160px;
+  }
+
+  .article-hero-title {
+    font-size: 1.5rem;
+  }
+
+  .article-related-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.blog-view-all {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+/* =====================================================================
+   Team section (was team.css)
+   ===================================================================== */
+
+/* =============================================
+   TEAM SECTION — standalone block
+   ============================================= */
+
+.team {
+  padding: 100px 0;
+}
+
+.team .section-title {
+  margin-bottom: var(--space-xs);
+}
+
+.team .section-subtitle {
+  margin-bottom: var(--space-xl);
+}
+
+/* Native horizontal scroller — same pattern as events section */
+.team-scroller {
+  --fade-start: 0%;
+  --fade-end: 0%;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+  user-select: none;
+  mask-image: linear-gradient(90deg,
+    transparent 0%,
+    black var(--fade-start),
+    black calc(100% - var(--fade-end)),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(90deg,
+    transparent 0%,
+    black var(--fade-start),
+    black calc(100% - var(--fade-end)),
+    transparent 100%
+  );
+  overscroll-behavior-x: contain;
+}
+
+.team-scroller::-webkit-scrollbar { display: none; }
+
+.team-scroller.dragging { cursor: grabbing; }
+
+.team-track {
+  display: flex;
+  gap: var(--space-md);
+  width: max-content;
+}
+
+/* Card — glow lives on .team-avatar-wrap::before so it tracks the avatar,
+   not the card top (card stretches taller due to text, avatar stays at top) */
+.team-card {
+  flex-shrink: 0;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.team-avatar-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    var(--card-accent, rgba(232, 181, 71, 0.5)) 0%,
+    transparent 60%
+  );
+  opacity: 0.6;
+  transform: scale(1);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  pointer-events: none;
+}
+
+.team-card:hover .team-avatar-wrap::before {
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+/* Circular avatar */
+.team-avatar {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 14%;
+}
+
+.team-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+
+/* Wrap for avatar + optional link badges */
+.team-avatar-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.team-links {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.team-link {
+  position: absolute;
+  pointer-events: all;
+  bottom: 8%;
+  right: 8%;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(12, 10, 8, 0.72);
+  border: 1px solid rgba(246, 243, 236, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(246, 243, 236, 0.45);
+  text-decoration: none;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+/* first of two links → bottom-left */
+.team-link:first-child:not(:last-child) {
+  right: auto;
+  left: 8%;
+}
+
+.team-link:hover {
+  color: var(--secondary);
+  border-color: rgba(61, 214, 140, 0.4);
+}
+
+.team-info {
+  width: 100%;
+  padding: var(--space-sm) 0 0;
+}
+
+.team-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.team-role {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  min-height: 2.5em;
+}
+
+/* "More soon" placeholder */
+.team-card--more {
+  width: 100px;
+  justify-content: center;
+}
+
+.team-card--more::before {
+  display: none;
+}
+
+.team-avatar--empty {
+  border: 1.5px dashed rgba(246, 243, 236, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  padding: 0;
+  background: transparent;
+}
+
+.team-avatar--empty span {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(246, 243, 236, 0.28);
+  letter-spacing: 0.5px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .team {
+    padding: var(--space-2xl) 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-card::before {
+    transition: none;
+  }
+}
+
+/* =====================================================================
+   Mono micro-labels — dates and tags only, in a quiet monospace voice.
+   Reference: drozdorus.com portfolio status labels — small size, regular
+   weight, natural casing (months and abbreviations keep their capitals);
+   thin and precise, never bold. Placed last so the weight here wins over
+   the labels' own earlier declarations.
+   Section headings (footer columns etc.) deliberately stay Geologica.
+   ===================================================================== */
+.badge-text,
+.conference-date,
+.past-conference-date,
+.article-tag,
+.article-read-time {
+  font-family: var(--font-mono);
+  font-weight: 400;
+}
+
+/* =====================================================================
+   Scroll-driven reveal (Chromium / new Safari) — block reveals are driven
+   by each element's own viewport position (animation-timeline: view()),
+   so content proofs in sync with the scroll and scrubs back out on the
+   way up. Browsers without support keep the JS IntersectionObserver
+   one-shot reveal untouched; here we neutralize that path instead.
+   Cards inside the horizontal scrollers (team, upcoming events) get only
+   the section-level reveal on purpose: a whole row shares one vertical
+   position, so per-card scrubbing would just duplicate the section fade.
+   animation-timeline goes through a custom property on purpose:
+   lightningcss otherwise folds it into the `animation` shorthand, which
+   is invalid grammar there, and the browser drops the whole declaration.
+   ===================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .section.pre-fade {
+      opacity: 1;
+      transform: none;
+    }
+    .section.pre-fade .methodology-item,
+    .section.pre-fade .service-card {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    @keyframes scroll-reveal {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .section {
+      --reveal-tl: view();
+      animation: scroll-reveal linear both;
+      animation-timeline: var(--reveal-tl);
+      animation-range: entry 0% entry 35%;
+    }
+
+    .methodology-item,
+    .service-card,
+    .article-card,
+    .faq-list {
+      --reveal-tl: view();
+      animation: scroll-reveal linear both;
+      animation-timeline: var(--reveal-tl);
+      animation-range: entry 0% entry 60%;
+      transition: none;
+    }
+  }
+}

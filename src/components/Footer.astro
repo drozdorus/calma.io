@@ -1,19 +1,11 @@
 ---
 // Footer — sitewide nav ("everything" menu): brand + 3 link columns so any page
-// can reach any destination. On the homepage (home=true) the section anchors
-// render as bare `#anchor` / `#top` so they smooth-scroll via script.js
-// (matching legacy index.html); on inner routes (default) they're absolute
-// (`/`, `/#anchor`) to jump back to the homepage section. Only the section
-// anchors use `base`; page links (verticals, blog, contact, privacy) are absolute.
+// can reach any destination. Section anchors are absolute (`/#anchor`): on the
+// homepage the browser treats them as same-document hash navigation (CSS
+// smooth-scroll + scroll-margin-top), on inner routes they jump back to the
+// homepage section — no `home` prop needed.
 import { getCollection } from 'astro:content';
-
-export interface Props {
-  /** homepage: emit bare `#anchor` links so the smooth-scroll JS matches */
-  home?: boolean;
-}
-const { home = false } = Astro.props;
-const base = home ? '' : '/';
-const logoHref = home ? '#top' : '/';
+import { site } from '../data/site';
 
 // Drive the "What we do" column from the verticals collection.
 const verticals = (await getCollection('verticals')).sort(
@@ -28,8 +20,8 @@ const year = new Date().getFullYear();
   <div class="container">
     <div class="footer-grid">
       <div class="footer-col footer-col--brand">
-        <a href={logoHref} class="footer-logo"><img src="/img/logo.svg" width="104" height="16" alt="Calma" /></a>
-        <p class="footer-tagline">Performance lead generation across insurance, financial, legal, and home services
+        <a href="/#top" class="footer-logo"><img src="/img/logo.svg" width="104" height="16" alt="Calma" /></a>
+        <p class="footer-tagline">Performance lead generation across insurance, financial, and home services
           verticals.</p>
       </div>
 
@@ -44,18 +36,18 @@ const year = new Date().getFullYear();
       <div class="footer-col">
         <p class="footer-heading">Company</p>
         <a href="/about/" class="footer-link">About</a>
-        <a href={`${base}#team`} class="footer-link">Team</a>
-        <a href={`${base}#conferences`} class="footer-link">Events</a>
+        <a href="/#team" class="footer-link">Team</a>
+        <a href="/#conferences" class="footer-link">Events</a>
         <a href="/blog/" class="footer-link">Blog</a>
-        <a href="/hiring/" class="footer-link">Careers</a>
+        <a href={site.vacanciesUrl} target="_blank" rel="noopener" class="footer-link">Careers</a>
       </div>
 
       <div class="footer-col">
         <p class="footer-heading">Get in touch</p>
         <a href="/contacts/" class="footer-link">Contact</a>
-        <a href="mailto:info@calma.io" class="footer-link">info@calma.io</a>
-        <a href="https://www.linkedin.com/company/calma-io/" target="_blank" rel="noopener" class="footer-link">LinkedIn</a>
-        <a href="https://www.crunchbase.com/organization/calma-b99b" target="_blank" rel="noopener" class="footer-link">Crunchbase</a>
+        <a href={`mailto:${site.email}`} class="footer-link">{site.email}</a>
+        <a href={site.linkedin} target="_blank" rel="noopener" class="footer-link">LinkedIn</a>
+        <a href={site.crunchbase} target="_blank" rel="noopener" class="footer-link">Crunchbase</a>
       </div>
 
       <div class="footer-legal">

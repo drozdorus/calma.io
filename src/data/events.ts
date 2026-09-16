@@ -9,7 +9,11 @@
 // eventStatus derived from the date; older past events only render as pills.
 
 export interface CalmaEvent {
-  /** Short display name for the card / pill (e.g. "Affiliate World") */
+  /** Display name for the card / pill, matching how the organiser names the
+   *  edition: regional ones carry the region (Affiliate Summit East, Affiliate
+   *  World Europe, SBC Summit Americas), the flagship goes unqualified even
+   *  though it has a home city (SBC Summit = the Lisbon one). Keep every
+   *  edition of a brand spelled the same way across years. */
   name: string;
   /** JSON-LD Event name with edition/year (defaults to `name`) */
   schemaName?: string;
@@ -46,7 +50,7 @@ export const events: CalmaEvent[] = [
     linkLabel: 'sbcevents.com',
   },
   {
-    name: 'Affiliate World',
+    name: 'Affiliate World Europe',
     schemaName: 'Affiliate World Europe 2026',
     description:
       'Premier affiliate marketing conference bringing together top affiliates, networks, and advertisers.',
@@ -115,6 +119,19 @@ export const events: CalmaEvent[] = [
     linkLabel: 'appgala.events',
   },
   {
+    name: 'Affiliate Grand Slam',
+    schemaName: 'Affiliate Grand Slam Rome 2026',
+    description:
+      'Affiliate and performance marketing conference gathering networks, advertisers, and media buyers, co-located with SiGMA Europe in Rome.',
+    start: '2026-11-02',
+    end: '2026-11-05',
+    location: 'Rome, Italy',
+    url: 'https://affiliategrandslam.com/',
+    organizer: { name: 'SiGMA Group', url: 'https://sigma.world' },
+    logo: { src: '/img/ags-logo-white.svg', alt: 'Affiliate Grand Slam' },
+    linkLabel: 'affiliategrandslam.com',
+  },
+  {
     name: 'Web Summit',
     schemaName: 'Web Summit 2026',
     description:
@@ -170,11 +187,11 @@ export const events: CalmaEvent[] = [
   { name: 'Web Summit', start: '2025-11-01', end: '2025-11-01', location: 'Lisbon, Portugal' },
   // SBC ran mid-September, Affiliate World early September — days kept so the
   // past list sorts SBC first within the month.
-  { name: 'SBC', start: '2025-09-16', end: '2025-09-18', location: 'Lisbon, Portugal' },
+  { name: 'SBC Summit', start: '2025-09-16', end: '2025-09-18', location: 'Lisbon, Portugal' },
   { name: 'Affiliate World Europe', start: '2025-09-04', end: '2025-09-05', location: 'Budapest, Hungary' },
   { name: 'Affiliate Summit East', start: '2025-08-01', end: '2025-08-01', location: 'New York, US' },
+  { name: 'Affiliate Takeover', start: '2025-07-01', end: '2025-07-01', location: 'Barcelona, Spain' },
   { name: 'AppGala', start: '2025-04-01', end: '2025-04-01', location: 'Warsaw, Poland' },
-  { name: 'Affiliate Takeover', start: '2024-07-01', end: '2024-07-01', location: 'Barcelona, Spain' },
 ];
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -184,13 +201,15 @@ function parts(iso: string) {
   return { y, m, d };
 }
 
-/** "9-11 Jun 2026" / "28 May 2026" / "30 Jun - 1 Jul 2026" */
+/** "09–11 Jun 2026" / "28 May 2026" / "30 Jun – 01 Jul 2026" — zero-padded
+ *  days + en dashes for the mono label treatment (CSS lowercases the month). */
 export function formatUpcomingDate(e: CalmaEvent): string {
   const s = parts(e.start);
   const en = parts(e.end);
-  if (e.start === e.end) return `${s.d} ${MONTHS[s.m - 1]} ${s.y}`;
-  if (s.m === en.m && s.y === en.y) return `${s.d}-${en.d} ${MONTHS[s.m - 1]} ${s.y}`;
-  return `${s.d} ${MONTHS[s.m - 1]} - ${en.d} ${MONTHS[en.m - 1]} ${en.y}`;
+  const dd = (d: number) => String(d).padStart(2, '0');
+  if (e.start === e.end) return `${dd(s.d)} ${MONTHS[s.m - 1]} ${s.y}`;
+  if (s.m === en.m && s.y === en.y) return `${dd(s.d)}–${dd(en.d)} ${MONTHS[s.m - 1]} ${s.y}`;
+  return `${dd(s.d)} ${MONTHS[s.m - 1]} – ${dd(en.d)} ${MONTHS[en.m - 1]} ${en.y}`;
 }
 
 /** "May 2026" */

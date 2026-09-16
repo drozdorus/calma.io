@@ -8,7 +8,7 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 - **Name**: Calma
 - **Domain**: calma.io
 - **Tagline**: "Keep calm, Calma generates leads"
-- **Pitch**: Performance lead generation across insurance, financial, legal, and home services verticals.
+- **Pitch**: Performance lead generation across insurance, financial, and home services verticals.
 - **Industry**: Performance lead generation
 - **Team**: ~10 members
 - **Target market**: US (primary)
@@ -24,7 +24,7 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 
 ## Tech Stack
 
-- **Astro 6** — static output (migrated from plain HTML/CSS/JS on 2026-05-31; see Roadmap).
+- **Astro 7** — static output (migrated from plain HTML/CSS/JS on 2026-05-31, upgraded 6→7 on 2026-08-25; see Roadmap).
 - **Build step**: `astro build` → `dist/`. Source is the same vanilla CSS/JS, now
   componentized (single-source Header/Footer/Layout) + a blog content collection.
 - **Hosting**: GitHub Pages, **source = GitHub Actions** (`.github/workflows/deploy.yml`
@@ -43,7 +43,7 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 |------|-------|
 | `src/layouts/BaseLayout.astro` | `<head>` (meta/OG/JSON-LD via props/slots), global CSS+JS includes |
 | `src/components/Header.astro` | **Page-level top nav** (Verticals dropdown, Blog, Contact, Hiring); pathname active; mobile burger menu. No `home` prop (all links absolute) |
-| `src/components/Footer.astro` | **Single source of truth.** 3-column sitewide nav; `home` prop → bare `#anchor` on homepage section links, absolute `/#anchor` elsewhere |
+| `src/components/Footer.astro` | **Single source of truth.** 3-column sitewide nav; all links absolute (`/#anchor` behaves as same-page hash on the homepage) |
 | `src/components/SectionNav.astro` | Floating bottom **section pill** (homepage only) — jumps homepage sections, scroll-spy active |
 | `src/pages/index.astro` | Homepage (sections, wave canvas, JSON-LD `@graph`, bottom CTA band → /contacts/, `<SectionNav />`) |
 | `src/pages/blog/[...slug].astro` / `blog/index.astro` | Article template + `/blog/` library index (`ArticleCard` + `cardCovers`) |
@@ -53,8 +53,10 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 | `src/content/blog/<slug>.md` · `src/content/verticals/<slug>.md` | Articles (3) + vertical pages (4) — Markdown + frontmatter |
 | `src/content.config.ts` | `blog` + `verticals` collection schemas |
 | `src/components/IconSprite.astro` | Shared hidden SVG icon sprite (homepage + hub) |
-| `src/styles/*.css` | `style.css` (global+FAQ+footer), `blog.css`, `team.css` — gated per-page |
-| `src/scripts/*.js` | `script.js` (wave canvas, island header, scroll-spy, drag scrollers, FAQ, form), `team.js` |
+| `src/components/Breadcrumb.astro` · `PageHero.astro` · `CtaBand.astro` | Shared inner-page scaffold: breadcrumb nav, centered h1+subtitle hero, "Ready to generate leads?" glass band (+ global `.btn-primary`) |
+| `src/data/site.ts` | Sitewide constants: contact email, vacancies URL, LinkedIn/Crunchbase |
+| `src/styles/style.css` | **The** stylesheet — design system, sections, blog/inner-page scaffold, team (blog.css/team.css merged in 2026-08-25) |
+| `src/scripts/script.js` | **The** script — wave canvas, island header, scroll-spy, drag scrollers (events/team), FAQ, form |
 | `public/` | `img/`, `fonts/`, `CNAME`, `.nojekyll`, `robots.txt`, favicons |
 | `astro.config.mjs` | `site`, `trailingSlash:'always'`, `build.format:'directory'`, sitemap, `markdown.processor` (smartypants off for verbatim quotes) |
 
@@ -82,9 +84,12 @@ Navigation is **split by purpose** (rebuilt 2026-06-02, Flighty-style):
 section; its bottom CTA band links to the contacts page. A thin gradient scroll-progress
 bar still sits at the top of every page.
 
-### Verticals (6)
+### Verticals (5)
 
-Auto Insurance · Home Insurance · Health Insurance · Legal Services · Home Improvement (home services) · Financial Services
+Auto Insurance · Home Insurance · Health Insurance · Home Improvement (home services) · Financial Services
+
+> Legal Services was dropped from the story on 2026-08-25 (owner decision) — Calma
+> doesn't run leads for it, so no copy/schema should claim it.
 
 ### Acquisition channels
 
@@ -113,7 +118,7 @@ Audience Intelligence · Automated Optimization · Lead Verification
 - **Accents**: `--primary` gold `#E8B547`, `--secondary` mint `#3DD68C` (desaturated
   in the April 2026 refresh, were `#FFD700` / `#00FF7F`).
 - **Text**: white with opacity tokens — `--text` / `--text-secondary` (.7) / `--text-muted` (.5).
-- **Layout**: `.container` max-width **1000px**. Island header narrows to 860px on scroll.
+- **Layout**: `.container` max-width **1120px** (widened from 1000px on 2026-08-25). Island header narrows to 860px on scroll.
 - **Tokens**: spacing (`--space-xs…2xl`), radius (`--radius-sm…xl`), glass surface
   (`--glass-bg`, `--glass-shadow`, hover variants), borders, eases. Use these — avoid
   hardcoded values.
@@ -134,7 +139,8 @@ Audience Intelligence · Automated Optimization · Lead Verification
 - Smooth-scroll anchors (80px offset); the **scroll-spy drives the bottom section pill**
   (`SectionNav`) on the homepage; top scroll-progress bar on every page
 - **Verticals dropdown** (header): hover + click/keyboard (Enter/Space/Arrow/Esc), `aria-expanded`
-- Drag-to-scroll horizontal scrollers (events, team) via `initHScroller`
+- Drag-to-scroll horizontal scrollers (upcoming events, team) via `initHScroller`;
+  **past events are a wrapping pill cloud** (all visible, no scroller) since 2026-08-25
 - **FAQ**: one control site-wide (`.faq-list`) — native `<details>` markup with a
   JS height-slide (Web Animations API) as progressive enhancement; works without JS;
   reduced-motion falls back to native toggle; items open independently everywhere

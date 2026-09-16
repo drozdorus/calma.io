@@ -2,16 +2,18 @@
 // About page — company story with a neutral founder paragraph. Exists primarily
 // as the entity page for "Calma + Ruslan Drozdov" queries (SERM): reached via the
 // footer "About" link, not from the homepage body, by owner's decision.
-// Built from the shared design system: breadcrumb/article-page (blog.css),
-// section-title/subtitle + service-card glass cards (style.css), team cards
-// (team.css, founding trio from src/data/team.ts), and the homepage .home-cta
-// band before the footer. Each founder card toggles its own expandable panel
+// Built from the shared design system: Breadcrumb/PageHero, service-card glass
+// cards (style.css), team cards (founding trio from src/data/team.ts), and the
+// shared CtaBand before the footer. Each founder card toggles its own expandable panel
 // (accordion): Rus's holds the real bio — kept in the DOM when collapsed so
 // search engines index it — the other two hold a running "bio coming soon" joke
 // so the page doesn't read as built by the founder about himself.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
 import { team, accentFor } from '../data/team';
 
 const foundingNames = ['Rus', 'Yehor', 'Artur'];
@@ -31,8 +33,6 @@ const founderNotes: Record<string, string> = {
   canonical="https://calma.io/about/"
   ogTitle="About Calma"
   ogDescription="The story behind Calma, a performance lead generation agency founded in 2024."
-  useBlogCss={true}
-  useTeamCss={true}
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -43,7 +43,7 @@ const founderNotes: Record<string, string> = {
     "about": { "@id": "https://calma.io/#organization" },
     "mainEntity": {
       "@type": "Person",
-      "@id": "https://calma.io/#founder",
+      "@id": "https://drozdorus.com/#person",
       "name": "Ruslan Drozdov",
       "alternateName": "Руслан Дроздов",
       "description": "Ukrainian entrepreneur and investor, key ideologist behind Calma. Started in online marketing in 2013, worked at Everad 2014–2018, founded Traffinad in 2018, then spent eight years in the startup ecosystem as a partner at Adventures Lab and Astroid.",
@@ -66,23 +66,16 @@ const founderNotes: Record<string, string> = {
     <div class="article-page">
       <div class="container">
 
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a href="/">calma.io</a>
-          <span class="breadcrumb-sep">/</span>
-          <span class="breadcrumb-current">About</span>
-        </nav>
+        <Breadcrumb items={[{ label: 'About' }]} />
 
-        <header class="about-hero">
-          <h1 class="section-title">About Calma</h1>
-          <p class="section-subtitle">Keep calm, here's the story behind the agency</p>
-        </header>
+        <PageHero title="About Calma" subtitle="Keep calm, here's the story behind the agency" />
 
         <div class="services-grid about-grid">
           <div class="service-card">
             <h2 class="service-title">What we do</h2>
             <p class="about-copy">
               Calma is a performance lead generation agency. We build and run our own
-              acquisition funnels across insurance, financial, legal, and home services
+              acquisition funnels across insurance, financial, and home services
               verticals in the US, and deliver the resulting leads and calls to partners
               who can serve them.
             </p>
@@ -241,11 +234,7 @@ const founderNotes: Record<string, string> = {
           </div>
         </div>
 
-        <div class="home-cta about-cta">
-          <h2 class="home-cta-heading">Ready to generate leads?</h2>
-          <p class="home-cta-text">Tell us about your vertical and volume goals — we'll show you how our acquisition system fits.</p>
-          <a href="/contacts/" class="vertical-cta-btn">Get in touch</a>
-        </div>
+        <CtaBand class="cta-band--flow" />
 
       </div>
     </div>
@@ -255,10 +244,8 @@ const founderNotes: Record<string, string> = {
 </BaseLayout>
 
 <script>
-  // On phones the founders row is a horizontal scroller (see the 640px media
-  // query below) — init drag/fade like team.js does on the homepage. No-op
-  // for the centered desktop layout (nothing overflows, fades stay 0).
-  (window as any).initHScroller?.(document.querySelector('.about-founders'));
+  // The founders row carries .team-scroller, so script.js's global init already
+  // gives it drag/fade on phones (no-op for the centered desktop layout).
 
   // Accordion over the three founder cards: each toggles its own panel, opening
   // one closes the rest. Card notes are jokes at rest and "tap to hide" while open.
@@ -287,17 +274,6 @@ const founderNotes: Record<string, string> = {
 </script>
 
 <style>
-  .about-hero {
-    margin: 1.75rem 0 0;
-    text-align: center;
-  }
-  /* .service-card defaults to opacity:0 until inside a scroll-observed
-     .section.visible on the homepage — force visible on this static page
-     (same workaround as the lead-generation hub). */
-  .about-grid :global(.service-card) {
-    opacity: 1;
-    transform: none;
-  }
   .about-grid {
     margin-bottom: var(--space-xl);
   }
@@ -313,7 +289,7 @@ const founderNotes: Record<string, string> = {
   /* Center the three founder cards instead of the homepage drag-scroller look —
      but only where they fit on one row. On phones wrapping put the third card
      (and the opened panel) far below the fold, so the row falls back to
-     team.css's horizontal scroller, same UX as the homepage team section. */
+     the shared .team-scroller horizontal scroller, same UX as the homepage team section. */
   @media (min-width: 640px) {
     .about-founders :global(.team-track) {
       width: 100%;
@@ -346,7 +322,7 @@ const founderNotes: Record<string, string> = {
       0 0 0 2px rgba(232, 181, 71, 0.55),
       0 0 18px rgba(232, 181, 71, 0.25);
   }
-  /* hover glow comes from team.css (.team-card:hover); keep it lit while open */
+  /* hover glow comes from the shared .team-card:hover rule; keep it lit while open */
   .founder-toggle[aria-expanded='true'] :global(.team-avatar-wrap::before) {
     opacity: 1;
   }
@@ -479,8 +455,5 @@ const founderNotes: Record<string, string> = {
   }
   .founder-icon-link:hover {
     color: var(--text);
-  }
-  .about-cta {
-    margin-top: var(--space-xl);
   }
 </style>

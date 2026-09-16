@@ -51,7 +51,6 @@ export const team: TeamMember[] = [
     role: 'Numbers Whisperer',
     linkedin: 'https://www.linkedin.com/in/iulia-gorodenska-a57109264/',
   },
-  { name: 'Vik', alt: 'Vik', img: 'vik.svg', role: 'Talent Scout' },
 ];
 
 const MINT = [61, 214, 140]; // --secondary

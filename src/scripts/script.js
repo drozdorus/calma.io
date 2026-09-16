@@ -399,13 +399,12 @@ function initHScroller(scroller) {
   updateFade();
 }
 
-// Expose for team.js, which runs as a separate module on the homepage and
-// calls initHScroller on the team scroller. (Mirrors window.closeMobileMenu,
-// which the header's inline onclick handlers depend on.)
+// Exposed for page-level scripts that init their own scrollers. (Mirrors
+// window.closeMobileMenu, which the header's inline onclick handlers depend on.)
 window.initHScroller = initHScroller;
 
 initHScroller(document.querySelector('.upcoming-events-scroller'));
-initHScroller(document.querySelector('.past-events-scroller'));
+initHScroller(document.querySelector('.team-scroller'));
 
 // FAQ — one accordion control for the whole site. Markup is native <details>,
 // so it toggles fine without JS; this only layers a height slide on top (Web

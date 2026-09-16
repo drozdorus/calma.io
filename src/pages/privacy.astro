@@ -1,12 +1,14 @@
 ---
 // Privacy Policy — built from the shared design system like /about/ and blog
-// articles: breadcrumb + .article-page scaffold (blog.css), .section-title /
+// articles: breadcrumb + .article-page scaffold, .section-title /
 // .section-subtitle hero, and the legal text in .article-prose so typography
 // and links match the rest of the site. Replaced the legacy pixel-for-pixel
 // port (gradient title, custom back-button, own copyright line) on 2026-06-11.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import PageHero from '../components/PageHero.astro';
 ---
 
 <BaseLayout
@@ -15,7 +17,6 @@ import Footer from '../components/Footer.astro';
   canonical="https://calma.io/privacy/"
   ogTitle="Calma — Privacy Policy"
   ogDescription="How Calma collects, uses, and protects information submitted through our website."
-  useBlogCss={true}
 >
   <Header />
 
@@ -23,16 +24,9 @@ import Footer from '../components/Footer.astro';
     <div class="article-page">
       <div class="container">
 
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a href="/">calma.io</a>
-          <span class="breadcrumb-sep">/</span>
-          <span class="breadcrumb-current">Privacy Policy</span>
-        </nav>
+        <Breadcrumb items={[{ label: 'Privacy Policy' }]} />
 
-        <header class="privacy-hero">
-          <h1 class="section-title">Privacy Policy</h1>
-          <p class="section-subtitle">Last updated: Jul 16, 2026</p>
-        </header>
+        <PageHero title="Privacy Policy" subtitle="Last updated: Jul 16, 2026" />
 
         <article class="article-prose privacy-prose">
           <h2>1. Who We Are</h2>
@@ -88,11 +82,6 @@ import Footer from '../components/Footer.astro';
 </BaseLayout>
 
 <style>
-  /* Same hero treatment as .about-hero on /about/ */
-  .privacy-hero {
-    margin: 1.75rem 0 0;
-    text-align: center;
-  }
   /* Legal text reads better centered as a column under the centered hero */
   .privacy-prose {
     margin: 0 auto;
