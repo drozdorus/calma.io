@@ -2658,6 +2658,18 @@ a.logo {
   padding-bottom: 80px;
 }
 
+/* One column on the hiring pages: the content above is a centered sheet, so
+   the form reads as the next step under its heading, not as a sidebar pair. */
+.hiring-apply .contact-content {
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  max-width: 780px;
+}
+
+.hiring-apply .contact-info p:last-child {
+  margin-bottom: var(--space-xs);
+}
+
 .apply-alt {
   font-size: 0.9rem;
   color: var(--text-muted);
