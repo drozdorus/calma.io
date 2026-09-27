@@ -8,6 +8,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import TeamCards from '../components/TeamCards.astro';
+import StatsStrip from '../components/StatsStrip.astro';
 import SectionNav from '../components/SectionNav.astro';
 import IconSprite from '../components/IconSprite.astro';
 import ArticleCard from '../components/blog/ArticleCard.astro';
@@ -231,6 +232,8 @@ const latestPosts = (await getCollection('blog'))
           </div>
         </div>
       </div>
+
+      <StatsStrip />
 
       <!-- Methodology -->
       <div class="methodology">

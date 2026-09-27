@@ -1,0 +1,14 @@
+---
+// Proof strip under the About copy: four true, rounded numbers from
+// src/data/stats.ts (sources noted there).
+import { stats } from '../data/stats';
+---
+
+<dl class="stats-strip">
+  {stats.map((s) => (
+    <div class="stat">
+      <dt class="stat-label">{s.label}</dt>
+      <dd class="stat-value">{s.value}</dd>
+    </div>
+  ))}
+</dl>
