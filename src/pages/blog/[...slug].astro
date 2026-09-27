@@ -8,6 +8,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 import Footer from '../../components/Footer.astro';
 import { heroCovers } from '../../components/blog/heroCovers';
 
@@ -99,13 +100,7 @@ const articleJsonLd = {
     <div class="article-page">
       <div class="container">
 
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a href="/">calma.io</a>
-          <span class="breadcrumb-sep">/</span>
-          <a href="/blog/">Blog</a>
-          <span class="breadcrumb-sep">/</span>
-          <span class="breadcrumb-current">{data.breadcrumbLabel}</span>
-        </nav>
+        <Breadcrumb items={[{ label: 'Blog', href: '/blog/' }, { label: data.breadcrumbLabel }]} />
 
         <header class="article-hero">
           <div class="article-hero-meta">
@@ -134,7 +129,7 @@ const articleJsonLd = {
             </section>
           )}
 
-          {data.afterFaq && <Fragment set:html={data.afterFaq} />}
+          {data.disclaimer && <p class="article-disclaimer">{data.disclaimer}</p>}
         </article>
 
         <section class="article-related">

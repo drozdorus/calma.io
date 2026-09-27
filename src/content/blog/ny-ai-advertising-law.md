@@ -15,7 +15,7 @@ breadcrumbLabel: 'NY AI Advertising Law'
 lead: "New York enacted its first standalone AI advertising law in December 2025, effective June 9, 2026. Here's what lead gen operators need to know — and what's already in force."
 relatedDesc: 'NY SB-8420A, FTC Endorsement Guides, and state ADMT frameworks — what performance marketers must act on now.'
 twitterDescription: 'NY SB-8420A synthetic performer law, digital replicas act, FTC Endorsement Guides, and ADMT rules — what performance marketers must act on now.'
-afterFaq: '<hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:2.5rem 0;"><p style="font-size:0.85rem;color:var(--text-muted);line-height:1.7;"><strong>Disclaimer:</strong> This article is for informational purposes only and does not constitute legal advice. Laws and regulations referenced may have changed since publication. Consult qualified legal counsel before making compliance decisions specific to your business.</p>'
+disclaimer: 'Disclaimer: This article is for informational purposes only and does not constitute legal advice. Laws and regulations referenced may have changed since publication. Consult qualified legal counsel before making compliance decisions specific to your business.'
 related:
   - meta-auto-insurance-ads
   - us-auto-insurance-market

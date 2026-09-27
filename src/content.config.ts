@@ -31,7 +31,7 @@ const blog = defineCollection({
     /** canonical one-liner used when this article appears in a related-card */
     relatedDesc: z.string(),
     /** raw HTML rendered inside .article-prose after the FAQ block (e.g. legal disclaimer) */
-    afterFaq: z.string().optional(),
+    disclaimer: z.string().optional(),
     faq: z
       .array(
         z.object({

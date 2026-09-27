@@ -832,13 +832,6 @@ body {
   overflow: hidden;
 }
 
-.methodology-item:hover {
-  background: var(--glass-bg-hover);
-  transform: translateY(-2px);
-  border-color: var(--border-hover);
-  box-shadow: var(--glass-shadow-hover);
-}
-
 .methodology-label {
   font-size: 1.1rem;
   font-weight: 600;
@@ -920,13 +913,6 @@ body {
   overflow: hidden;
 }
 
-.service-card:hover {
-  background: var(--glass-bg-hover);
-  transform: translateY(-2px);
-  border-color: var(--border-hover);
-  box-shadow: var(--glass-shadow-hover);
-}
-
 .service-head {
   display: flex;
   align-items: center;
@@ -948,11 +934,6 @@ body {
   color: var(--primary);
   flex-shrink: 0;
   transition: all 0.3s var(--ease);
-}
-
-.service-card:hover .service-icon {
-  background: rgba(232, 181, 71, 0.14);
-  border-color: rgba(232, 181, 71, 0.32);
 }
 
 .service-title {
@@ -1035,14 +1016,18 @@ body {
 /* Shared accent text link — matches the amber→mint convention already used by
    the contact / careers links. Use this instead of inventing per-block link
    styles (no arrows / underlines / nudges, to stay consistent site-wide). */
-.text-link {
+.text-link,
+.faq-answer a,
+.article-prose a {
   color: var(--primary);
   text-decoration: underline;
   text-underline-offset: 3px;
   transition: color 0.2s var(--ease);
 }
 
-.text-link:hover {
+.text-link:hover,
+.faq-answer a:hover,
+.article-prose a:hover {
   color: var(--secondary);
 }
 
@@ -1733,17 +1718,6 @@ body {
 
 /* Links inside FAQ answers follow the site's text-link convention
    (underline = "link in text", amber → mint on hover). */
-.faq-answer a {
-  color: var(--primary);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color 0.2s var(--ease);
-}
-
-.faq-answer a:hover {
-  color: var(--secondary);
-}
-
 /* Boxed container (homepage) */
 .faq-list .faq-item {
   border-bottom: 1px solid var(--border-default);
@@ -2093,13 +2067,13 @@ a.logo {
 }
 
 .breadcrumb a {
-  color: rgba(246, 243, 236, 0.5);
+  color: var(--text-muted);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .breadcrumb a:hover {
-  color: rgba(246, 243, 236, 0.85);
+  color: var(--text);
 }
 
 .breadcrumb-sep {
@@ -2194,12 +2168,6 @@ a.logo {
 .article-prose strong {
   color: rgba(246, 243, 236, 0.9);
   font-weight: 600;
-}
-
-.article-prose a {
-  color: var(--primary);
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .article-prose blockquote {
@@ -2493,8 +2461,8 @@ a.logo {
 }
 
 .team-link:hover {
-  color: var(--secondary);
-  border-color: rgba(61, 214, 140, 0.4);
+  color: var(--primary);
+  border-color: var(--border-hover);
 }
 
 .team-info {
@@ -2793,4 +2761,14 @@ a.logo {
       transition: none;
     }
   }
+}
+
+/* Legal/editorial disclaimer under an article's FAQ (frontmatter `disclaimer`). */
+.article-disclaimer {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-default);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
 }
