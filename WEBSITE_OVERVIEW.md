@@ -60,7 +60,9 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 | `src/components/Breadcrumb.astro` · `PageHero.astro` · `CtaBand.astro` | Shared inner-page scaffold: breadcrumb nav, centered h1+subtitle hero, "Ready to generate leads?" glass band (+ global `.btn-primary`) |
 | `src/data/site.ts` | Sitewide constants: contact email, careers path (`/hiring/`), LinkedIn/Crunchbase |
 | `src/styles/style.css` | **The** stylesheet — design system, sections, blog/inner-page scaffold, team (blog.css/team.css merged in 2026-08-25) |
-| `src/scripts/script.js` | **The** script — wave canvas, island header, scroll-spy, drag scrollers (events/team), FAQ, form |
+| `src/scripts/script.js` | **The** script — island header, scroll-spy, drag scrollers (events/team), FAQ, form |
+| `src/scripts/waves.js` | Hero waves, imported by script.js (same bundle): WebGL fragment shader by default, the original Canvas 2D version as fallback and at `?waves=classic` |
+| `src/data/stats.ts` → `StatsStrip.astro` | Homepage "By the Numbers" cards (sibling of Our Methodology in About); each figure's source is a comment next to it |
 | `public/` | `img/`, `fonts/`, `CNAME`, `.nojekyll`, `robots.txt`, favicons |
 | `astro.config.mjs` | `site`, `trailingSlash:'always'`, `build.format:'directory'`, sitemap, `markdown.processor` (smartypants off for verbatim quotes) |
 
@@ -139,7 +141,7 @@ Audience Intelligence · Automated Optimization · Lead Verification
 
 ### Key interactions
 
-- Canvas wave animation (multi-layer sine, color-shifting, scroll-fade)
+- Hero waves (WebGL shader, 2026-09-27): draw-in intro, lines part around the pointer, tap/click ripples, slow "lead" sparks along the lines, quiet zone behind the headline, amplitude settles on scroll; DPR/pixel-capped with auto quality drop, still frame for reduced motion, Canvas 2D fallback
 - Island header (full-width → floating pill on scroll)
 - Smooth-scroll anchors (80px offset); the **scroll-spy drives the bottom section pill**
   (`SectionNav`) on the homepage; top scroll-progress bar on every page
