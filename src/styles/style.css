@@ -772,55 +772,31 @@ body {
 }
 
 /* Methodology */
-/* Stats strip — four proof numbers under the About copy. Value sits above its
-   label visually; the dl keeps label (dt) first for screen readers. */
-.stats-strip {
-  max-width: 1120px;
-  margin: 0 auto var(--space-2xl);
-  display: grid;
+/* By the Numbers — reuses the methodology card; only the value is new.
+   Value sits above its label visually; dt stays first for screen readers. */
+.methodology-grid.stats-grid {
   grid-template-columns: repeat(4, 1fr);
-  border-top: 1px solid var(--border-default);
-  border-bottom: 1px solid var(--border-default);
 }
 
 .stat {
   display: flex;
   flex-direction: column-reverse;
   gap: var(--space-xs);
-  padding: var(--space-lg) var(--space-md);
-  text-align: center;
-}
-
-.stat + .stat {
-  border-left: 1px solid var(--border-default);
 }
 
 .stat-value {
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
 
-.stat-label {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-@media (max-width: 640px) {
-  .stats-strip {
+@media (max-width: 900px) {
+  .methodology-grid.stats-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .stat:nth-child(3) {
-    border-left: 0;
-  }
-
-  .stat:nth-child(n + 3) {
-    border-top: 1px solid var(--border-default);
   }
 }
 
@@ -1543,6 +1519,14 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .methodology-grid.stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .methodology-item.stat {
+    padding: var(--space-md);
+  }
+
   .services-grid {
     grid-template-columns: 1fr;
     gap: var(--space-md);
@@ -1644,6 +1628,7 @@ body {
 .section.visible .methodology-item:nth-child(3),
 .section.visible .service-card:nth-child(3) { transition-delay: 160ms; }
 
+.section.visible .methodology-item:nth-child(4),
 .section.visible .service-card:nth-child(4) { transition-delay: 240ms; }
 .section.visible .service-card:nth-child(5) { transition-delay: 320ms; }
 .section.visible .service-card:nth-child(6) { transition-delay: 400ms; }

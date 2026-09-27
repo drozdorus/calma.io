@@ -1,14 +1,17 @@
 ---
-// Proof strip under the About copy: four true, rounded numbers from
-// src/data/stats.ts (sources noted there).
+// "By the Numbers" — a sibling of Our Methodology inside About: same h3,
+// same glass cards, so it reads as part of the section, not a bolt-on.
 import { stats } from '../data/stats';
 ---
 
-<dl class="stats-strip">
-  {stats.map((s) => (
-    <div class="stat">
-      <dt class="stat-label">{s.label}</dt>
-      <dd class="stat-value">{s.value}</dd>
-    </div>
-  ))}
-</dl>
+<div class="methodology stats">
+  <h3 class="methodology-title">By the Numbers</h3>
+  <dl class="methodology-grid stats-grid">
+    {stats.map((s) => (
+      <div class="methodology-item stat">
+        <dt class="methodology-desc">{s.label}</dt>
+        <dd class="stat-value">{s.value}</dd>
+      </div>
+    ))}
+  </dl>
+</div>

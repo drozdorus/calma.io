@@ -128,7 +128,7 @@ void main() {
 
     // Leads: sparse bright points drifting along each line.
     float spacing = 150.0 + hash(fi + 4.0) * 90.0;
-    float u = p.x / spacing - t * (0.18 + hash(fi + 5.0) * 0.3);
+    float u = p.x / spacing - t * (0.06 + hash(fi + 5.0) * 0.08);
     float cell = floor(u);
     float f = (fract(u) - 0.5) * spacing;
     float on = step(0.66, hash(cell * 1.37 + fi * 31.0));
