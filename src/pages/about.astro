@@ -4,8 +4,8 @@
 // Built from the shared design system: Breadcrumb/PageHero, service-card glass
 // cards (style.css), team cards (founding trio from src/data/team.ts), and the
 // shared CtaBand before the footer. Each founder card toggles its own expandable
-// panel (accordion): Rus's holds his bio, the other two hold a running
-// "bio coming soon" joke.
+// panel (accordion): Rus's holds his bio and is open on load, the other two
+// hold a running "bio coming soon" joke.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -23,6 +23,9 @@ const founderNotes: Record<string, string> = {
   Yehor: 'tap for the bio ↓',
   Artur: 'tap for the excuse ↓',
 };
+const openNote = 'tap to hide ↑';
+// The panel that is open when the page loads.
+const openByDefault = 'Rus';
 ---
 
 <BaseLayout
@@ -106,8 +109,10 @@ const founderNotes: Record<string, string> = {
                 type="button"
                 class="team-card founder-toggle"
                 style={`--card-accent: ${accentFor(i, founding.length)}`}
-                aria-expanded="false"
+                aria-expanded={m.name === openByDefault ? 'true' : 'false'}
                 aria-controls={`founder-panel-${m.name.toLowerCase()}`}
+                data-resting={founderNotes[m.name]}
+                data-open-note={openNote}
               >
                 <div class="team-avatar-wrap">
                   <div class="team-avatar">
@@ -117,14 +122,14 @@ const founderNotes: Record<string, string> = {
                 <div class="team-info">
                   <div class="team-name">{m.name}</div>
                   <div class="team-role">{m.role}</div>
-                  <div class="founder-note">{founderNotes[m.name]}</div>
+                  <div class="founder-note">{m.name === openByDefault ? openNote : founderNotes[m.name]}</div>
                 </div>
               </button>
             ))}
           </div>
         </div>
 
-        <div class="service-card founder-panel" id="founder-panel-rus">
+        <div class="service-card founder-panel open" id="founder-panel-rus">
           <div class="founder-panel-inner">
           <div class="founder-panel-head">
             <div class="founder-panel-avatar">
@@ -260,11 +265,14 @@ const founderNotes: Record<string, string> = {
 
   // Accordion over the three founder cards: each toggles its own panel, opening
   // one closes the rest. Card notes are jokes at rest and "tap to hide" while open.
-  const entries = [...document.querySelectorAll('.founder-toggle')].map((toggle) => ({
+  // One panel is already open in the markup, so the resting text comes from the
+  // data attribute rather than from whatever the note shows at load.
+  const entries = [...document.querySelectorAll<HTMLElement>('.founder-toggle')].map((toggle) => ({
     toggle,
     panel: document.getElementById(toggle.getAttribute('aria-controls') ?? ''),
     note: toggle.querySelector('.founder-note'),
-    resting: toggle.querySelector('.founder-note')?.textContent ?? '',
+    resting: toggle.dataset.resting ?? '',
+    openNote: toggle.dataset.openNote ?? '',
   }));
   const close = (e: (typeof entries)[number]) => {
     e.panel?.classList.remove('open');
@@ -275,7 +283,7 @@ const founderNotes: Record<string, string> = {
     entry.toggle.addEventListener('click', () => {
       const open = entry.panel?.classList.toggle('open') ?? false;
       entry.toggle.setAttribute('aria-expanded', String(open));
-      if (entry.note) entry.note.textContent = open ? 'tap to hide ↑' : entry.resting;
+      if (entry.note) entry.note.textContent = open ? entry.openNote : entry.resting;
       if (open) {
         entries.filter((other) => other !== entry).forEach(close);
         entry.panel?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -345,8 +353,8 @@ const founderNotes: Record<string, string> = {
   .founder-toggle .founder-note {
     color: var(--primary);
   }
-  /* Profile panels: collapsed until their card is tapped.
-     Animated with the grid-template-rows 0fr→1fr trick;
+  /* Profile panels: collapsed unless .open (one is open on load, the rest open
+     on tap). Animated with the grid-template-rows 0fr→1fr trick;
      the card's own padding/border/shadow collapse alongside so nothing leaks
      through when closed. visibility:hidden keeps the collapsed links out of the
      tab order. */
