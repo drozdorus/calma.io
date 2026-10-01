@@ -41,6 +41,7 @@ export const team: TeamMember[] = [
     linkedin: 'https://www.linkedin.com/in/anastasiia-stefinin-140792256/',
   },
   { name: 'Val', alt: 'Val', img: 'val.svg', role: 'Encoded' },
+  { name: 'Myko', alt: 'Myko', img: 'myko.svg', role: 'Hustle in Training' },
   { name: 'Lisa', alt: 'Lisa', img: 'lisa.svg', role: 'Cut & Hook Specialist' },
   { name: 'Max', alt: 'Max', img: 'max.svg', role: 'Frame Surgeon' },
   { name: 'Alex', alt: 'Alex', img: 'alex.svg', role: 'Pixel Perfectionist' },
