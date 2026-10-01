@@ -1,13 +1,11 @@
 ---
-// About page — company story with a neutral founder paragraph. Exists primarily
-// as the entity page for "Calma + Ruslan Drozdov" queries (SERM): reached via the
-// footer "About" link, not from the homepage body, by owner's decision.
+// About page — company story and the founding team. Reached via the footer
+// "About" link, not from the homepage body.
 // Built from the shared design system: Breadcrumb/PageHero, service-card glass
 // cards (style.css), team cards (founding trio from src/data/team.ts), and the
-// shared CtaBand before the footer. Each founder card toggles its own expandable panel
-// (accordion): Rus's holds the real bio — kept in the DOM when collapsed so
-// search engines index it — the other two hold a running "bio coming soon" joke
-// so the page doesn't read as built by the founder about himself.
+// shared CtaBand before the footer. Each founder card toggles its own expandable
+// panel (accordion): Rus's holds his bio, the other two hold a running
+// "bio coming soon" joke.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -347,8 +345,8 @@ const founderNotes: Record<string, string> = {
   .founder-toggle .founder-note {
     color: var(--primary);
   }
-  /* Profile panels: collapsed until their card is tapped, but kept in the DOM so
-     the bio stays indexable. Animated with the grid-template-rows 0fr→1fr trick;
+  /* Profile panels: collapsed until their card is tapped.
+     Animated with the grid-template-rows 0fr→1fr trick;
      the card's own padding/border/shadow collapse alongside so nothing leaks
      through when closed. visibility:hidden keeps the collapsed links out of the
      tab order. */

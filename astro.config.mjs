@@ -19,8 +19,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // The founder photo on /about/ sits in a collapsed panel, so the sitemap
-      // is what tells Google Images the file belongs to that page.
+      // Image entries for pages whose main image is not the shared OG cover.
       serialize(item) {
         if (item.url === 'https://calma.io/about/') {
           item.img = [{ url: 'https://calma.io/img/team/ruslan-drozdov.webp' }];
