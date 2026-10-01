@@ -41,13 +41,22 @@ const founderNotes: Record<string, string> = {
     "url": "https://calma.io/about/",
     "name": "About Calma",
     "about": { "@id": "https://calma.io/#organization" },
+    "primaryImageOfPage": { "@id": "https://calma.io/about/#founder-photo" },
     "mainEntity": {
       "@type": "Person",
       "@id": "https://drozdorus.com/#person",
       "name": "Ruslan Drozdov",
       "alternateName": "Руслан Дроздов",
       "description": "Ukrainian entrepreneur and investor, key ideologist behind Calma. Started in online marketing in 2013, worked at Everad 2014–2018, founded Traffinad in 2018, then spent eight years in the startup ecosystem as a partner at Adventures Lab and Astroid.",
-      "image": "https://calma.io/img/team/ruslan-drozdov.webp",
+      "image": {
+        "@type": "ImageObject",
+        "@id": "https://calma.io/about/#founder-photo",
+        "url": "https://calma.io/img/team/ruslan-drozdov.webp",
+        "contentUrl": "https://calma.io/img/team/ruslan-drozdov.webp",
+        "width": 480,
+        "height": 480,
+        "caption": "Ruslan Drozdov"
+      },
       "url": "https://drozdorus.com/",
       "worksFor": { "@id": "https://calma.io/#organization" },
       "sameAs": [
@@ -126,7 +135,6 @@ const founderNotes: Record<string, string> = {
                 alt="Ruslan Drozdov — founder of Calma, performance lead generation agency"
                 width="480"
                 height="480"
-                loading="lazy"
               />
             </div>
             <div>

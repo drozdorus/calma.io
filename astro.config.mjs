@@ -17,5 +17,16 @@ export default defineConfig({
     // GFM (tables, etc.) stays on; disabling smartypants only affects quote glyphs.
     processor: unified({ smartypants: false }),
   },
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      // The founder photo on /about/ sits in a collapsed panel, so the sitemap
+      // is what tells Google Images the file belongs to that page.
+      serialize(item) {
+        if (item.url === 'https://calma.io/about/') {
+          item.img = [{ url: 'https://calma.io/img/team/ruslan-drozdov.webp' }];
+        }
+        return item;
+      },
+    }),
+  ],
 });
