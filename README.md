@@ -36,3 +36,31 @@ never write a contact address into a job description.
 **Check it works:** `npm run build` must list `/hiring/<slug>/` for every open role.
 After a deploy, submit the form once and look for the row in Notion. Search Console →
 Enhancements → Job postings shows whether Google accepted the markup.
+
+## Search engines
+
+`calma.io` is a domain property in both Google Search Console and Bing Webmaster Tools
+(owner's account). Bing → Recommendations is where title and markup complaints surface;
+the 2026-10-11 sweep (short/long titles, no IndexNow) is what the rules below come from.
+
+**Titles:** Bing flags a `<title>` under ~30 or over 70 characters and Google truncates
+around 60, so keep every page at 40–60. Blog posts and vacancies set `title` (the tag,
+with the " — Calma" suffix) and `ogTitle` (the h1 / share title, no suffix) separately,
+so a long headline can stay on the page while the tag gets a shorter rewrite. Audit after
+a build:
+
+```sh
+for f in $(find dist -name index.html); do t=$(grep -o '<title>[^<]*' "$f" | cut -c8-); echo "${#t} $f"; done | sort -n
+```
+
+**IndexNow:** the `indexnow` job in `.github/workflows/deploy.yml` posts every sitemap URL
+to `api.indexnow.org` after each push-triggered deploy (not the weekly cron), so Bing,
+Yandex, Naver and Seznam recrawl within minutes instead of waiting for a crawl. The key is
+public by design: `public/19d650364f2f508b0e54c881db8783b3.txt` (content = the key) and
+`INDEXNOW_KEY` in the workflow must match. Rotate with `openssl rand -hex 16`, renaming the
+file and updating the env in one commit. Verify in Bing WMT → IndexNow (submitted URLs show
+up within a day), or re-run the job from the Actions tab. Manual submit from the Mac:
+
+```sh
+curl -sS -o /dev/null -w '%{http_code}\n' 'https://api.indexnow.org/indexnow?url=https://calma.io/&key=19d650364f2f508b0e54c881db8783b3'
+```

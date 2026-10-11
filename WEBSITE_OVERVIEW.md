@@ -63,7 +63,7 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 | `src/scripts/script.js` | **The** script — island header, scroll-spy, drag scrollers (events/team), FAQ, form |
 | `src/scripts/waves.js` | Hero waves, imported by script.js (same bundle): WebGL fragment shader by default, the original Canvas 2D version as fallback and at `?waves=classic` |
 | `src/data/stats.ts` → `StatsStrip.astro` | Homepage "By the Numbers" cards (sibling of Our Methodology in About); each figure's source is a comment next to it |
-| `public/` | `img/`, `fonts/`, `CNAME`, `.nojekyll`, `robots.txt`, favicons |
+| `public/` | `img/`, `fonts/`, `CNAME`, `.nojekyll`, `robots.txt`, `llms.txt`, the IndexNow key file `<key>.txt` (see README → Search engines), favicons |
 | `astro.config.mjs` | `site`, `trailingSlash:'always'`, `build.format:'directory'`, sitemap, `markdown.processor` (smartypants off for verbatim quotes) |
 
 ---

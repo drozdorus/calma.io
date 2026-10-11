@@ -1,5 +1,5 @@
 ---
-title: 'The US Auto Insurance Market: Structure, Players, and Lead Economics — Calma'
+title: 'US Auto Insurance Market: Players and Lead Economics — Calma'
 description: 'How the $312B US auto insurance market is structured, who the key players are, and where performance lead generation fits in the ecosystem.'
 canonical: 'https://calma.io/blog/us-auto-insurance-market/'
 ogTitle: 'The US Auto Insurance Market: Structure, Players, and Lead Economics'

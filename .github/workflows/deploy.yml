@@ -23,6 +23,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      urls: ${{ steps.urls.outputs.urls }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,6 +39,11 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Build with Astro
         run: npm run build
+      - name: Collect sitemap URLs for IndexNow
+        id: urls
+        run: |
+          urls=$(grep -o '<loc>https://calma.io/[^<]*</loc>' dist/sitemap-0.xml | sed 's/<[^>]*>//g' | jq -R . | jq -sc .)
+          echo "urls=$urls" >> "$GITHUB_OUTPUT"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -52,3 +59,24 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  indexnow:
+    # Tell Bing (and the other IndexNow engines) which URLs to recrawl, right
+    # after the deploy. Skipped on the weekly cron rebuild: nothing new to say.
+    # The key is public by design — public/<key>.txt must hold the same value.
+    needs: [build, deploy]
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    env:
+      INDEXNOW_KEY: 19d650364f2f508b0e54c881db8783b3
+      URLS: ${{ needs.build.outputs.urls }}
+    steps:
+      - name: Submit sitemap URLs to IndexNow
+        run: |
+          body=$(jq -nc --arg host calma.io --arg key "$INDEXNOW_KEY" --argjson urls "$URLS" \
+            '{host: $host, key: $key, keyLocation: ("https://calma.io/" + $key + ".txt"), urlList: $urls}')
+          code=$(curl -sS -o /tmp/indexnow.out -w '%{http_code}' -X POST 'https://api.indexnow.org/indexnow' \
+            -H 'Content-Type: application/json; charset=utf-8' -d "$body")
+          echo "IndexNow: HTTP $code for $(echo "$URLS" | jq length) URLs"
+          cat /tmp/indexnow.out; echo
+          case "$code" in 200|202) ;; *) exit 1 ;; esac

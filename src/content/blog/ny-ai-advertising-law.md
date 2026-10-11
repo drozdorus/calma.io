@@ -1,5 +1,5 @@
 ---
-title: "New York's AI Advertising Law: What Lead Gen Operators Need to Know — Calma"
+title: "New York's AI Advertising Law: A Guide for Lead Gen — Calma"
 description: 'NY SB-8420A (synthetic performer disclosure, effective June 9, 2026), the parallel digital replicas law, FTC rules, and state ADMT frameworks — what lead gen operators need to act on now.'
 canonical: 'https://calma.io/blog/ny-ai-advertising-law/'
 ogTitle: "New York's AI Advertising Law: What Lead Gen Operators Need to Know"

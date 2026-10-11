@@ -1,5 +1,5 @@
 ---
-title: 'Running Auto Insurance Ads on Meta: What Changed in 2025–2026 — Calma'
+title: 'Auto Insurance Ads on Meta: What Changed in 2025–2026 — Calma'
 description: "How Meta's Andromeda engine and Special Ad Category restrictions reshaped creative strategy for auto insurance advertisers. A practitioner's guide."
 canonical: 'https://calma.io/blog/meta-auto-insurance-ads/'
 ogTitle: 'Running Auto Insurance Ads on Meta: What Changed in 2025–2026'
