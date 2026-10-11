@@ -61,7 +61,7 @@ client-acquisition funnel — there is a contact form, but no hard-sell CTAs.
 | `src/data/site.ts` | Sitewide constants: contact email, careers path (`/hiring/`), LinkedIn/Crunchbase |
 | `src/styles/style.css` | **The** stylesheet — design system, sections, blog/inner-page scaffold, team (blog.css/team.css merged in 2026-08-25) |
 | `src/scripts/script.js` | **The** script — island header, scroll-spy, drag scrollers (events/team), FAQ, form |
-| `src/scripts/waves.js` | Hero waves, imported by script.js (same bundle): WebGL fragment shader by default, the original Canvas 2D version as fallback and at `?waves=classic` |
+| `src/scripts/waves.js` | Hero waves, imported by script.js (same bundle): WebGL fragment shader by default, the original Canvas 2D version as fallback and at `?waves=classic`. A worker-side probe (OffscreenCanvas, 1 s timeout) sends software WebGL (SwiftShader in headless Chrome = every Lighthouse/PSI run, GPU-less Linux) to a still Canvas 2D frame; the shader compiles through `KHR_parallel_shader_compile` so first paint carries no long task |
 | `src/data/stats.ts` → `StatsStrip.astro` | Homepage "By the Numbers" cards (sibling of Our Methodology in About); each figure's source is a comment next to it |
 | `public/` | `img/`, `fonts/`, `CNAME`, `.nojekyll`, `robots.txt`, `llms.txt`, the IndexNow key file `<key>.txt` (see README → Search engines), favicons |
 | `astro.config.mjs` | `site`, `trailingSlash:'always'`, `build.format:'directory'`, sitemap, `markdown.processor` (smartypants off for verbatim quotes) |
@@ -141,7 +141,7 @@ Audience Intelligence · Automated Optimization · Lead Verification
 
 ### Key interactions
 
-- Hero waves (WebGL shader, 2026-09-27): draw-in intro, lines part around the pointer, tap/click ripples, slow "lead" sparks along the lines, quiet zone behind the headline, amplitude settles on scroll; DPR/pixel-capped with auto quality drop, still frame for reduced motion, Canvas 2D fallback
+- Hero waves (WebGL shader, 2026-09-27): draw-in intro, lines part around the pointer, tap/click ripples, slow "lead" sparks along the lines, quiet zone behind the headline, amplitude settles on scroll; DPR/pixel-capped with auto quality drop, still frame for reduced motion, Canvas 2D fallback. Since 2026-10-11 a device that cannot hold 20 fps after the intro freezes on its current frame, and software WebGL never runs the loop at all: PSI mobile had measured 36 s of main-thread blocking (SwiftShader rasterising every frame on the CPU), Performance 62 → 95+ with the visuals on real GPUs untouched
 - Island header (full-width → floating pill on scroll)
 - Smooth-scroll anchors (80px offset); the **scroll-spy drives the bottom section pill**
   (`SectionNav`) on the homepage; top scroll-progress bar on every page

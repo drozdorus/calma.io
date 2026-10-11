@@ -5,6 +5,13 @@
 //
 // Lifecycle shared by both: rAF runs only while the hero is in view
 // (scrollY < 300, the canvas is faded out past that) and the tab is visible.
+//
+// Where the GPU is software (SwiftShader in headless Chrome, so every
+// Lighthouse / PageSpeed run; llvmpipe on GPU-less Linux) the shader would
+// rasterise on the CPU and block the main thread for the whole visit — PSI
+// mobile measured 36 s of blocking time on 2026-10-11. Those get one still
+// frame of the Canvas 2D version instead. Real devices that still cannot hold
+// 20 fps after the intro freeze on their current frame.
 
 const FADE_END = 300;
 
@@ -14,20 +21,77 @@ export function initWaves() {
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const forceClassic = new URLSearchParams(location.search).get('waves') === 'classic';
-
-  if (!forceClassic && shaderWaves(canvas, reduced)) return;
-  if (!reduced) classicWaves(canvas);
+  if (forceClassic) {
+    classicWaves(canvas, reduced);
+    return;
+  }
+  probeGL((software) => {
+    if (!software && shaderWaves(canvas, reduced)) return;
+    classicWaves(canvas, reduced || software);
+  });
 }
 
+// Is WebGL here hardware or emulated? The renderer string names SwiftShader /
+// llvmpipe when it is CPU-side. The probe context is created in a worker on an
+// OffscreenCanvas because on SwiftShader the creation itself takes seconds
+// (2.2 s measured in headless Chrome): in a worker that blocks nobody. A
+// browser without OffscreenCanvas in workers (older Safari) skips the probe
+// and is treated as hardware, which for those browsers it always is.
+// `failIfMajorPerformanceCaveat` catches some software paths by itself, not a
+// forced SwiftShader, so the renderer check stays. No timeout: drawing the
+// still frame while the worker is still inside SwiftShader's init contends
+// for the GPU process and blocks the main thread for as long (measured), so
+// the hero simply waits for the answer.
+function probeGL(cb) {
+  if (typeof Worker === 'undefined' || typeof OffscreenCanvas === 'undefined') {
+    cb(false);
+    return;
+  }
+  const src = `
+    let r = 'none';
+    try {
+      const gl = new OffscreenCanvas(1, 1).getContext('webgl', { failIfMajorPerformanceCaveat: true });
+      if (gl) {
+        const i = gl.getExtension('WEBGL_debug_renderer_info');
+        r = i ? String(gl.getParameter(i.UNMASKED_RENDERER_WEBGL)) : 'unknown';
+        const l = gl.getExtension('WEBGL_lose_context');
+        if (l) l.loseContext();
+      }
+    } catch (e) {}
+    postMessage(r);
+    close();
+  `;
+  let url, w;
+  try {
+    url = URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
+    w = new Worker(url);
+  } catch (e) {
+    cb(false);
+    return;
+  }
+  let settled = false;
+  const done = (software) => {
+    if (settled) return;
+    settled = true;
+    URL.revokeObjectURL(url);
+    cb(software);
+  };
+  w.onmessage = (e) =>
+    done(e.data === 'none' || /swiftshader|llvmpipe|softpipe|software|basic render/i.test(e.data));
+  w.onerror = () => done(false);
+}
+
+// Returns a `halt` that stops the loop for good (the last frame stays).
 function runLoop(frame) {
   let running = false;
+  let dead = false;
   let id;
   const tick = (now) => {
     frame(now);
     id = requestAnimationFrame(tick);
   };
   const start = () => {
-    if (running || document.hidden) return;
+    if (running || dead || document.hidden) return;
     running = true;
     id = requestAnimationFrame(tick);
   };
@@ -40,6 +104,10 @@ function runLoop(frame) {
   sync();
   window.addEventListener('scroll', sync, { passive: true });
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : sync()));
+  return () => {
+    dead = true;
+    stop();
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -169,140 +237,179 @@ function shaderWaves(canvas, reduced) {
   });
   if (!gl) return false;
 
+  // Compile and link are synchronous and cost a few hundred ms on a phone —
+  // one long task right at first paint. With KHR_parallel_shader_compile the
+  // driver does the work on its own thread and we poll until it is done,
+  // reading no status before then (any status read would block). Without the
+  // extension it is the old synchronous path.
   const compile = (type, src) => {
     const s = gl.createShader(type);
     gl.shaderSource(s, src);
     gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-      console.warn('[waves]', gl.getShaderInfoLog(s));
-      return null;
-    }
     return s;
   };
   const vs = compile(gl.VERTEX_SHADER, VERT);
   const fs = compile(gl.FRAGMENT_SHADER, FRAG);
-  if (!vs || !fs) return false;
   const prog = gl.createProgram();
   gl.attachShader(prog, vs);
   gl.attachShader(prog, fs);
   gl.linkProgram(prog);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
-  gl.useProgram(prog);
 
-  // One oversized triangle covers the viewport.
-  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  const aPos = gl.getAttribLocation(prog, 'a_pos');
-  gl.enableVertexAttribArray(aPos);
-  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-  const U = {};
-  ['u_res', 'u_dpr', 'u_time', 'u_intro', 'u_calm', 'u_amp', 'u_mouse', 'u_rip'].forEach(
-    (n) => (U[n] = gl.getUniformLocation(prog, n)),
-  );
-
-  canvas.classList.add('is-gl');
-
-  // Resolution: DPR capped at 2 and total pixels capped, so a 5K display or a
-  // 3x phone doesn't shade 15M pixels. `quality` drops if frames run slow.
-  const MAX_PIXELS = 3.2e6;
-  let quality = 1;
-  let w = 0, h = 0, dpr = 1;
-  function resize() {
-    w = canvas.clientWidth;
-    h = canvas.clientHeight;
-    dpr = Math.min(window.devicePixelRatio || 1, 2) * quality;
-    if (w * h * dpr * dpr > MAX_PIXELS) dpr = Math.sqrt(MAX_PIXELS / (w * h));
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    gl.viewport(0, 0, canvas.width, canvas.height);
-  }
-  new ResizeObserver(resize).observe(canvas);
-  resize();
-
-  // Pointer: smoothed position + a strength that fades when idle.
-  const mouse = { x: -1e4, y: -1e4, tx: -1e4, ty: -1e4, s: 0, active: 0 };
-  const rip = new Float32Array([0, 0, -1, 0, 0, -1, 0, 0, -1]);
-  let ripIdx = 0;
-  const t0 = performance.now();
-  const now = () => (performance.now() - t0) / 1000;
-
-  if (!reduced) {
-    const inHero = () => window.scrollY < FADE_END;
-    window.addEventListener('pointermove', (e) => {
-      if (!inHero()) return;
-      mouse.tx = e.clientX;
-      mouse.ty = e.clientY;
-      if (mouse.x < -1e3) { mouse.x = e.clientX; mouse.y = e.clientY; }
-      mouse.active = now();
-    }, { passive: true });
-    window.addEventListener('pointerdown', (e) => {
-      if (!inHero()) return;
-      rip.set([e.clientX, e.clientY, now()], ripIdx * 3);
-      ripIdx = (ripIdx + 1) % 3;
-    }, { passive: true });
-    document.documentElement.addEventListener('pointerleave', () => (mouse.active = -10));
-  }
-
-  const INTRO = 2.4;
-  const easeOut = (x) => 1 - Math.pow(1 - Math.min(1, x), 3);
-  let last = 0, slow = 0, frames = 0;
-
-  function draw(time, intro) {
-    const idle = time - mouse.active > 1.5;
-    mouse.s += ((idle ? 0 : 1) - mouse.s) * 0.04;
-    mouse.x += (mouse.tx - mouse.x) * 0.12;
-    mouse.y += (mouse.ty - mouse.y) * 0.12;
-
-    gl.uniform2f(U.u_res, w, h);
-    gl.uniform1f(U.u_dpr, canvas.width / w);
-    gl.uniform1f(U.u_time, time);
-    gl.uniform1f(U.u_intro, intro);
-    gl.uniform1f(U.u_calm, Math.min(1, window.scrollY / FADE_END));
-    gl.uniform1f(U.u_amp, w > 768 ? 1.6 : 1);
-    gl.uniform3f(U.u_mouse, mouse.x, mouse.y, mouse.s);
-    gl.uniform3fv(U.u_rip, rip);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-  }
-
-  if (reduced) {
-    // Still frame instead of nothing: the hero keeps its identity.
-    draw(12, 1);
-    new ResizeObserver(() => draw(12, 1)).observe(canvas);
+  const linked = () => {
+    if (gl.getProgramParameter(prog, gl.LINK_STATUS)) return true;
+    console.warn('[waves]', gl.getShaderInfoLog(fs) || gl.getShaderInfoLog(vs) || gl.getProgramInfoLog(prog));
+    return false;
+  };
+  const parallel = gl.getExtension('KHR_parallel_shader_compile');
+  if (!parallel) {
+    if (!linked()) return false;
+    run();
     return true;
   }
-
-  canvas.addEventListener('webglcontextlost', (e) => e.preventDefault());
-
-  runLoop((ms) => {
-    const time = now();
-    // Adaptive quality: after the intro, if frames average >22ms, render
-    // fewer pixels (down to 60% linear) rather than stutter.
-    if (last && time > INTRO) {
-      frames++;
-      slow += time - last > 0.022 ? 1 : 0;
-      if (frames === 60) {
-        if (slow > 30 && quality > 0.6) { quality = Math.max(0.6, quality * 0.8); resize(); }
-        frames = slow = 0;
-      }
+  // Async: the canvas owns a WebGL context now, so a link failure here can no
+  // longer fall back to Canvas 2D — it leaves the hero without waves, which
+  // on a GPU that compiled this shader for two weeks is theoretical.
+  const poll = () => {
+    if (!gl.getProgramParameter(prog, parallel.COMPLETION_STATUS_KHR)) {
+      requestAnimationFrame(poll);
+      return;
     }
-    last = time;
-    draw(time, easeOut(time / INTRO));
-  });
+    if (linked()) run();
+  };
+  requestAnimationFrame(poll);
   return true;
+
+  function run() {
+    gl.useProgram(prog);
+
+    // One oversized triangle covers the viewport.
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const aPos = gl.getAttribLocation(prog, 'a_pos');
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+    const U = {};
+    ['u_res', 'u_dpr', 'u_time', 'u_intro', 'u_calm', 'u_amp', 'u_mouse', 'u_rip'].forEach(
+      (n) => (U[n] = gl.getUniformLocation(prog, n)),
+    );
+
+    canvas.classList.add('is-gl');
+
+    // Resolution: DPR capped at 2 and total pixels capped, so a 5K display or a
+    // 3x phone doesn't shade 15M pixels. `quality` drops if frames run slow.
+    const MAX_PIXELS = 3.2e6;
+    let quality = 1;
+    let w = 0, h = 0, dpr = 1;
+    function resize() {
+      w = canvas.clientWidth;
+      h = canvas.clientHeight;
+      dpr = Math.min(window.devicePixelRatio || 1, 2) * quality;
+      if (w * h * dpr * dpr > MAX_PIXELS) dpr = Math.sqrt(MAX_PIXELS / (w * h));
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    new ResizeObserver(resize).observe(canvas);
+    resize();
+
+    // Pointer: smoothed position + a strength that fades when idle.
+    const mouse = { x: -1e4, y: -1e4, tx: -1e4, ty: -1e4, s: 0, active: 0 };
+    const rip = new Float32Array([0, 0, -1, 0, 0, -1, 0, 0, -1]);
+    let ripIdx = 0;
+    const t0 = performance.now();
+    const now = () => (performance.now() - t0) / 1000;
+
+    if (!reduced) {
+      const inHero = () => window.scrollY < FADE_END;
+      window.addEventListener('pointermove', (e) => {
+        if (!inHero()) return;
+        mouse.tx = e.clientX;
+        mouse.ty = e.clientY;
+        if (mouse.x < -1e3) { mouse.x = e.clientX; mouse.y = e.clientY; }
+        mouse.active = now();
+      }, { passive: true });
+      window.addEventListener('pointerdown', (e) => {
+        if (!inHero()) return;
+        rip.set([e.clientX, e.clientY, now()], ripIdx * 3);
+        ripIdx = (ripIdx + 1) % 3;
+      }, { passive: true });
+      document.documentElement.addEventListener('pointerleave', () => (mouse.active = -10));
+    }
+
+    const INTRO = 2.4;
+    const easeOut = (x) => 1 - Math.pow(1 - Math.min(1, x), 3);
+    let last = 0, slow = 0, frames = 0;
+
+    function draw(time, intro) {
+      const idle = time - mouse.active > 1.5;
+      mouse.s += ((idle ? 0 : 1) - mouse.s) * 0.04;
+      mouse.x += (mouse.tx - mouse.x) * 0.12;
+      mouse.y += (mouse.ty - mouse.y) * 0.12;
+
+      gl.uniform2f(U.u_res, w, h);
+      gl.uniform1f(U.u_dpr, canvas.width / w);
+      gl.uniform1f(U.u_time, time);
+      gl.uniform1f(U.u_intro, intro);
+      gl.uniform1f(U.u_calm, Math.min(1, window.scrollY / FADE_END));
+      gl.uniform1f(U.u_amp, w > 768 ? 1.6 : 1);
+      gl.uniform3f(U.u_mouse, mouse.x, mouse.y, mouse.s);
+      gl.uniform3fv(U.u_rip, rip);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+
+    if (reduced) {
+      // Still frame instead of nothing: the hero keeps its identity.
+      draw(12, 1);
+      new ResizeObserver(() => draw(12, 1)).observe(canvas);
+      return true;
+    }
+
+    canvas.addEventListener('webglcontextlost', (e) => e.preventDefault());
+
+    let stalled = 0;
+    const halt = runLoop((ms) => {
+      const time = now();
+      // Adaptive quality: after the intro, if frames average >22ms, render
+      // fewer pixels (down to 60% linear) rather than stutter. If half the
+      // frames still take over 50ms the device cannot animate this at all:
+      // stop and keep the current frame.
+      if (last && time > INTRO) {
+        const dt = time - last;
+        frames++;
+        slow += dt > 0.022 ? 1 : 0;
+        stalled += dt > 0.05 ? 1 : 0;
+        if (frames === 60) {
+          if (stalled > 30) {
+            halt();
+            return;
+          }
+          if (slow > 30 && quality > 0.6) { quality = Math.max(0.6, quality * 0.8); resize(); }
+          frames = slow = stalled = 0;
+        }
+      }
+      last = time;
+      draw(time, easeOut(time / INTRO));
+    });
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Canvas 2D version (original, kept as fallback)
 
-function classicWaves(canvas) {
-  const ctx = canvas.getContext('2d', { alpha: true });
+// `still` draws one frame and only redraws on resize: for reduced motion and
+// for software GL, where even this loop is more than the main thread should carry.
+function classicWaves(canvas, still) {
+  // A still frame rasterises on the CPU (`willReadFrequently`): on a software
+  // GPU the accelerated canvas path is 15x slower for the blurred strokes.
+  const ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: still });
   const waves = [];
 
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     waves.forEach(w => { w.yOffset = canvas.height * w.relY; });
+    if (still) frame();
   }
   window.addEventListener('resize', resize);
 
@@ -353,8 +460,7 @@ function classicWaves(canvas) {
     ctx.restore();
   }
 
-  resize();
-  runLoop(() => {
+  function frame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     waves.forEach(wave => {
       drawWave(wave);
@@ -366,5 +472,9 @@ function classicWaves(canvas) {
       wave.wavelength += Math.sin(wave.phase * 0.1) * 0.5;
       wave.wavelength = Math.max(300, Math.min(900, wave.wavelength));
     });
-  });
+  }
+
+  resize();
+  if (still) return;
+  runLoop(frame);
 }
