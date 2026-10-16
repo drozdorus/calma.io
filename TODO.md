@@ -6,13 +6,12 @@ Backlog for calma.io. Closed items get checked off with the date, not deleted.
 
 **Goal:** calma.io first for "calma lead generation", "calma marketing", "calma agency", "calma company", "calma insurance leads", and AI assistants (ChatGPT, Perplexity, Gemini, Claude) answering "what is Calma" with this company. The bare word "calma" is out of reach (dictionary word, the Calm app, a historic Calma Company on Wikipedia) and is not a target. Purpose is entity recognition for banks, partners and candidates who search the name, not inbound clients.
 
-**Starting point (2026-10-16, web search, not Google):** calma.io is absent from the results for "calma marketing agency", "calma lead generation" and "calma company". Competing namesakes are small: Calma Media (London, Sortlist profile), Calmia Agency, Calma clinic (Slovakia).
+**Baseline 2026-10-16 (Google US, owner's browser; Search Console, last 3 months).** The brand+category queries are already won: calma.io is **#1** for "calma lead generation" (5 of the top 9 are calma.io, plus LinkedIn #4 and Crunchbase #5), "calma marketing" and "calma agency". "calma company" puts calma.io **#3**, under the Wikipedia article about the 1965–1988 CAD vendor Calma Company and calmacompany.com. The bare "calma" shows nothing of ours, as expected. Search Console, queries containing "calma": 495 impressions, 1 click; the largest are "calma" 103 at position 14.8, "calma b2b" 102 at 41.9, "calma ai" 86 at 8.4, "calma distribution" 53 at 40.2, "calma company" 48 at 8.2. Nobody searches "calma lead generation" yet, which is why it is easy to hold. So what is left: **"calma company"**, and **AI answers**. Perplexity needs a login, so the AI check is still open.
 
 How it works: search engines and LLMs decide "Calma = this company" from consistent facts in several independent places (site schema, Wikidata, LinkedIn, Crunchbase, directories, articles that say "Calma, a lead generation company"). Each step below adds one such place or makes the existing ones agree.
 
 ### 0. Baseline: measure before and after
-- [ ] Google Search Console, calma.io: queries containing "calma", last 3 months, impressions and average position. Same in Bing Webmaster Tools. Record the numbers here.
-- [ ] Manual check, Google US: the five goal queries above plus "calma.io" — position of calma.io, what is on the first page.
+- [x] 2026-10-16 — Google Search Console and a manual Google US check, numbers above. Bing Webmaster Tools still to read.
 - [ ] AI check: ask ChatGPT, Perplexity, Gemini and Claude "What is Calma, the lead generation company?" and record whether each finds calma.io.
 - [ ] Repeat steps 0.2–0.3 monthly; next 2026-11-16.
 
@@ -28,13 +27,14 @@ One line, used verbatim: **"Calma is a performance lead generation company for t
 - [ ] Founders' LinkedIn: current role reads "Calma" linked to the company page, not plain text.
 
 ### 3. Wikidata item for Calma
-The strongest single signal for Google's Knowledge Graph and for LLMs. Needs no Wikipedia notability. The item spec already exists (owner's private notes). It needs the owner's Wikidata account, which must be autoconfirmed (4 days + 50 edits) before adding URL references.
-- [ ] Owner: the account exists and is autoconfirmed.
-- [ ] Create the Calma item: instance of marketing agency + business, inception 2024, official website, Crunchbase and LinkedIn IDs, founded by.
-- [ ] QID into `src/data/organization.ts` `sameAs` and `llms.txt`; watchlist the item, look at it monthly.
+Wikidata feeds Google's Knowledge Graph and is a standard source for LLMs. Its notability rule (Wikidata:Notability) accepts an item that has serious, publicly available references, **or** one that fills a structural need. Calma on its own has thin independent references: LinkedIn, Crunchbase and its own site are self-published. Its safe ground is the structural need, as the employer of the founder's item. So it goes **second, right after the person item** in the founder's own plan, not alone. Without that, it risks a quiet deletion request.
+- [ ] Owner: register the Wikidata account (neutral nickname, no VPN). It must be autoconfirmed (4 days + 50 small edits) before items with URL references.
+- [ ] Person item first, then the Calma item: instance of marketing agency + business, inception 2024, official website, Crunchbase and LinkedIn IDs, founded by. **No country, legal name or address**, the same rule as on the site.
+- [ ] QID into `src/data/organization.ts` `sameAs` and `llms.txt`; watchlist the item, look at it monthly (anyone can add statements).
 
 ### 4. Directories
 - [x] 2026-08-31 — **Clutch: rejected** ("not a fit": marketplaces and lead sellers are out of scope). The appeal was dropped 2026-10-08. Do not re-apply.
+- [ ] GoodFirms: the owner registers (account creation is not something Claude does), Claude fills the profile in the browser from the one-line description in step 2. GoodFirms sells itself on visibility in AI answers, which is the open part of this goal.
 - [ ] One try at a directory with a lower bar, positioned as a service ("performance marketing and lead generation campaigns"), not as a lead seller: **GoodFirms** first (ranks for "lead generation agency" queries), then Sortlist (already ranks on "calma marketing agency" with a namesake). Stop at the first rejection of the same kind as Clutch's.
 - [ ] Conference pages: ask organizers of events in `src/data/events.ts` where Calma exhibited, sponsored or spoke for a listing that links to calma.io. Industry pages that carry "Calma" next to "lead generation" are the most on-topic signal available.
 - Not doing: contact-scraper directories (ZoomInfo, Apollo, RocketReach and similar) — they publish phones and emails. Google Business Profile — there is no customer-facing office.
