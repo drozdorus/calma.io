@@ -13,7 +13,7 @@ How it works: search engines and LLMs decide "Calma = this company" from consist
 ### 0. Baseline: measure before and after
 - [x] 2026-10-16 — Google Search Console and a manual Google US check, numbers above. Bing Webmaster Tools still to read.
 - [ ] AI check: ask ChatGPT, Perplexity, Gemini and Claude "What is Calma, the lead generation company?" and record whether each finds calma.io.
-- [ ] Clean AI run: the same six questions in a ChatGPT **Temporary Chat** (no memory) and in Perplexity; record here.
+- [x] 2026-10-16 — Clean ChatGPT run (personalised results off), "What is Calma, the lead generation company?": correct and sourced from calma.io and /about/. AI-driven performance marketing and lead generation, founded 2024, US; Meta/Google/TikTok; auto, home and health insurance, home improvement, financial services (no "legal" this time); founder and his background; 400K+ leads, 10K+ creatives, about ten people, launch in three days; conferences (LeadsCon, Affiliate Summit) as proof it is a real business. Calls it a "lead generation publisher" that sells leads rather than an agency, which is accurate. Industry line includes "affiliate marketing", likely from the LinkedIn specialty of that name. Perplexity not checked.
 - [ ] Repeat the Google and AI checks monthly; next 2026-11-16.
 
 ### 1. On-site entity record
