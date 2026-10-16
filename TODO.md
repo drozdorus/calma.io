@@ -16,11 +16,11 @@ How it works: search engines and LLMs decide "Calma = this company" from consist
 - [ ] Repeat steps 0.2–0.3 monthly; next 2026-11-16.
 
 ### 1. On-site entity record
-- [x] 2026-10-16 — Organization JSON-LD moved to `src/data/organization.ts` and emitted on `/` and `/about/` (about pointed at `#organization` without carrying it). Added `foundingDate` and The Org in `sameAs`. `llms.txt`: The Org and a disambiguation line (not the Calm app, not other "calma" businesses). **The legal entity stays out of machine-readable text** (owner, 2026-10-16; same rule as the reversed text on `/privacy/`): no legal name or address in schema, footer, `llms.txt` or profiles.
+- [x] 2026-10-16 — Organization JSON-LD moved to `src/data/organization.ts` and emitted on `/` and `/about/` (about pointed at `#organization` without carrying it). Added `foundingDate` and The Org in `sameAs`. `llms.txt`: The Org and a disambiguation line (not the Calm app, not other "calma" businesses). **The legal entity stays out of machine-readable text** (owner, 2026-10-16; same rule as the reversed text on `/privacy/`): no legal name or address in schema, footer or `llms.txt`. Directory profiles that require an HQ address may carry it (owner, 2026-10-16, GoodFirms).
 - [ ] Add the Wikidata QID to `sameAs` the day the item exists (step 3).
 
 ### 2. Existing profiles: one description everywhere (owner, Claude can fill in the browser)
-One line, used verbatim: **"Calma is a performance lead generation company for the US insurance, home services and financial verticals, founded in 2024."** Same name, website `https://calma.io`, founding year, logo. No legal name or address.
+One line, used verbatim: **"Calma is a performance lead generation company for the US insurance, home services and financial verticals, founded in 2024."** Same name, website `https://calma.io`, founding year, logo.
 - [ ] LinkedIn company page `calma-io`: tagline, about, website, industry, size, founded, location.
 - [ ] Crunchbase org `calma-b99b`: description, founded, website, socials.
 - [ ] The Org `theorg.com/org/calma`: description, people.
@@ -34,8 +34,8 @@ Wikidata feeds Google's Knowledge Graph and is a standard source for LLMs. Its n
 
 ### 4. Directories
 - [x] 2026-08-31 — **Clutch: rejected** ("not a fit": marketplaces and lead sellers are out of scope). The appeal was dropped 2026-10-08. Do not re-apply.
-- [ ] GoodFirms: the owner registers (account creation is not something Claude does), Claude fills the profile in the browser from the one-line description in step 2. GoodFirms sells itself on visibility in AI answers, which is the open part of this goal.
-- [ ] One try at a directory with a lower bar, positioned as a service ("performance marketing and lead generation campaigns"), not as a lead seller: **GoodFirms** first (ranks for "lead generation agency" queries), then Sortlist (already ranks on "calma marketing agency" with a namesake). Stop at the first rejection of the same kind as Clutch's.
+- [x] 2026-10-16 — **GoodFirms: submitted for review** (owner's account, filled by Claude). Services BPO / Lead Generation 60% + Digital Marketing / Demand Generation 40%; industries Insurance 70, Fintech 15, Other 15; clients SMB 20 / mid-market 50 / enterprise 30. HQ is the Limassol address with the company phone, by the owner's choice: a directory profile is not the site. Still empty: the AI tools entry (did not save), portfolios (0/3) and reviews (0/2); both raise the profile and probably the approval odds. GoodFirms says it approves about 23% of applications.
+- [ ] If GoodFirms rejects: one try at a directory with a lower bar, positioned as a service ("performance marketing and lead generation campaigns"), not as a lead seller: **GoodFirms** first (ranks for "lead generation agency" queries), then Sortlist (already ranks on "calma marketing agency" with a namesake). Stop at the first rejection of the same kind as Clutch's.
 - [ ] Conference pages: ask organizers of events in `src/data/events.ts` where Calma exhibited, sponsored or spoke for a listing that links to calma.io. Industry pages that carry "Calma" next to "lead generation" are the most on-topic signal available.
 - Not doing: contact-scraper directories (ZoomInfo, Apollo, RocketReach and similar) — they publish phones and emails. Google Business Profile — there is no customer-facing office.
 
