@@ -22,8 +22,8 @@ How it works: search engines and LLMs decide "Calma = this company" from consist
 ### 2. Existing profiles: one description everywhere (owner, Claude can fill in the browser)
 One line, used verbatim: **"Calma is a performance lead generation company for the US insurance, home services and financial verticals, founded in 2024."** Same name, website `https://calma.io`, founding year, logo.
 - [x] 2026-10-16 — LinkedIn company page `calma-io`: tagline and overview rewritten to the standard line, specialties + "lead generation", "insurance lead generation". Website, industry (Marketing Services), size 11–50 and founded 2024 were already right. Location left empty.
-- [ ] Crunchbase org `calma-b99b`: description still says "publisher — we generate, verify, and sell leads", one-liner "performance lead generation agency", founded year not shown. Needs the owner logged in to Crunchbase in Chrome; Claude then edits.
-- [ ] The Org `theorg.com/org/calma`: description is the old "Where data meets creativity… perfomance marketing agency" (typo included), industries list IT and InsurTech. Needs the owner logged in to The Org in Chrome.
+- [ ] Crunchbase org `calma-b99b`: description still says "publisher — we generate, verify, and sell leads", one-liner "performance lead generation agency", founded year not shown. The owner is logged in; a "Welcome to Crunchbase" terms dialog must be accepted by the owner first, then Claude edits.
+- [x] 2026-10-16 — The Org `theorg.com/org/calma`: description replaced with the standard line, HQ Limassol, Cyprus, industries InsurTech + Marketing (Information Technology removed).
 - [ ] Founders' LinkedIn: current role reads "Calma" linked to the company page, not plain text.
 
 ### 3. Wikidata item for Calma
