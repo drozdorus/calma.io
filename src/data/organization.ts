@@ -22,7 +22,7 @@ export const organizationJsonLd = {
   image: 'https://calma.io/img/metaimg.png',
   description:
     'Calma is a performance lead generation publisher specializing in compliance-first, AI-optimized lead acquisition across auto insurance, home insurance, health insurance, home improvement, and financial services verticals.',
-  foundingDate: '2024',
+  foundingDate: '2024-12-21',
   email: site.email,
   areaServed: 'United States',
   contactPoint: {
