@@ -4,6 +4,7 @@
 // logo (/#top) targets. Section navigation lives in the floating SectionNav
 // pill; the header carries page-level links only.
 import { getCollection } from 'astro:content';
+import { organizationJsonLd } from '../data/organization';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -110,52 +111,7 @@ const latestPosts = (await getCollection('blog'))
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
-        {
-          "@type": "Organization",
-          "@id": "https://calma.io/#organization",
-          "name": "Calma",
-          "alternateName": ["Calma Agency", "Calma.io"],
-          "url": "https://calma.io",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://calma.io/img/logo.svg"
-          },
-          "image": "https://calma.io/img/metaimg.png",
-          "description": "Calma is a performance lead generation publisher specializing in compliance-first, AI-optimized lead acquisition across auto insurance, home insurance, health insurance, home improvement, and financial services verticals.",
-          "email": "info@calma.io",
-          "areaServed": "United States",
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "email": "info@calma.io",
-            "contactType": "sales"
-          },
-          "sameAs": [
-            "https://www.linkedin.com/company/calma-io/",
-            "https://www.crunchbase.com/organization/calma-b99b"
-          ],
-          "founder": { "@id": "https://drozdorus.com/#person" },
-          "knowsAbout": [
-            "Lead Generation",
-            "Performance Marketing",
-            "Insurance Lead Generation",
-            "Compliance Marketing",
-            "AI-Driven Marketing",
-            "Media Buying",
-            "Digital Advertising",
-            "Partner Marketing"
-          ],
-          "hasOfferCatalog": {
-            "@type": "OfferCatalog",
-            "name": "Lead Generation Services",
-            "itemListElement": [
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Auto Insurance Lead Generation" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Home Insurance Lead Generation" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Health Insurance Lead Generation" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Home Improvement Lead Generation" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Financial Services Lead Generation" } }
-            ]
-          }
-        },
+        organizationJsonLd,
         {
           "@type": "Person",
           "@id": "https://drozdorus.com/#person",

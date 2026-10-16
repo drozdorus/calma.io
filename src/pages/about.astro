@@ -7,6 +7,7 @@
 // panel (accordion): Rus's holds his bio and is open on load, the other two
 // hold a running "bio coming soon" joke.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { organizationJsonLd } from '../data/organization';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
@@ -37,6 +38,7 @@ const openByDefault = 'Rus';
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
+    "@graph": [organizationJsonLd, {
     "@type": "AboutPage",
     "@id": "https://calma.io/about/#aboutpage",
     "url": "https://calma.io/about/",
@@ -68,6 +70,7 @@ const openByDefault = 'Rus';
         "https://github.com/drozdorus"
       ]
     }
+    }]
   })} />
 
   <Header />
