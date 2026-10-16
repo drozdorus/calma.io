@@ -17,13 +17,13 @@ How it works: search engines and LLMs decide "Calma = this company" from consist
 - [ ] Repeat steps 0.2–0.3 monthly; next 2026-11-16.
 
 ### 1. On-site entity record
-- [x] 2026-10-16 — Organization JSON-LD moved to `src/data/organization.ts` and emitted on `/` and `/about/` (about pointed at `#organization` without carrying it). Added `legalName` Calma Tech LTD, `foundingDate`, `address` (Limassol, CY), The Org in `sameAs`. Footer copyright now names Calma Tech LTD. `llms.txt`: legal entity, The Org, a disambiguation line (not the Calm app, not other "calma" businesses).
+- [x] 2026-10-16 — Organization JSON-LD moved to `src/data/organization.ts` and emitted on `/` and `/about/` (about pointed at `#organization` without carrying it). Added `foundingDate` and The Org in `sameAs`. `llms.txt`: The Org and a disambiguation line (not the Calm app, not other "calma" businesses). **The legal entity stays out of machine-readable text** (owner, 2026-10-16; same rule as the reversed text on `/privacy/`): no legal name or address in schema, footer, `llms.txt` or profiles.
 - [ ] Add the Wikidata QID to `sameAs` the day the item exists (step 3).
 
 ### 2. Existing profiles: one description everywhere (owner, Claude can fill in the browser)
-One line, used verbatim: **"Calma is a performance lead generation company for the US insurance, home services and financial verticals, founded in 2024."** Same name, website `https://calma.io`, founding year, HQ Limassol, logo.
+One line, used verbatim: **"Calma is a performance lead generation company for the US insurance, home services and financial verticals, founded in 2024."** Same name, website `https://calma.io`, founding year, logo. No legal name or address.
 - [ ] LinkedIn company page `calma-io`: tagline, about, website, industry, size, founded, location.
-- [ ] Crunchbase org `calma-b99b`: description, legal name, founded, HQ, website, socials.
+- [ ] Crunchbase org `calma-b99b`: description, founded, website, socials.
 - [ ] The Org `theorg.com/org/calma`: description, people.
 - [ ] Founders' LinkedIn: current role reads "Calma" linked to the company page, not plain text.
 

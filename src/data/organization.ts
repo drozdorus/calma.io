@@ -4,16 +4,15 @@
 // the organization must also ship the node itself.
 //
 // This is the entity record behind brand queries ("calma lead generation",
-// "calma marketing"): legalName/address tie the site to the registry and WHOIS
-// record of Calma Tech LTD, sameAs ties it to the profiles that describe it.
-// Add a profile here the day it goes live (Wikidata QID included).
+// "calma marketing"): sameAs ties it to the profiles that describe it. Add a
+// profile here the day it goes live. No legal name or address here on purpose:
+// the legal entity is kept out of machine-readable text (see privacy.astro).
 import { site } from './site';
 
 export const organizationJsonLd = {
   '@type': 'Organization',
   '@id': 'https://calma.io/#organization',
   name: 'Calma',
-  legalName: 'Calma Tech LTD',
   alternateName: ['Calma Agency', 'Calma.io'],
   url: 'https://calma.io',
   logo: {
@@ -24,11 +23,6 @@ export const organizationJsonLd = {
   description:
     'Calma is a performance lead generation publisher specializing in compliance-first, AI-optimized lead acquisition across auto insurance, home insurance, health insurance, home improvement, and financial services verticals.',
   foundingDate: '2024',
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Limassol',
-    addressCountry: 'CY',
-  },
   email: site.email,
   areaServed: 'United States',
   contactPoint: {
