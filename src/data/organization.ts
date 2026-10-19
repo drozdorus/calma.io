@@ -30,7 +30,7 @@ export const organizationJsonLd = {
     email: site.email,
     contactType: 'sales',
   },
-  sameAs: [site.linkedin, site.crunchbase, 'https://theorg.com/org/calma'],
+  sameAs: [site.linkedin, site.crunchbase, 'https://theorg.com/org/calma', 'https://www.goodfirms.co/company/calma'],
   founder: { '@id': 'https://drozdorus.com/#person' },
   knowsAbout: [
     'Lead Generation',
