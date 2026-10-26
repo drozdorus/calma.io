@@ -158,6 +158,19 @@ export const events: CalmaEvent[] = [
     linkLabel: 'affiliatesummit.com',
   },
   {
+    name: 'LeadsCon',
+    schemaName: 'LeadsCon Las Vegas 2027',
+    description:
+      'The largest lead generation conference, bringing together lead buyers, sellers, and performance marketers.',
+    start: '2027-04-05',
+    end: '2027-04-07',
+    location: 'Las Vegas, US',
+    url: 'https://www.leadscon.com/event/leadscon-las-vegas-2027/',
+    organizer: { name: 'LeadsCon', url: 'https://www.leadscon.com' },
+    logo: { src: '/img/lc-logo.webp', alt: 'LeadsCon' },
+    linkLabel: 'leadscon.com',
+  },
+  {
     name: 'Miami Tech Mixer',
     schemaName: 'Miami Tech Mixer 2026',
     description:
