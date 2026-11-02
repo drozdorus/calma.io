@@ -50,6 +50,13 @@ LLMs learn "Calma = lead generation" from sentences where the two stand together
 ### Related
 - [ ] `src/content/verticals/auto-insurance.md` FAQ says "We design consent capture around current rules — including TCPA…". Calma collects no personal data on its side (owner, 2026-09-27: no compliance-tooling claims). Rewrite or drop that answer and the JSON-LD copy of it.
 
+### AI-assistant test 2026-11-02 (record: `serm/audit_calma_visibility_2026-11-02.md`, local)
+ChatGPT, asked «which companies called Calma exist» and then «anyone in marketing?», lists other Calmas and Calma Media (calmamedia.co.uk, UK) but never calma.io; pointed at calma.io it answers correctly. Gemini named calma.io first in both turns. Logged-in "Temporary Chat" still leaks account memory, so the owner's own accounts are not a benchmark.
+- [ ] Homepage meta description still says "publisher … Compliance-first": align it with the standard line (performance lead generation company)
+- [ ] "calma agency": calmaagency.com now outranks calma.io on Google and Bing (was #1 on 2026-10-16), find out why
+- [ ] Sortlist (and similar agency directories) profile: "Calma" + "marketing agency" co-occurrence on third-party pages is what a discovery-style question picks up
+- [ ] Wikidata item for Calma: 2026-11-06 (serm), helps grounded lookups, not open-ended lists
+
 ## Hiring
 
 - [x] 2026-09-16 — **Owner:** share the Notion DB "Applications (website)" with the `n8n` integration (open the DB → ••• → Connections → n8n). The intake workflow is active but its Notion write fails with "Could not find database … make sure it is shared with your integration" (execution 101990, 2026-09-16). Then re-run the smoke test: `curl -X POST https://nnnnnnnn.calma.ad/webhook/calma-hiring-apply -H 'Content-Type: application/json' -d '{"name":"TEST","email":"t@example.com","role":"Open application","message":"test"}'` must return `{ "ok": true }` and a row must appear in the DB.
