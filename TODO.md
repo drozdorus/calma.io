@@ -48,11 +48,11 @@ LLMs learn "Calma = lead generation" from sentences where the two stand together
 - [ ] calma.io blog: one post a quarter is enough to keep the site alive in the index.
 
 ### Related
-- [ ] `src/content/verticals/auto-insurance.md` FAQ says "We design consent capture around current rules — including TCPA…". Calma collects no personal data on its side (owner, 2026-09-27: no compliance-tooling claims). Rewrite or drop that answer and the JSON-LD copy of it.
+- [x] 2026-11-03 — TCPA / FCC one-to-one consent-capture claims removed from auto-insurance, home-insurance and finance (FAQ + "Compliance comes first" section, so the FAQPage JSON-LD follows) and the consent-capture line from home-services. Now: creative built to platform policy and offer rules, Special Ad Category on Meta, prospects go through the buyer's own consent flow. Calma collects no personal data on its side (owner, 2026-09-27).
 
 ### AI-assistant test 2026-11-02 (record: `serm/audit_calma_visibility_2026-11-02.md`, local)
 ChatGPT, asked «which companies called Calma exist» and then «anyone in marketing?», lists other Calmas and Calma Media (calmamedia.co.uk, UK) but never calma.io; pointed at calma.io it answers correctly. Gemini named calma.io first in both turns. Logged-in "Temporary Chat" still leaks account memory, so the owner's own accounts are not a benchmark.
-- [ ] Homepage meta description still says "publisher … Compliance-first": align it with the standard line (performance lead generation company)
+- [x] 2026-11-03 — Homepage meta description = the standard line verbatim; OG/Twitter, WebSite schema, Organization `description` and the "What is Calma?" FAQ now say "performance lead generation company for the US insurance, home services and financial verticals" too; `llms.txt` "agency" → "company". No "Compliance-first" left in machine-read copy of the homepage.
 - [ ] "calma agency": calmaagency.com now outranks calma.io on Google and Bing (was #1 on 2026-10-16), find out why
 - [ ] Sortlist (and similar agency directories) profile: "Calma" + "marketing agency" co-occurrence on third-party pages is what a discovery-style question picks up
 - [ ] Wikidata item for Calma: 2026-11-06 (serm), helps grounded lookups, not open-ended lists

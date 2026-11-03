@@ -22,7 +22,7 @@ faq:
   - question: 'How does Calma generate home insurance leads?'
     answer: 'We run paid social and video campaigns across Meta, Google, and TikTok with compliance-first creative, use AI to target in-market homeowners, and qualify each prospect before delivery. We optimize for downstream performance — cost per acquired lead, contact rate, and buyer conversion — not traffic volume.'
   - question: "Are Calma's home insurance leads compliant?"
-    answer: 'Compliance is built into the funnel. We design consent capture around current rules — including TCPA and the FCC one-to-one consent framework — apply Special Ad Category requirements where they apply on Meta, and verify consent and contactability before a lead is delivered.'
+    answer: 'Compliance starts with the ad. Creative is built to platform policy and to each offer’s rules, Special Ad Category requirements are applied on Meta where they apply, and prospects go through the consent and quote flow their buyer defines. We check authenticity and contactability before a lead is delivered.'
   - question: 'Who buys home insurance leads from Calma?'
     answer: 'Carriers, independent and captive agencies, and lead aggregators. We work to each buyer’s volume targets, geographies, and quality bar rather than selling one generic product.'
 cta:
@@ -47,8 +47,8 @@ The result is a lead stream measured by contact rate and buyer conversion — no
 
 ## Compliance comes first
 
-Home insurance is a regulated, consent-sensitive vertical, and the rules keep moving. We
-build consent capture and verification into the funnel from the start — designed around TCPA
-and the FCC one-to-one consent framework, with Special Ad Category requirements applied on
-Meta where relevant. Compliance is treated as a precondition for a quality lead, not an
+Home insurance is a regulated, consent-sensitive vertical, and the rules keep moving. Creative
+is built to platform policy and to each offer’s rules from the first draft, Special Ad
+Category requirements are applied on Meta where relevant, and prospects go through the
+consent flow their buyer defines. Compliance is treated as a precondition for a quality lead, not an
 afterthought.

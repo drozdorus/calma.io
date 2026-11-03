@@ -48,6 +48,6 @@ system. The result is a lead stream measured by contact rate and close rate — 
 ## Quality and consent built in
 
 Even outside the most heavily regulated verticals, lead quality and consent decide whether a
-campaign actually pays back. We build consent capture and verification into the funnel,
+campaign actually pays back. We verify every record,
 screen for homeownership and project relevance, and design creative and measurement to be
 compliance-first — so the leads we deliver are real, reachable, and worth quoting.

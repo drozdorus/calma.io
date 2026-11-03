@@ -21,7 +21,7 @@ export const organizationJsonLd = {
   },
   image: 'https://calma.io/img/metaimg.png',
   description:
-    'Calma is a performance lead generation publisher specializing in compliance-first, AI-optimized lead acquisition across auto insurance, home insurance, health insurance, home improvement, and financial services verticals.',
+    'Calma is a performance lead generation company for the US insurance, home services and financial verticals, founded in 2024.',
   foundingDate: '2024-12-21',
   email: site.email,
   areaServed: 'United States',

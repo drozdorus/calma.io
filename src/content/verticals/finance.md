@@ -22,7 +22,7 @@ faq:
   - question: 'Which financial products does Calma cover?'
     answer: 'We run campaigns across consumer lending products including personal loans, HELOC, and reverse mortgage (HECM), and can scale into adjacent products based on demand. Each campaign is built around the buyer’s product, geography, and quality requirements.'
   - question: "Are Calma's financial services leads compliant?"
-    answer: 'Compliance is built into the funnel. Lending is a consent-sensitive, heavily regulated vertical, so we design consent capture around current rules — including TCPA and the FCC one-to-one consent framework — apply Special Ad Category requirements where they apply on Meta, and verify consent and contactability before a lead is delivered.'
+    answer: 'Compliance starts with the ad. Lending is a consent-sensitive, heavily regulated vertical, so creative is built to platform policy and to each offer’s rules, Special Ad Category requirements are applied on Meta where they apply, and prospects go through the consent and quote flow their buyer defines. We check authenticity and contactability before a lead is delivered.'
   - question: 'Who buys financial services leads from Calma?'
     answer: 'Lenders, brokers, and lead networks. We work to each buyer’s volume targets, geographies, product, and quality bar rather than selling one generic product.'
 cta:
@@ -47,8 +47,8 @@ system. The result is a lead stream measured by contact rate and buyer conversio
 
 ## Compliance comes first
 
-Lending is among the most consent-sensitive verticals, and the rules keep moving. We build
-consent capture and verification into the funnel from the start — designed around TCPA and
-the FCC one-to-one consent framework, with Special Ad Category requirements applied on Meta
-where relevant. Compliance is treated as a precondition for a quality lead, not an
+Lending is among the most consent-sensitive verticals, and the rules keep moving. Creative is
+built to platform policy and to each offer’s rules from the first draft, Special Ad Category
+requirements are applied on Meta where relevant, and prospects go through the consent flow
+their buyer defines. Compliance is treated as a precondition for a quality lead, not an
 afterthought.
