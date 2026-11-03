@@ -17,3 +17,8 @@ yarn-error.log*
 pnpm-debug.log*
 # local agent scratch (internal notes — public repo)
 .claude/
+
+# internal docs: kept on the owner's Mac only (public repo, owner 2026-11-03)
+TODO.md
+WEBSITE_OVERVIEW.md
+RUNBOOK.md
