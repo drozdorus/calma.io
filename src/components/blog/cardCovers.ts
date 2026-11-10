@@ -52,8 +52,8 @@ export const cardCovers: Record<string, string> = {
               <line x1="285" y1="45" x2="285" y2="80" stroke="#E8B547" stroke-opacity="0.65" stroke-width="1.5"/>
               <circle cx="195" cy="88" r="14" fill="none" stroke="#3DD68C" stroke-opacity="0.58" stroke-width="1.5"/>
               <circle cx="285" cy="88" r="14" fill="none" stroke="#E8B547" stroke-opacity="0.58" stroke-width="1.5"/>
-              <text x="187" y="92" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#3DD68C" fill-opacity="0.85">AI</text>
-              <text x="274" y="92" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#E8B547" fill-opacity="0.85">LAW</text>
+              <text x="195" y="91" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#3DD68C" fill-opacity="0.85">AI</text>
+              <text x="285" y="91" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" font-weight="700" fill="#E8B547" fill-opacity="0.85">LAW</text>
               <defs><linearGradient id="cg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="0.35"/><stop offset="35%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
               <rect width="480" height="55" fill="url(#cg3)"/>
             </svg>`,
@@ -69,15 +69,15 @@ export const cardCovers: Record<string, string> = {
               <circle cx="370" cy="122" r="1.7" fill="white" fill-opacity="0.16"/>
               <circle cx="410" cy="40" r="1.4" fill="white" fill-opacity="0.15"/>
               <circle cx="445" cy="115" r="2" fill="white" fill-opacity="0.19"/>
-              <text x="240" y="88" text-anchor="middle" font-family="system-ui,sans-serif" font-size="30" font-weight="800" fill="#3DD68C" fill-opacity="0.22">FOMO TAX</text>
-              <polyline points="30,94 95,60 165,97 235,50 305,94 375,63 450,88" fill="none" stroke="#3DD68C" stroke-opacity="0.6" stroke-width="1.5"/>
-              <circle cx="30" cy="94" r="3.5" fill="#3DD68C" fill-opacity="0.7"/>
-              <circle cx="95" cy="60" r="3.5" fill="#3DD68C" fill-opacity="0.7"/>
-              <circle cx="165" cy="97" r="3.5" fill="#3DD68C" fill-opacity="0.7"/>
-              <circle cx="235" cy="50" r="4.5" fill="#3DD68C" fill-opacity="0.85"/>
-              <circle cx="305" cy="94" r="3.5" fill="#3DD68C" fill-opacity="0.7"/>
-              <circle cx="375" cy="63" r="3.5" fill="#3DD68C" fill-opacity="0.7"/>
-              <circle cx="450" cy="88" r="3.5" fill="#3DD68C" fill-opacity="0.7"/>
+              <text x="240" y="70" text-anchor="middle" font-family="system-ui,sans-serif" font-size="32" font-weight="800" fill="#3DD68C" fill-opacity="0.6">FOMO TAX</text>
+              <polyline points="30,130 95,104 165,132 235,98 305,128 375,106 450,124" fill="none" stroke="#3DD68C" stroke-opacity="0.5" stroke-width="1.5"/>
+              <circle cx="30" cy="130" r="3.5" fill="#3DD68C" fill-opacity="0.6"/>
+              <circle cx="95" cy="104" r="3.5" fill="#3DD68C" fill-opacity="0.6"/>
+              <circle cx="165" cy="132" r="3.5" fill="#3DD68C" fill-opacity="0.6"/>
+              <circle cx="235" cy="98" r="4.5" fill="#3DD68C" fill-opacity="0.75"/>
+              <circle cx="305" cy="128" r="3.5" fill="#3DD68C" fill-opacity="0.6"/>
+              <circle cx="375" cy="106" r="3.5" fill="#3DD68C" fill-opacity="0.6"/>
+              <circle cx="450" cy="124" r="3.5" fill="#3DD68C" fill-opacity="0.6"/>
               <defs><linearGradient id="cg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="0.45"/><stop offset="40%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
               <rect width="480" height="60" fill="url(#cg4)"/>
             </svg>`,

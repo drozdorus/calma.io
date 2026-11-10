@@ -12,8 +12,8 @@ export const heroCovers: Record<string, string> = {
               <rect x="300" y="152" width="50" height="88" rx="3" fill="#E8B547" fill-opacity="0.32"/>
               <rect x="360" y="142" width="50" height="98" rx="3" fill="#E8B547" fill-opacity="0.38"/>
               <line x1="0" y1="170" x2="960" y2="170" stroke="#E8B547" stroke-opacity="0.18" stroke-width="1"/>
-              <text x="480" y="128" text-anchor="middle" font-family="system-ui,sans-serif" font-size="68" font-weight="800" fill="#E8B547" fill-opacity="0.6">$312B</text>
-              <text x="480" y="158" text-anchor="middle" font-family="Menlo,monospace" font-size="13" letter-spacing="0.18em" fill="#E8B547" fill-opacity="0.4">US AUTO INSURANCE MARKET</text>
+              <text x="620" y="128" text-anchor="middle" font-family="system-ui,sans-serif" font-size="68" font-weight="800" fill="#E8B547" fill-opacity="0.6">$312B</text>
+              <text x="620" y="158" text-anchor="middle" font-family="Menlo,monospace" font-size="13" letter-spacing="0.18em" fill="#E8B547" fill-opacity="0.4">US AUTO INSURANCE MARKET</text>
               <defs><linearGradient id="hg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="0.5"/><stop offset="42%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
               <rect width="960" height="110" fill="url(#hg1)"/>
             </svg>`,
@@ -53,8 +53,8 @@ export const heroCovers: Record<string, string> = {
               <line x1="580" y1="72" x2="580" y2="130" stroke="#E8B547" stroke-opacity="0.65" stroke-width="2"/>
               <circle cx="380" cy="148" r="24" fill="none" stroke="#3DD68C" stroke-opacity="0.58" stroke-width="2"/>
               <circle cx="580" cy="148" r="24" fill="none" stroke="#E8B547" stroke-opacity="0.58" stroke-width="2"/>
-              <text x="369" y="153" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#3DD68C" fill-opacity="0.85">AI</text>
-              <text x="558" y="153" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#E8B547" fill-opacity="0.85">LAW</text>
+              <text x="380" y="153" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#3DD68C" fill-opacity="0.85">AI</text>
+              <text x="580" y="153" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#E8B547" fill-opacity="0.85">LAW</text>
               <defs><linearGradient id="hg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="0.35"/><stop offset="35%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
               <rect width="960" height="100" fill="url(#hg3)"/>
             </svg>`,
@@ -70,16 +70,16 @@ export const heroCovers: Record<string, string> = {
               <circle cx="740" cy="195" r="2.5" fill="white" fill-opacity="0.16"/>
               <circle cx="820" cy="65" r="2" fill="white" fill-opacity="0.15"/>
               <circle cx="890" cy="185" r="3" fill="white" fill-opacity="0.19"/>
-              <text x="480" y="140" text-anchor="middle" font-family="system-ui,sans-serif" font-size="62" font-weight="800" fill="#3DD68C" fill-opacity="0.22">FOMO TAX</text>
-              <polyline points="60,150 190,95 330,155 470,80 610,150 750,100 900,140" fill="none" stroke="#3DD68C" stroke-opacity="0.6" stroke-width="2"/>
-              <circle cx="60" cy="150" r="5" fill="#3DD68C" fill-opacity="0.7"/>
-              <circle cx="190" cy="95" r="5" fill="#3DD68C" fill-opacity="0.7"/>
-              <circle cx="330" cy="155" r="5" fill="#3DD68C" fill-opacity="0.7"/>
-              <circle cx="470" cy="80" r="6" fill="#3DD68C" fill-opacity="0.85"/>
-              <circle cx="610" cy="150" r="5" fill="#3DD68C" fill-opacity="0.7"/>
-              <circle cx="750" cy="100" r="5" fill="#3DD68C" fill-opacity="0.7"/>
-              <circle cx="900" cy="140" r="5" fill="#3DD68C" fill-opacity="0.7"/>
-              <text x="480" y="215" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" letter-spacing="0.18em" fill="#3DD68C" fill-opacity="0.4">AI HORIZON JOURNAL</text>
+              <text x="480" y="108" text-anchor="middle" font-family="system-ui,sans-serif" font-size="62" font-weight="800" fill="#3DD68C" fill-opacity="0.6">FOMO TAX</text>
+              <text x="480" y="136" text-anchor="middle" font-family="Menlo,monospace" font-size="12" letter-spacing="0.18em" fill="#3DD68C" fill-opacity="0.4">AI HORIZON JOURNAL</text>
+              <polyline points="60,204 190,176 330,208 470,168 610,202 750,178 900,198" fill="none" stroke="#3DD68C" stroke-opacity="0.5" stroke-width="2"/>
+              <circle cx="60" cy="204" r="5" fill="#3DD68C" fill-opacity="0.6"/>
+              <circle cx="190" cy="176" r="5" fill="#3DD68C" fill-opacity="0.6"/>
+              <circle cx="330" cy="208" r="5" fill="#3DD68C" fill-opacity="0.6"/>
+              <circle cx="470" cy="168" r="6" fill="#3DD68C" fill-opacity="0.75"/>
+              <circle cx="610" cy="202" r="5" fill="#3DD68C" fill-opacity="0.6"/>
+              <circle cx="750" cy="178" r="5" fill="#3DD68C" fill-opacity="0.6"/>
+              <circle cx="900" cy="198" r="5" fill="#3DD68C" fill-opacity="0.6"/>
               <defs><linearGradient id="hg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="0.45"/><stop offset="40%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
               <rect width="960" height="110" fill="url(#hg4)"/>
             </svg>`,
