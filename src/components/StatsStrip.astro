@@ -80,6 +80,13 @@ import { stats } from '../data/stats';
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    /* background-clip: text paints only inside the box, and line-height: 1
+       ends the box above the descenders ("y", "p"), so they rendered cut.
+       Grow the paint area down (and a hair right for the overshoot of the
+       last glyph under negative tracking) and take it back with negative
+       margins, so the layout doesn't move. */
+    padding: 0 0.05em 0.2em 0;
+    margin: 0 -0.05em -0.2em 0;
   }
 
   .stat-giant-label {
