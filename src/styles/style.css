@@ -721,9 +721,7 @@ body {
   margin-right: auto;
 }
 
-/* About — heading in a left column, text in a right column on desktop
-   (breaks the centred-everything symmetry); stacks back to the original
-   single centered column on mobile/tablet. */
+/* About (desktop layout: see "Homepage section system" below) */
 .about-content {
   max-width: 1200px;
   margin: 0 auto var(--space-2xl);
@@ -995,86 +993,202 @@ body {
   text-align: center;
 }
 
-/* ─── Desktop: break the centred-everything symmetry ───
-   Section heading + intro move to a left column with content to their
-   right, and the Methodology / Services 3x1 card grids become bento
-   layouts (one emphasized card, two regular) instead of three identical
-   boxes. Below this width everything stacks back to the original
-   single-column, centered layout — unchanged on mobile. */
+/* ─── Homepage section system (index.astro only, scoped under main.home) ───
+   Every homepage section is a .home-row: a .home-head (heading + intro) and a
+   .home-body. On desktop the head always sits in the same left rail (1/3 of
+   the container) and is left-aligned; the body either sits beside it (prose,
+   lists, FAQ) or, with .home-row--stack, runs the full container width below
+   it (collections: team, events, blog). Below 901px the rows are plain
+   single-column blocks with the original centred headings.
+   The shared glass-card classes (.methodology-grid, .services-grid,
+   .service-card, .faq-list) are reused on /about/, /lead-generation/ and the
+   article pages — everything here is scoped under .home so those pages stay
+   as they are. */
+
+/* Methodology — three numbered steps on hairlines (echoes the stats strip),
+   not boxed cards. Homepage-only markup (.methodology-steps). */
+.methodology-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: step;
+}
+
+.methodology-step {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  column-gap: var(--space-sm);
+  row-gap: 6px;
+  padding: var(--space-md) 0;
+  border-top: 1px solid var(--border-default);
+}
+
+.methodology-step:last-child {
+  border-bottom: 1px solid var(--border-default);
+}
+
+.methodology-step::before {
+  content: counter(step, decimal-leading-zero);
+  grid-row: 1 / span 2;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  line-height: 1.9;
+  color: var(--primary);
+  opacity: 0.85;
+}
+
+.methodology-step .methodology-label {
+  grid-column: 2;
+  margin: 0;
+}
+
+.methodology-step .methodology-desc {
+  grid-column: 2;
+  max-width: 52ch;
+}
+
 @media (min-width: 901px) {
-  .about-content {
+  .home .home-row {
     display: grid;
-    grid-template-columns: minmax(200px, 320px) 1fr;
-    gap: var(--space-2xl);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    column-gap: var(--space-2xl);
     align-items: start;
   }
 
-  .about-content .section-title {
-    text-align: left;
-    margin-bottom: 0;
+  .home .home-row--stack {
+    row-gap: var(--space-xl);
   }
 
-  .services-header {
-    display: grid;
-    grid-template-columns: minmax(200px, 320px) 1fr;
-    gap: var(--space-2xl);
-    align-items: start;
-    margin-bottom: var(--space-2xl);
-  }
-
-  .services-header .section-title {
-    text-align: left;
-    margin-bottom: 0;
-  }
-
-  .services-header .section-subtitle {
-    text-align: left;
-    margin-bottom: 0;
-    max-width: 60ch;
-  }
-
-  /* Bento: first card emphasized and full-width, the remaining two share
-     the row below — same cards, no new markup. Scoped to the homepage's
-     About/Verticals sections (`.about`, `.services`): .methodology-grid,
-     .service-card etc. are the shared glass-card language and are reused
-     verbatim on /about/ and /lead-generation/ — those must not change. */
-  .about .methodology-grid,
-  .services .services-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .about .methodology-item:first-child,
-  .services .service-card:first-child {
+  .home .home-row--stack > .home-body {
     grid-column: 1 / -1;
-    padding: var(--space-xl) var(--space-2xl);
   }
 
-  .about .methodology-item:first-child .methodology-label {
-    font-size: 1.3rem;
+  /* Heads: one alignment, one rhythm, everywhere. */
+  .home .home-head > * {
+    text-align: left;
+    margin-left: 0;
+    margin-right: 0;
   }
 
-  .about .methodology-item:first-child .methodology-desc {
-    max-width: 60ch;
+  .home .home-head .section-title {
+    margin-bottom: var(--space-sm);
   }
 
-  /* The emphasized service card's list reads better as a wrapped row than
-     a short vertical stack lost in the extra width. */
-  .services .service-card:first-child .service-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs) var(--space-xl);
+  .home .home-head .section-subtitle {
+    font-size: 1rem;
+    max-width: 34ch;
+    margin-bottom: 0;
   }
 
-  .services .service-card:first-child .service-list li {
-    padding: 0 0 0 16px;
+  .home .home-head .methodology-title,
+  .home .home-head .traffic-sources-title {
+    margin-bottom: 0;
   }
 
-  .services .service-card:first-child .service-list li + li {
-    border-top: none;
+  /* FAQ heading joins the system (was a smaller muted variant). */
+  .home .faq .section-title {
+    font-size: clamp(1.8rem, 4.5vw, 2.3rem);
+    color: var(--text);
   }
 
-  .services .service-card:first-child .service-more {
-    margin-top: var(--space-sm);
+  /* About: intro, methodology, numbers, channels — one rhythm. */
+  .home .about .home-row,
+  .home .about .stats-strip {
+    margin-bottom: 96px;
+  }
+
+  .home .about .home-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .home .about-text {
+    margin-bottom: var(--space-md);
+  }
+
+  .home .methodology-step {
+    grid-template-columns: 3rem minmax(0, 14rem) minmax(0, 1fr);
+    column-gap: var(--space-md);
+    align-items: baseline;
+    padding: var(--space-lg) 0;
+  }
+
+  .home .methodology-step::before {
+    grid-row: auto;
+  }
+
+  /* Line the rail heading up with the first step's label, not the hairline. */
+  .home .methodology > .home-head {
+    padding-top: calc(var(--space-lg) + 2px);
+  }
+
+  .home .methodology-step .methodology-desc {
+    grid-column: 3;
+  }
+
+  .home .traffic-sources-desc {
+    text-align: left;
+    max-width: 62ch;
+  }
+
+  .home .traffic-logos {
+    justify-content: flex-start;
+    gap: var(--space-2xl);
+  }
+
+  /* Verticals: three equal cards beside the head; the sub-verticals list is
+     set larger so it fills the card instead of floating in it. */
+  .home .services-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-sm);
+    max-width: none;
+  }
+
+  .home .service-card {
+    padding: var(--space-md);
+  }
+
+  .home .service-title {
+    font-size: 1.15rem;
+  }
+
+  .home .service-list li {
+    font-size: 1rem;
+    padding: 10px 0 10px 16px;
+  }
+
+  .home .approach {
+    margin-top: var(--space-xl);
+    text-align: left;
+    max-width: 62ch;
+    margin-left: 0;
+  }
+
+  .home .services-cta,
+  .home .team-join-cta,
+  .home .blog-view-all {
+    text-align: left;
+  }
+
+  .home .events-section-title {
+    text-align: left;
+  }
+
+  .home .blog-grid {
+    margin-top: 0;
+  }
+}
+
+/* Between 901 and 1099px the rail leaves too little room for three vertical
+   cards side by side: the verticals body drops below the head instead. */
+@media (min-width: 901px) and (max-width: 1099px) {
+  .home .home-row--verticals {
+    row-gap: var(--space-xl);
+  }
+
+  .home .home-row--verticals > .home-body {
+    grid-column: 1 / -1;
   }
 }
 

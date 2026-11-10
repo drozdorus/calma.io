@@ -83,6 +83,13 @@ import { stats } from '../data/stats';
     letter-spacing: 0.01em;
   }
 
+  /* Desktop: the eyebrow sits on the homepage's left heading line. */
+  @media (min-width: 901px) {
+    .stats-strip-eyebrow {
+      text-align: left;
+    }
+  }
+
   @media (max-width: 900px) {
     .stats-row {
       grid-template-columns: repeat(2, 1fr);
