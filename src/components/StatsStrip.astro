@@ -41,9 +41,14 @@ import { stats } from '../data/stats';
     margin-bottom: var(--space-lg);
   }
 
+  /* The row is a size container: the figures are sized from its width so
+     the widest value ("No cap", ~3.3em) always fits its cell on one line.
+     Every value shares one size and one line, so the four cells read as a
+     single even row at any desktop width (no wrapped "3 / days"). */
   .stats-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    container-type: inline-size;
   }
 
   .stat-giant {
@@ -62,7 +67,9 @@ import { stats } from '../data/stats';
 
   .stat-giant-value {
     font-family: var(--font-heading);
-    font-size: clamp(2.75rem, 7.5vw, 8.75rem);
+    /* (cell width - its 24px + 8px side padding) / widest value in em */
+    font-size: clamp(2.75rem, calc((25cqi - 32px) / 3.35), 7.5rem);
+    white-space: nowrap;
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1;
@@ -83,16 +90,30 @@ import { stats } from '../data/stats';
     letter-spacing: 0.01em;
   }
 
-  /* Desktop: the eyebrow sits on the homepage's left heading line. */
+  /* Desktop: left-aligned like the rest of the homepage — the eyebrow on
+     the heading line, each figure flush with its hairline. */
   @media (min-width: 901px) {
     .stats-strip-eyebrow {
       text-align: left;
+    }
+    .stat-giant {
+      align-items: flex-start;
+      text-align: left;
+      /* Left-aligned figures need no air on the right, only before the
+         next hairline. */
+      padding: var(--space-md) 8px var(--space-md) var(--space-md);
+    }
+    .stat-giant:first-child {
+      padding-left: 0;
     }
   }
 
   @media (max-width: 900px) {
     .stats-row {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .stat-giant-value {
+      font-size: clamp(2.75rem, calc((50cqi - 2 * var(--space-sm)) / 3.35), 5.5rem);
     }
     .stat-giant:nth-child(2) {
       border-left: none;
@@ -109,6 +130,9 @@ import { stats } from '../data/stats';
   @media (max-width: 560px) {
     .stats-row {
       grid-template-columns: 1fr;
+    }
+    .stat-giant-value {
+      font-size: 2.75rem;
     }
     .stat-giant {
       border-left: none !important;
