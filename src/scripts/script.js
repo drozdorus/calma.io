@@ -15,11 +15,105 @@ document.body.appendChild(progressEl);
 // Scroll-spy: the floating section pill (homepage only). Each link points to an
 // on-page section; we highlight the one currently in view. No-ops on pages
 // without the pill (navLinks is empty there).
+//
+// Driven by IntersectionObserver rather than polling getBoundingClientRect on
+// scroll: with `scroll-behavior: smooth` (global, html{}), a large wheel/trackpad
+// scroll is animated by the compositor across several frames while 'scroll'
+// events on the main thread can lag or coalesce behind it — so a position
+// computed from the *last fired* scroll event could still read as the previous
+// section after the page has visually settled on the next one (e.g. the pill
+// stuck on "Verticals" while Team is already on screen). IntersectionObserver
+// reacts to actual visibility changes instead, so it can't lag like that.
 const sectionNavEl = document.querySelector('.section-nav');
 const navLinks = [...document.querySelectorAll('.section-nav .section-nav-link[href^="#"]')];
 const navMap = new Map(navLinks.map(l => [l.getAttribute('href').slice(1), l]));
-let activeNavLink = null;
+let activeNavLink = navLinks[0] || null;
 const footerEl = document.querySelector('footer, .footer');
+
+if (activeNavLink) {
+  activeNavLink.classList.add('active');
+  activeNavLink.setAttribute('aria-current', 'true');
+}
+
+function setActiveNavLink(link) {
+  if (!link || link === activeNavLink) return;
+  if (activeNavLink) {
+    activeNavLink.classList.remove('active');
+    activeNavLink.removeAttribute('aria-current');
+  }
+  link.classList.add('active');
+  link.setAttribute('aria-current', 'true');
+  // Keep the active item in view inside the (scrollable) pill on mobile —
+  // adjust only the pill's horizontal scroll, never the page's vertical one.
+  const scroller = link.closest('.section-nav-scroll');
+  if (scroller && scroller.scrollWidth > scroller.clientWidth) {
+    const linkLeft = link.offsetLeft;
+    const linkRight = linkLeft + link.offsetWidth;
+    const viewLeft = scroller.scrollLeft;
+    const viewRight = viewLeft + scroller.clientWidth;
+    if (linkLeft < viewLeft) scroller.scrollLeft = linkLeft - 8;
+    else if (linkRight > viewRight) scroller.scrollLeft = linkRight - scroller.clientWidth + 8;
+  }
+  activeNavLink = link;
+}
+
+if (navLinks.length) {
+  // A section counts as "current" while it occupies a band starting just
+  // below the header and ending well above the viewport's bottom — this also
+  // means a gap section with no nav entry (Blog) simply leaves the previous
+  // link active, and the last section (FAQ) naturally stays active once the
+  // page is scrolled past it (nothing re-triggers), no special-casing needed.
+  const spyObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setActiveNavLink(navMap.get(entry.target.id));
+      }
+    });
+  }, { rootMargin: '-100px 0px -70% 0px', threshold: 0 });
+
+  navMap.forEach((_link, id) => {
+    const sec = document.getElementById(id);
+    if (sec) spyObserver.observe(sec);
+  });
+}
+
+// Hide the pill while the user scrolls down (it otherwise sits over whatever
+// they're reading); reveal it on scroll-up or once scrolling settles near a
+// section. Always hidden once the footer/CTA band is in view.
+let lastScrollY = window.pageYOffset;
+let navRevealTimer = null;
+const navHideOnScroll = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function updateNavVisibility(scrolled) {
+  if (!sectionNavEl) return;
+
+  if (footerEl && footerEl.getBoundingClientRect().top < window.innerHeight) {
+    sectionNavEl.classList.add('is-hidden');
+    lastScrollY = scrolled;
+    return;
+  }
+
+  // Reduced motion: skip the scroll-direction hide/reveal entirely — the pill
+  // just stays put (still hidden near the footer above) instead of appearing
+  // and disappearing as the user scrolls.
+  if (!navHideOnScroll) {
+    sectionNavEl.classList.remove('is-hidden');
+    return;
+  }
+
+  const delta = scrolled - lastScrollY;
+  if (delta > 4 && scrolled > 120) {
+    sectionNavEl.classList.add('is-hidden');
+  } else if (delta < -4) {
+    sectionNavEl.classList.remove('is-hidden');
+  }
+  lastScrollY = scrolled;
+
+  clearTimeout(navRevealTimer);
+  navRevealTimer = setTimeout(() => {
+    sectionNavEl.classList.remove('is-hidden');
+  }, 150);
+}
 
 function updateScrollState() {
   const scrolled = window.pageYOffset;
@@ -41,47 +135,7 @@ function updateScrollState() {
   const max = doc.scrollHeight - doc.clientHeight;
   progressEl.style.transform = `scaleX(${max > 0 ? scrolled / max : 0})`;
 
-  // Active section: the last mapped section whose top has crossed the offset
-  // line. While still in the hero, every section top is below it; we default to
-  // the first link so the pill always shows a selection once it's visible.
-  if (navLinks.length) {
-    let current = null;
-    navMap.forEach((link, id) => {
-      const sec = document.getElementById(id);
-      if (sec && sec.getBoundingClientRect().top <= 100) current = link;
-    });
-    // Bottom edge: the last section can't always scroll under the offset line
-    // (CTA band + footer follow it), so once fully scrolled, force the last link.
-    if (scrolled + window.innerHeight >= doc.scrollHeight - 2) {
-      current = navLinks[navLinks.length - 1];
-    }
-    if (!current) current = navLinks[0];
-    if (current !== activeNavLink) {
-      if (activeNavLink) activeNavLink.classList.remove('active');
-      current.classList.add('active');
-      current.setAttribute('aria-current', 'true');
-      if (activeNavLink) activeNavLink.removeAttribute('aria-current');
-      // Keep the active item in view inside the (scrollable) pill on mobile —
-      // adjust only the pill's horizontal scroll, never the page's vertical one.
-      const scroller = current.closest('.section-nav-scroll');
-      if (scroller && scroller.scrollWidth > scroller.clientWidth) {
-        const linkLeft = current.offsetLeft;
-        const linkRight = linkLeft + current.offsetWidth;
-        const viewLeft = scroller.scrollLeft;
-        const viewRight = viewLeft + scroller.clientWidth;
-        if (linkLeft < viewLeft) scroller.scrollLeft = linkLeft - 8;
-        else if (linkRight > viewRight) scroller.scrollLeft = linkRight - scroller.clientWidth + 8;
-      }
-      activeNavLink = current;
-    }
-  }
-
-  // Hide the pill once the footer/CTA band enters view so it never sits on top
-  // of the footer in a broken way.
-  if (sectionNavEl && footerEl) {
-    const footerTop = footerEl.getBoundingClientRect().top;
-    sectionNavEl.classList.toggle('is-hidden', footerTop < window.innerHeight);
-  }
+  updateNavVisibility(scrolled);
 }
 
 let ticking = false;
