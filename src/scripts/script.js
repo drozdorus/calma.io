@@ -12,35 +12,35 @@ const progressEl = document.createElement('div');
 progressEl.className = 'scroll-progress';
 document.body.appendChild(progressEl);
 
-// Scroll-spy: the floating section pill (homepage only). Each link points to an
-// on-page section; we highlight the one currently in view. No-ops on pages
-// without the pill (navLinks is empty there).
+// Scroll-spy: the floating section pill (homepage only). The active item is
+// always the LAST pill section whose top has crossed the detection line
+// (30% down the viewport) — so a section without a pill item (Blog) keeps
+// the previous one (Events) lit, and the hero lights nothing.
 //
-// Driven by IntersectionObserver rather than polling getBoundingClientRect on
-// scroll: with `scroll-behavior: smooth` (global, html{}), a large wheel/trackpad
-// scroll is animated by the compositor across several frames while 'scroll'
-// events on the main thread can lag or coalesce behind it — so a position
-// computed from the *last fired* scroll event could still read as the previous
-// section after the page has visually settled on the next one (e.g. the pill
-// stuck on "Verticals" while Team is already on screen). IntersectionObserver
-// reacts to actual visibility changes instead, so it can't lag like that.
+// Computed from live getBoundingClientRect() positions, never accumulated
+// from observer events: an IntersectionObserver band only reports sections
+// that pass through it, so a jump (window.scrollTo, anchor click, load at a
+// #hash, a fast fling) that skips sections left a stale item lit. Recomputed
+// every animation frame while scrolling (so smooth scrolling tracks), on
+// `scrollend` (the settled position is always final), and on load, resize
+// and hashchange. Five rect reads per frame — negligible. No-ops on pages
+// without the pill (navLinks is empty there).
 const sectionNavEl = document.querySelector('.section-nav');
 const navLinks = [...document.querySelectorAll('.section-nav .section-nav-link[href^="#"]')];
-const navMap = new Map(navLinks.map(l => [l.getAttribute('href').slice(1), l]));
-let activeNavLink = navLinks[0] || null;
+const navSections = navLinks
+  .map(link => ({ link, el: document.getElementById(link.getAttribute('href').slice(1)) }))
+  .filter(s => s.el);
+let activeNavLink = null;
 const footerEl = document.querySelector('footer, .footer');
 
-if (activeNavLink) {
-  activeNavLink.classList.add('active');
-  activeNavLink.setAttribute('aria-current', 'true');
-}
-
 function setActiveNavLink(link) {
-  if (!link || link === activeNavLink) return;
+  if (link === activeNavLink) return;
   if (activeNavLink) {
     activeNavLink.classList.remove('active');
     activeNavLink.removeAttribute('aria-current');
   }
+  activeNavLink = link;
+  if (!link) return;
   link.classList.add('active');
   link.setAttribute('aria-current', 'true');
   // Keep the active item in view inside the (scrollable) pill on mobile —
@@ -54,27 +54,24 @@ function setActiveNavLink(link) {
     if (linkLeft < viewLeft) scroller.scrollLeft = linkLeft - 8;
     else if (linkRight > viewRight) scroller.scrollLeft = linkRight - scroller.clientWidth + 8;
   }
-  activeNavLink = link;
 }
 
-if (navLinks.length) {
-  // A section counts as "current" while it occupies a band starting just
-  // below the header and ending well above the viewport's bottom — this also
-  // means a gap section with no nav entry (Blog) simply leaves the previous
-  // link active, and the last section (FAQ) naturally stays active once the
-  // page is scrolled past it (nothing re-triggers), no special-casing needed.
-  const spyObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        setActiveNavLink(navMap.get(entry.target.id));
-      }
-    });
-  }, { rootMargin: '-100px 0px -70% 0px', threshold: 0 });
+function updateActiveNavLink() {
+  if (!navSections.length) return;
+  const line = window.innerHeight * 0.3;
+  let current = null;
+  for (const s of navSections) {
+    if (s.el.getBoundingClientRect().top <= line) current = s.link;
+    else break; // sections are in DOM (= pill) order
+  }
+  setActiveNavLink(current);
+}
 
-  navMap.forEach((_link, id) => {
-    const sec = document.getElementById(id);
-    if (sec) spyObserver.observe(sec);
-  });
+if (navSections.length) {
+  window.addEventListener('scrollend', updateActiveNavLink);
+  window.addEventListener('resize', updateActiveNavLink);
+  window.addEventListener('hashchange', updateActiveNavLink);
+  window.addEventListener('load', updateActiveNavLink);
 }
 
 // Hide the pill while the user scrolls down (it otherwise sits over whatever
@@ -136,6 +133,7 @@ function updateScrollState() {
   progressEl.style.transform = `scaleX(${max > 0 ? scrolled / max : 0})`;
 
   updateNavVisibility(scrolled);
+  updateActiveNavLink();
 }
 
 let ticking = false;
@@ -151,7 +149,7 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // Run once on load so a page opened mid-scroll (e.g. via #anchor) is correct;
-// at the top it resolves to "no active link".
+// at the top the pill resolves to "no active item".
 updateScrollState();
 
 // Form handling
