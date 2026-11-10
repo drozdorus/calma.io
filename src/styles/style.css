@@ -223,7 +223,7 @@ body {
 
 /* Container */
 .container {
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--space-sm);
 }
@@ -274,7 +274,7 @@ body {
 }
 
 .header-content {
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 16px var(--space-sm);
   display: flex;
@@ -605,7 +605,7 @@ body {
 }
 
 .hero-content {
-  max-width: 1120px;
+  max-width: 1200px;
   animation: fadeInUp 1s ease;
 }
 
@@ -717,10 +717,16 @@ body {
   margin-right: auto;
 }
 
-/* About */
+/* About — heading in a left column, text in a right column on desktop
+   (breaks the centred-everything symmetry); stacks back to the original
+   single centered column on mobile/tablet. */
 .about-content {
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto var(--space-2xl);
+}
+
+.about-text-section {
+  max-width: 70ch;
 }
 
 .about-text {
@@ -773,7 +779,7 @@ body {
 
 /* Methodology */
 .methodology {
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto var(--space-2xl);
 }
 
@@ -820,7 +826,7 @@ body {
 
 /* Traffic Sources */
 .traffic-sources {
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -868,7 +874,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--space-md);
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -966,7 +972,7 @@ body {
 
 .approach {
   margin-top: var(--space-2xl);
-  max-width: 1120px;
+  max-width: 1200px;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -983,6 +989,89 @@ body {
 .team-join-cta {
   margin-top: var(--space-lg);
   text-align: center;
+}
+
+/* ─── Desktop: break the centred-everything symmetry ───
+   Section heading + intro move to a left column with content to their
+   right, and the Methodology / Services 3x1 card grids become bento
+   layouts (one emphasized card, two regular) instead of three identical
+   boxes. Below this width everything stacks back to the original
+   single-column, centered layout — unchanged on mobile. */
+@media (min-width: 901px) {
+  .about-content {
+    display: grid;
+    grid-template-columns: minmax(200px, 320px) 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+
+  .about-content .section-title {
+    text-align: left;
+    margin-bottom: 0;
+  }
+
+  .services-header {
+    display: grid;
+    grid-template-columns: minmax(200px, 320px) 1fr;
+    gap: var(--space-2xl);
+    align-items: start;
+    margin-bottom: var(--space-2xl);
+  }
+
+  .services-header .section-title {
+    text-align: left;
+    margin-bottom: 0;
+  }
+
+  .services-header .section-subtitle {
+    text-align: left;
+    margin-bottom: 0;
+    max-width: 60ch;
+  }
+
+  /* Bento: first card emphasized and full-width, the remaining two share
+     the row below — same cards, no new markup. Scoped to the homepage's
+     About/Verticals sections (`.about`, `.services`): .methodology-grid,
+     .service-card etc. are the shared glass-card language and are reused
+     verbatim on /about/ and /lead-generation/ — those must not change. */
+  .about .methodology-grid,
+  .services .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about .methodology-item:first-child,
+  .services .service-card:first-child {
+    grid-column: 1 / -1;
+    padding: var(--space-xl) var(--space-2xl);
+  }
+
+  .about .methodology-item:first-child .methodology-label {
+    font-size: 1.3rem;
+  }
+
+  .about .methodology-item:first-child .methodology-desc {
+    max-width: 60ch;
+  }
+
+  /* The emphasized service card's list reads better as a wrapped row than
+     a short vertical stack lost in the extra width. */
+  .services .service-card:first-child .service-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-xl);
+  }
+
+  .services .service-card:first-child .service-list li {
+    padding: 0 0 0 16px;
+  }
+
+  .services .service-card:first-child .service-list li + li {
+    border-top: none;
+  }
+
+  .services .service-card:first-child .service-more {
+    margin-top: var(--space-sm);
+  }
 }
 
 /* Shared accent text link — matches the amber→mint convention already used by
@@ -1198,7 +1287,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-2xl);
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
