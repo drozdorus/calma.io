@@ -772,34 +772,6 @@ body {
 }
 
 /* Methodology */
-/* By the Numbers — reuses the methodology card; only the value is new.
-   Value sits above its label visually; dt stays first for screen readers. */
-.methodology-grid.stats-grid {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.stat {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: var(--space-xs);
-}
-
-.stat-value {
-  font-family: var(--font-heading);
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: var(--text);
-  font-variant-numeric: tabular-nums;
-}
-
-@media (max-width: 900px) {
-  .methodology-grid.stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 .methodology {
   max-width: 1120px;
   margin: 0 auto var(--space-2xl);
@@ -1502,14 +1474,6 @@ body {
 
   .methodology-grid {
     grid-template-columns: 1fr;
-  }
-
-  .methodology-grid.stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .methodology-item.stat {
-    padding: var(--space-md);
   }
 
   .services-grid {
@@ -2707,7 +2671,9 @@ a.logo {
 .conference-date,
 .past-conference-date,
 .article-tag,
-.article-read-time {
+.article-read-time,
+.stats-strip-eyebrow,
+.stat-giant-label {
   font-family: var(--font-mono);
   font-weight: 400;
 }

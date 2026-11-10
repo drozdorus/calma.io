@@ -1,17 +1,115 @@
 ---
-// "By the Numbers" — a sibling of Our Methodology inside About: same h3,
-// same glass cards, so it reads as part of the section, not a bolt-on.
+// "By the Numbers" — the strongest proof on the page, so it's the visual
+// peak: giant fluid-size figures, full container width, hairline dividers
+// instead of boxed cards. The count-up (script.js) is a progressive
+// enhancement — the final value below is what renders without JS and what
+// crawlers see; IntersectionObserver swaps it for a 0→target animation
+// once the block scrolls into view, then restores the exact source string.
 import { stats } from '../data/stats';
 ---
 
-<div class="methodology stats">
-  <h3 class="methodology-title">By the Numbers</h3>
-  <dl class="methodology-grid stats-grid">
+<div class="stats-strip" aria-label="By the numbers">
+  <p class="stats-strip-eyebrow">By the Numbers</p>
+  <dl class="stats-row">
     {stats.map((s) => (
-      <div class="methodology-item stat">
-        <dt class="methodology-desc">{s.label}</dt>
-        <dd class="stat-value">{s.value}</dd>
+      <div class="stat-giant">
+        <dt class="stat-giant-label">{s.label}</dt>
+        <dd
+          class="stat-giant-value"
+          data-count-to={s.countTo}
+          data-count-suffix={s.countSuffix}
+          data-final={s.value}
+        >{s.value}</dd>
       </div>
     ))}
   </dl>
 </div>
+
+<style>
+  .stats-strip {
+    margin: 0 auto var(--space-2xl);
+    /* Full container width — no inner max-width clamp like the other
+       About sub-blocks. */
+  }
+
+  .stats-strip-eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: var(--space-lg);
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stat-giant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-xs);
+    padding: var(--space-lg) var(--space-sm);
+    border-left: 1px solid var(--border-default);
+  }
+
+  .stat-giant:first-child {
+    border-left: none;
+  }
+
+  .stat-giant-value {
+    font-family: var(--font-heading);
+    font-size: clamp(2.75rem, 7.5vw, 8.75rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    /* Restrained gradient accent — same brand signature as the hero title,
+       used sparingly here (one block on the page). */
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-giant-label {
+    order: 2;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    letter-spacing: 0.01em;
+  }
+
+  @media (max-width: 900px) {
+    .stats-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stat-giant:nth-child(2) {
+      border-left: none;
+    }
+    .stat-giant:nth-child(3) {
+      border-left: none;
+      border-top: 1px solid var(--border-default);
+    }
+    .stat-giant:nth-child(4) {
+      border-top: 1px solid var(--border-default);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .stats-row {
+      grid-template-columns: 1fr;
+    }
+    .stat-giant {
+      border-left: none !important;
+      border-top: 1px solid var(--border-default);
+      padding: var(--space-md) var(--space-sm);
+    }
+    .stat-giant:first-child {
+      border-top: none;
+    }
+  }
+</style>

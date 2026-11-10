@@ -192,6 +192,49 @@ document.querySelectorAll('.section').forEach(section => {
   sectionObserver.observe(section);
 });
 
+// "By the Numbers" count-up — the HTML already carries the final value
+// (no-JS / crawler fallback); this only animates toward it once the block
+// is in view. Runs once per element, skipped entirely under reduced motion.
+(function initStatsCountUp() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const nodes = [...document.querySelectorAll('.stat-giant-value[data-count-to]')];
+  if (!nodes.length) return;
+
+  function animate(el) {
+    const target = parseFloat(el.dataset.countTo);
+    const suffix = el.dataset.countSuffix || '';
+    const final = el.dataset.final;
+    if (!Number.isFinite(target)) return;
+
+    const duration = 1200;
+    const start = performance.now();
+
+    function tick(now) {
+      const p = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      if (p < 1) {
+        el.textContent = Math.round(target * eased) + suffix;
+        requestAnimationFrame(tick);
+      } else {
+        el.textContent = final;
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animate(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+
+  nodes.forEach(el => observer.observe(el));
+})();
+
 // Mobile menu
 const mobileMenu = document.getElementById('mobileMenu');
 
