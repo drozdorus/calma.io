@@ -606,7 +606,11 @@ body {
 
 .hero-content {
   max-width: 1200px;
-  animation: fadeInUp 1s ease;
+  /* Fast, near-immediate entrance — was 1s (visibly ~30% opacity a second
+     after load). The H1 is static markup either way (visible without JS);
+     this only governs how quickly the CSS animation reaches full opacity.
+     The wave canvas keeps its own slower reveal (waves.js), independent. */
+  animation: fadeInUp 0.28s var(--ease) both;
 }
 
 .hero-title {
