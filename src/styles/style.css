@@ -1175,6 +1175,54 @@ body {
     text-align: left;
   }
 
+  /* Upcoming events: on desktop the cards fill the container as equal
+     columns (count set in index.astro as --cols) instead of a 300px-card
+     scroller that stopped short of the right edge. Below 901px the
+     drag-scroller stays. */
+  .home .upcoming-events-scroller {
+    overflow: visible;
+    cursor: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .home .upcoming-events-track {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+    width: auto;
+  }
+
+  .home .upcoming-events-track .conference-card {
+    width: auto;
+  }
+
+  /* A single upcoming event would be one very wide, mostly empty card:
+     lay it out as a row instead (logo | date, name, location | link). */
+  .home .upcoming-events-track[data-count="1"] .conference-card {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "logo date link"
+      "logo name link"
+      "logo loc  link";
+    column-gap: var(--space-lg);
+    align-items: center;
+    text-align: left;
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .home .upcoming-events-track[data-count="1"] .conference-logo-wrapper { grid-area: logo; margin: 0; }
+  .home .upcoming-events-track[data-count="1"] .conference-date { grid-area: date; }
+  .home .upcoming-events-track[data-count="1"] .conference-name { grid-area: name; }
+  .home .upcoming-events-track[data-count="1"] .conference-location { grid-area: loc; margin: 0; }
+  .home .upcoming-events-track[data-count="1"] .conference-link { grid-area: link; }
+
+  /* Past events: same chips, same order, fully expanded — only the rows
+     start on the section's left edge instead of being centred. */
+  .home .past-events-cloud {
+    justify-content: flex-start;
+  }
+
   .home .blog-grid {
     margin-top: 0;
   }

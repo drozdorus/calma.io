@@ -62,6 +62,13 @@ const today = new Date().toISOString().slice(0, 10);
 const upcomingEvents = events
   .filter((e) => e.end >= today)
   .sort((a, b) => a.start.localeCompare(b.start));
+// Desktop column count for the upcoming cards (they fill the container
+// width as equal columns): one row for up to four events, then rows of four
+// when that divides evenly, otherwise rows of three.
+const upcomingCols =
+  upcomingEvents.length <= 4
+    ? Math.max(upcomingEvents.length, 1)
+    : upcomingEvents.length % 4 === 0 ? 4 : 3;
 const pastEvents = events
   .filter((e) => e.end < today)
   .sort((a, b) => b.end.localeCompare(a.end));
@@ -357,7 +364,7 @@ const latestPosts = (await getCollection('blog'))
           <div class="events-section">
             <h3 class="events-section-title">Upcoming Events</h3>
             <div class="upcoming-events-scroller">
-              <div class="upcoming-events-track">
+              <div class="upcoming-events-track" data-count={upcomingEvents.length} style={`--cols: ${upcomingCols}`}>
                 {upcomingEvents.map((e) => (
                   <a href={e.url} target="_blank" rel="noopener" class="conference-card">
                     <div class="conference-logo-wrapper">
