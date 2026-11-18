@@ -81,4 +81,44 @@ export const cardCovers: Record<string, string> = {
               <defs><linearGradient id="cg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="0.45"/><stop offset="40%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
               <rect width="480" height="60" fill="url(#cg4)"/>
             </svg>`,
+  '25-people-or-agents': `<svg viewBox="0 0 480 150" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="480" height="150" fill="#0d0d0d"/>
+              <circle cx="40" cy="35" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="60" cy="35" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="80" cy="35" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="100" cy="35" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="120" cy="35" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="40" cy="55" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="60" cy="55" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="80" cy="55" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="100" cy="55" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="120" cy="55" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="40" cy="75" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="60" cy="75" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="80" cy="75" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="100" cy="75" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="120" cy="75" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="40" cy="95" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="60" cy="95" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="80" cy="95" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="100" cy="95" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="120" cy="95" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="40" cy="115" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="60" cy="115" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="80" cy="115" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="100" cy="115" r="4" fill="white" fill-opacity="0.28"/>
+              <circle cx="120" cy="115" r="4" fill="white" fill-opacity="0.28"/>
+              <text x="240" y="84" text-anchor="middle" font-family="system-ui,sans-serif" font-size="30" font-weight="800" fill="#3DD68C" fill-opacity="0.6">1 vs 25</text>
+              <line x1="390" y1="75" x2="350" y2="40" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="1.5"/>
+              <line x1="390" y1="75" x2="440" y2="45" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="1.5"/>
+              <line x1="390" y1="75" x2="445" y2="110" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="1.5"/>
+              <line x1="390" y1="75" x2="345" y2="115" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="1.5"/>
+              <line x1="390" y1="75" x2="395" y2="130" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="1.5"/>
+              <circle cx="350" cy="40" r="3.5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="440" cy="45" r="3.5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="445" cy="110" r="3.5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="345" cy="115" r="3.5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="395" cy="130" r="3.5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="390" cy="75" r="7" fill="#3DD68C" fill-opacity="0.8"/>
+            </svg>`,
 };

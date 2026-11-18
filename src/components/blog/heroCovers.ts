@@ -83,4 +83,49 @@ export const heroCovers: Record<string, string> = {
               <defs><linearGradient id="hg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="0.45"/><stop offset="40%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
               <rect width="960" height="110" fill="url(#hg4)"/>
             </svg>`,
+  '25-people-or-agents': `<svg viewBox="0 0 960 240" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="960" height="240" fill="#0d0d0d"/>
+              <circle cx="90" cy="64" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="118" cy="64" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="146" cy="64" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="174" cy="64" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="202" cy="64" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="90" cy="92" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="118" cy="92" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="146" cy="92" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="174" cy="92" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="202" cy="92" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="90" cy="120" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="118" cy="120" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="146" cy="120" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="174" cy="120" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="202" cy="120" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="90" cy="148" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="118" cy="148" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="146" cy="148" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="174" cy="148" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="202" cy="148" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="90" cy="176" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="118" cy="176" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="146" cy="176" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="174" cy="176" r="6" fill="white" fill-opacity="0.28"/>
+              <circle cx="202" cy="176" r="6" fill="white" fill-opacity="0.28"/>
+              <text x="480" y="128" text-anchor="middle" font-family="system-ui,sans-serif" font-size="66" font-weight="800" fill="#3DD68C" fill-opacity="0.6">1 vs 25</text>
+              <text x="480" y="158" text-anchor="middle" font-family="Menlo,monospace" font-size="12" letter-spacing="0.18em" fill="#3DD68C" fill-opacity="0.4">PEOPLE OR AGENTS</text>
+              <line x1="790" y1="120" x2="720" y2="60" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="2"/>
+              <line x1="790" y1="120" x2="860" y2="65" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="2"/>
+              <line x1="790" y1="120" x2="880" y2="170" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="2"/>
+              <line x1="790" y1="120" x2="710" y2="180" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="2"/>
+              <line x1="790" y1="120" x2="795" y2="205" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="2"/>
+              <line x1="790" y1="120" x2="820" y2="40" stroke="#3DD68C" stroke-opacity="0.3" stroke-width="2"/>
+              <circle cx="720" cy="60" r="5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="860" cy="65" r="5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="880" cy="170" r="5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="710" cy="180" r="5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="795" cy="205" r="5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="820" cy="40" r="5" fill="#3DD68C" fill-opacity="0.45"/>
+              <circle cx="790" cy="120" r="12" fill="#3DD68C" fill-opacity="0.8"/>
+              <defs><linearGradient id="hg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a0a" stop-opacity="0.45"/><stop offset="40%" stop-color="#0a0a0a" stop-opacity="0"/></linearGradient></defs>
+              <rect width="960" height="110" fill="url(#hg5)"/>
+            </svg>`,
 };
