@@ -149,8 +149,8 @@ export const events: CalmaEvent[] = [
     schemaName: 'Affiliate Summit West 2027',
     description:
       'The flagship performance marketing conference in Las Vegas, connecting affiliates, advertisers, and industry leaders.',
-    start: '2027-01-12',
-    end: '2027-01-14',
+    start: '2027-01-26',
+    end: '2027-01-28',
     location: 'Las Vegas, US',
     url: 'https://affiliatesummit.com/west',
     organizer: { name: 'Affiliate Summit', url: 'https://affiliatesummit.com' },
